@@ -1,0 +1,124 @@
+# Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+kind: pipeline
+name: License
+
+steps:
+  - name: check
+    image: golang
+    pull: always
+    commands:
+      - go get -u github.com/google/addlicense
+      - addlicense -c "SIGHUP s.r.l" -v -l bsd --check .
+
+# ---
+# kind: pipeline
+# name: Build docker image
+#
+# depends_on:
+#   - License
+#
+# volumes:
+#   - name: dockersock
+#     host:
+#       path: /var/run/docker.sock
+#
+# steps:
+#   - name: build_and_push_docker_image
+#     image: docker:dind
+#     pull: always
+#     environment:
+#       GITHUB_TOKEN:
+#         from_secret: GITHUB_TOKEN
+#       REGISTRY_USER:
+#         from_secret: REGISTRY_USER
+#       REGISTRY_PASSWORD:
+#         from_secret: REGISTRY_PASSWORD
+#       REGISTRY:
+#         from_secret: REGISTRY
+#     volumes:
+#       - name: dockersock
+#         path: /var/run/docker.sock
+#     commands:
+#       - image_name=$${REGISTRY}/fury/poc-fury-application-status-page
+#       - docker pull $${image_name}:webapp || true
+#       - docker pull $${image_name}:backend || true
+#       - docker login -u $${REGISTRY_USER} -p $${REGISTRY_PASSWORD} $${REGISTRY}
+#         # creating a cache image for node modules
+#       - docker build --target webapp --tag $${image_name}:webapp .
+#       - docker build --target compile --tag $${image_name}:backend .
+#       - docker build --cache-from $${image_name}:webapp --cache-from $${image_name}:backend --tag $${image_name}:$${DRONE_BUILD_NUMBER} --tag $${image_name}:latest .
+#       - docker push $${image_name}:webapp
+#       - docker push $${image_name}:$${DRONE_BUILD_NUMBER}
+#       - docker push $${image_name}:latest
+#
+#   - name: deploy_k8s_staging
+#     image: quay.io/sighup/kubectl-kustomize:1.18.2_3.6.1
+#     pull: always
+#     depends_on: [build_and_push_docker_image]
+#     environment:
+#       REGISTRY:
+#         from_secret: REGISTRY
+#       KUBECONFIG:
+#         from_secret: KUBECONFIG_STAGING_B64
+#     commands:
+#       - echo $${KUBECONFIG} | base64 -d > /tmp/kubeconfig
+#       - image_name=$${REGISTRY}/fury/poc-fury-application-status-page
+#       - ls -latrh kubernetes
+#       - ls -latrh kubernetes/staging
+#       - cd kubernetes/staging
+#       - kustomize edit set image $${image_name}:$${DRONE_BUILD_NUMBER}
+#       - kustomize build .
+#       - kustomize build . | kubectl apply -f - --kubeconfig=/tmp/kubeconfig
+#
+---
+kind: pipeline
+name: Build and Release
+
+depends_on:
+  - License
+
+steps:
+  - name: front
+    image: node:14.16
+    pull: always
+    environment:
+      SERVER_OFFLINE: "false"
+      APP_ENV: production
+      SERVER_BASE_PATH: ""
+    commands:
+      - yarn --cwd ./web-client install
+      - yarn --cwd ./web-client build
+
+  - name: build
+    image: golang:1.16-buster
+    pull: always
+    depends_on: [front]
+    commands:
+      - cp -a -R web-client/dist/ static/
+      - curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
+      - git reset --hard
+      - git fetch --tags
+      - ./bin/goreleaser check
+      - ./bin/goreleaser build --debug --snapshot --rm-dist
+
+  - name: release
+    image: golang:1.16-buster
+    pull: always
+    depends_on: [build]
+    environment:
+      GITHUB_TOKEN:
+        from_secret: GITHUB_TOKEN
+    commands:
+      - curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
+      - git reset --hard
+      - git fetch --tags
+      - cp -a -R web-client/dist/ static/
+      - ./bin/goreleaser check
+      - ./bin/goreleaser --debug release --rm-dist --skip-validate
+    when:
+      ref:
+        include:
+          - refs/tags/**
