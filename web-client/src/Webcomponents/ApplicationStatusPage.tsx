@@ -6,10 +6,10 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import FuryApplicationStatus from "../Components/FuryApplicationStatus";
+import ApplicationStatus from "../Components/ApplicationStatus/Component";
 
 import reactToWebComponent from "react-to-webcomponent";
 
-const FuryApplicationStatusPage = reactToWebComponent(FuryApplicationStatus, React, ReactDOM);
+const ApplicationStatusPage = reactToWebComponent(ApplicationStatus, React, ReactDOM);
 
-export default FuryApplicationStatusPage;
+export default ApplicationStatusPage;

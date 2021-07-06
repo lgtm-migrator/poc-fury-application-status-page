@@ -4,7 +4,7 @@
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
-    "fury-dashboard-state-handler": "0.1.12",
+    "fury-component": "^0.1.7",
     "fury-design-system": "^0.0.5",
     "i18next": "^20.2.4",
     "loglevel": "^1.7.1",
@@ -12,6 +12,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-i18next": "^11.8.15",
+    "react-router-dom": "^5.2.0",
     "react-to-webcomponent": "^1.5.1"
   },
   "devDependencies": {
@@ -21,12 +22,14 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@types/react-dom": "^17.0.7",
+    "@types/react-router-dom": "^5.1.7",
     "babel-loader": "^8.2.2",
     "bundle-loader": "^0.5.6",
     "css-loader": "^5.2.4",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.1",
     "js-yaml": "^4.1.0",
+    "miragejs": "^0.1.41",
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",
     "react-scripts": "4.0.3",
@@ -40,11 +43,11 @@
     "webpack-server": "^0.1.2"
   },
   "scripts": {
-    "build": "webpack --mode production",
-    "build-to-server": "webpack --mode production -o ../static/",
-    "webpack-dev": "webpack serve",
-    "dev-local-no-backend": "webpack serve --env from_yaml=true --env offline=true",
-    "dev-local-with-backend": "webpack serve --env from_yaml=true --env offline=false"
+    "build": "webpack --mode production --config=webpack.dev.config.js",
+    "webpack-dev": "webpack serve --config=webpack.dev.config.js",
+    "dev-base": "webpack serve --config webpack.dev.config.js --env from_yaml=true --env config_path=../config.yml",
+    "dev-local-no-backend": "yarn dev-base --env offline=true",
+    "dev-local-with-backend": "yarn dev-base --env offline=false"
   },
   "eslintConfig": {
     "extends": [
