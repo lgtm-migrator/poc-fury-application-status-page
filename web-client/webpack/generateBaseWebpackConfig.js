@@ -98,6 +98,9 @@ function getModule() {
 function generateBaseWebpackConfig(env, mode, dotenv, args) {
   return {
     mode: mode,
+    output: {
+      publicPath: '/'
+    },
     resolve: {
       extensions: [".ts", ".tsx", ".jsx", ".js", ".json"],
     },

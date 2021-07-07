@@ -11,6 +11,7 @@ interface MockedClusterService {
   status: "healthy" | "error";
   name: string;
   cluster: BelongsTo<"cluster">;
+  id: string;
 }
 
 export function makeServer({ environment = 'test' }, urlPrefix: string, apiPath?: string) {
@@ -30,7 +31,8 @@ export function makeServer({ environment = 'test' }, urlPrefix: string, apiPath?
       }),
       clusterService: Factory.extend<Partial<MockedClusterService>>({
         status: "healthy",
-        name: "cluster service"
+        name: "cluster service",
+        id: "Cluster Service ID"
       })
     },
     seeds(server) {
@@ -39,7 +41,32 @@ export function makeServer({ environment = 'test' }, urlPrefix: string, apiPath?
         id: "cluster.one",
       });
       server.create("clusterService", {
-        cluster: clusterOne
+        cluster: clusterOne,
+        id: "cluster.service.one"
+      });
+      const clusterTwo = server.create("cluster", {
+        name: "cluster two",
+        id: "cluster.two",
+      });
+      server.create("clusterService", {
+        cluster: clusterTwo,
+        id: "cluster.service.two"
+      });
+      const clusterThree = server.create("cluster", {
+        name: "cluster three",
+        id: "cluster.three",
+      });
+      server.create("clusterService", {
+        cluster: clusterThree,
+        id: "cluster.service.three"
+      });
+      const clusterFour = server.create("cluster", {
+        name: "cluster four",
+        id: "cluster.four",
+      });
+      server.create("clusterService", {
+        cluster: clusterFour,
+        id: "cluster.service.four"
       });
     },
     routes() {
@@ -65,13 +92,14 @@ export function makeServer({ environment = 'test' }, urlPrefix: string, apiPath?
         return schema.all("cluster").models;
       })
 
-      this.get(':id/list', (schema, request) => {
-        const clusterServices = schema.all("clusterService").models.find(clusterService => clusterService.cluster?.id === request.params.id);
+      this.get(':clusterId/list', (schema, request) => {
+        const clusterServices = schema.all("clusterService").models.find(clusterService => clusterService.cluster?.id === request.params.clusterId);
 
-        return {
+        return [{
           name: clusterServices?.name,
+          id: clusterServices?.id,
           status: clusterServices?.status
-        } as MockedClusterService
+        } as MockedClusterService]
       })
     },
   })
