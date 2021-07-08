@@ -5,13 +5,14 @@
  */
 
 import React, {Suspense, useEffect, useState} from "react";
-import {EuiSpacer, EuiErrorBoundary, EuiEmptyPrompt, EuiLoadingSpinner} from "fury-design-system";
-import { initialize } from "./i18n";
+import {EuiEmptyPrompt, EuiErrorBoundary, EuiLoadingSpinner, EuiSpacer} from "fury-design-system";
+import {initialize} from "./i18n";
 import logo from "./Assets/logo.svg";
 import fury from "./Assets/logotype.svg";
 import {makeServer} from "./Services/Mocks/MakeServer";
 import {Server} from "miragejs/server";
 import {logger} from "./Services/Logger";
+import {MocksScenario} from "./Services/Mocks/types";
 
 const fetchApiPathFromEnvOrRemoteAsync = async () => {
   const apiPath: string | undefined = process.env.API_PATH;
@@ -38,6 +39,7 @@ function injectMockServer() {
     return makeServer(
       { environment: "development" },
       process.env.SERVER_BASE_PATH ?? "",
+      MocksScenario.scenario1,
       process.env.API_PATH ?? ""
     );
   }
