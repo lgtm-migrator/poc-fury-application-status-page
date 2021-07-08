@@ -24,4 +24,9 @@ export type MockedServerBaseFactories = {
   clusterService: FactoryDefinition;
 }
 
+export enum MocksScenario {
+  "scenario1",
+  "scenario2"
+}
+
 export type MockedSchema = Schema<Registry<MockedServerBaseModels, MockedServerBaseFactories>>
