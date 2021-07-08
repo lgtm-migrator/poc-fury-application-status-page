@@ -3,7 +3,7 @@ import { releaseNumber } from "../../constants";
 import { createStateHandler } from "../../Services/createStateHandler";
 import ApplicationStatusComponent from "./Component";
 import { logger } from "../../Services/Logger";
-import {makeServer} from "../../Services/MocksServer";
+import {makeServer} from "../../Services/Mocks/MakeServer";
 import {StateManager} from "fury-component/dist/State/types";
 import {IStateHandler} from "../types";
 
@@ -45,7 +45,7 @@ const ApplicationStatusContainer = (props: ApplicationStatusContainerProps) => {
 
   if (isMocked) {
     logger.info(stateHandler.getState().apiurl);
-    makeServer({ environment: "development" }, stateHandler.getState().apiurl)
+    makeServer({ environment: "development" }, 'scenario1', stateHandler.getState().apiurl)
   }
 
   return (
