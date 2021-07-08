@@ -46,7 +46,7 @@ const ClusterServiceStatusContainer = (props: ClusterServiceStatusComponentProps
         <ClusterServiceStatusComponent
           language={props.language}
           releaseNumber={releaseNumber}
-          clusterList={clusterServiceList}
+          clusterServiceList={clusterServiceList}
         />
       )}
     </>

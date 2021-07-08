@@ -1,6 +1,9 @@
-.cluster-status-text {
-    text-align: center;
+.euiFlexGroup--gutterMedium > .euiFlexItem.cluster-service-status-message {
     margin-bottom: 30px;
+}
+
+.euiFlexGroup--gutterMedium > .euiFlexItem.cluster-service-status-message p {
+    white-space: pre;
 }
 
 .cluster-service-card {

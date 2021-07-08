@@ -4,7 +4,7 @@ import {
   EuiPanel,
   EuiHeaderBreadcrumbs,
   EuiPage,
-  EuiPageBody, EuiPageHeader, EuiPageContent, EuiPageHeaderSection, EuiFlexItem, EuiText, EuiIcon, EuiLink, EuiTitle
+  EuiPageBody, EuiPageHeader, EuiPageContent, EuiPageHeaderSection, EuiFlexItem, EuiText, EuiIcon, EuiTitle
 } from "fury-design-system";
 import "./Style.css";
 import {EuiCustomLink} from "../EuiCustomLink";
@@ -19,12 +19,24 @@ interface ClusterCardProps {
   cluster: any;
 }
 
+const getClusterCardStatusIcon = (status: string) => {
+ if (status === 'healthy') {
+   return (
+     <EuiIcon size={"l"} type="checkInCircleFilled" color={"success"} />
+   )
+ }
+
+ return (
+   <EuiIcon size={"l"} type="crossInACircleFilled" color={"danger"} />
+ )
+}
+
 const ClusterCard = (props: ClusterCardProps) => {
  return (
    <EuiPanel paddingSize="s" className="cluster-card" >
      <EuiFlexGroup gutterSize="m" alignItems={"center"} responsive={false}>
        <EuiFlexItem grow={false}>
-         <EuiIcon size={"l"} type="checkInCircleFilled" color={"success"} />
+         {getClusterCardStatusIcon(props.cluster.status)}
        </EuiFlexItem>
        <EuiFlexItem grow={false}>
          <EuiText size="s" >
@@ -42,6 +54,36 @@ const ClusterCard = (props: ClusterCardProps) => {
      </EuiFlexGroup>
    </EuiPanel>
  )
+}
+
+const getClusterStatusHeader = (clusterList: any[]) => {
+  const clusterInError = (clusterList ?? []).filter((cluster) => {
+    return cluster.status === "error";
+  })
+  let messageIcon = 'checkInCircleFilled';
+  let messageIconColor = 'success';
+  let message = 'All CompanyName systems are fully operational';
+
+  if (clusterInError.length > 0) {
+    messageIcon = 'crossInACircleFilled';
+    messageIconColor = 'danger';
+    message = `There's an issue with ${clusterInError.map(cluster => cluster.name).join(', ')}`;
+  }
+
+  return (
+    <EuiFlexGroup gutterSize="m" alignItems={"center"} justifyContent={"center"} direction={"column"} responsive={false}>
+      <EuiFlexItem>
+        <EuiIcon size={"xxl"} type={messageIcon} color={messageIconColor} />
+      </EuiFlexItem>
+      <EuiFlexItem>
+        <EuiTitle size={"s"} className={"cluster-status-text"}>
+          <h1>
+            {message}
+          </h1>
+        </EuiTitle>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+  )
 }
 
 const ClusterStatusComponent = (props: ClusterStatusComponentProps) => {
@@ -87,18 +129,7 @@ const ClusterStatusComponent = (props: ClusterStatusComponentProps) => {
               color="transparent"
               style={{ maxWidth: "600px", width: "100%" }}
               hasShadow={false}>
-              <EuiFlexGroup gutterSize="m" alignItems={"center"} justifyContent={"center"} direction={"column"} responsive={false}>
-                <EuiFlexItem>
-                  <EuiIcon size={"xxl"} type="checkInCircleFilled" color={"success"} />
-                </EuiFlexItem>
-                <EuiFlexItem>
-                  <EuiTitle size={"s"} className={"cluster-status-text"}>
-                    <h1>
-                      All CompanyName systems are fully operational
-                    </h1>
-                  </EuiTitle>
-                </EuiFlexItem>
-              </EuiFlexGroup>
+              {getClusterStatusHeader(props.clusterList)}
               {props.clusterList.length > 0 ?
                 props.clusterList.map((cluster) =>
                   <ClusterCard cluster={cluster} key={cluster.id}/>
