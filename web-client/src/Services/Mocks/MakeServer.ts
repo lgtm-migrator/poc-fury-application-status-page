@@ -1,10 +1,10 @@
 import {createServer} from "miragejs"
-import {logger} from "../Logger";
 import {seedsFactory} from "./Seeds";
 import {getBaseFactories, getBaseModels} from "./Configuration";
 import {getRoutes} from "./Routes";
+import {MocksScenario} from "./types";
 
-export function makeServer({ environment = 'test' }, scenario: string = 'scenario1', urlPrefix: string, apiPath?: string) {
+export function makeServer({ environment = 'test' }, scenario: MocksScenario = MocksScenario.scenario1, urlPrefix: string, apiPath?: string) {
   return createServer({
     environment,
     models: getBaseModels(),

@@ -1,6 +1,6 @@
 import {Server} from "miragejs/server";
 import {Registry} from "miragejs/-types";
-import {MockedServerBaseFactories, MockedServerBaseModels} from "./types";
+import {MockedServerBaseFactories, MockedServerBaseModels, MocksScenario} from "./types";
 
 function getScenarioOneSeeds(server: Server<Registry<MockedServerBaseModels, MockedServerBaseFactories>>) {
   const clusterOne = server.create("cluster", {
@@ -101,11 +101,11 @@ function getScenarioTwoSeeds(server: Server<Registry<MockedServerBaseModels, Moc
   });
 }
 
-export function seedsFactory(scenario: string) {
+export function seedsFactory(scenario: MocksScenario) {
   switch (scenario) {
-    case 'scenario1':
+    case MocksScenario.scenario1:
       return getScenarioOneSeeds
-    case 'scenario2':
+    case MocksScenario.scenario2:
       return getScenarioTwoSeeds
   }
 }
