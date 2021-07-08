@@ -9,7 +9,7 @@ import {EuiSpacer, EuiErrorBoundary, EuiEmptyPrompt, EuiLoadingSpinner} from "fu
 import { initialize } from "./i18n";
 import logo from "./Assets/logo.svg";
 import fury from "./Assets/logotype.svg";
-import {makeServer} from "./Services/MocksServer";
+import {makeServer} from "./Services/Mocks/MakeServer";
 import {Server} from "miragejs/server";
 import {logger} from "./Services/Logger";
 
