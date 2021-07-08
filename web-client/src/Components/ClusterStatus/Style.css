@@ -5,3 +5,7 @@
 .cluster-card.euiPanel.euiPanel--borderRadiusMedium {
     border-radius: 12px;
 }
+
+.cluster-status-text {
+    margin-bottom: 30px;
+}

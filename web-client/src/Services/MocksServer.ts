@@ -51,11 +51,12 @@ export function makeServer({ environment = 'test' }, urlPrefix: string, apiPath?
       });
       server.create("clusterService", {
         cluster: clusterTwo,
-        id: "cluster.service.two"
+        status: "error",
+        id: "cluster.service.two.one",
+        name: "cluster service 2-1"
       });
       const clusterThree = server.create("cluster", {
         name: "cluster three",
-        status: "error",
         id: "cluster.three",
       });
       server.create("clusterService", {
