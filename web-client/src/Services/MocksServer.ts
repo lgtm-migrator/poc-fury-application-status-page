@@ -46,6 +46,7 @@ export function makeServer({ environment = 'test' }, urlPrefix: string, apiPath?
       });
       const clusterTwo = server.create("cluster", {
         name: "cluster two",
+        status: "error",
         id: "cluster.two",
       });
       server.create("clusterService", {
@@ -54,6 +55,7 @@ export function makeServer({ environment = 'test' }, urlPrefix: string, apiPath?
       });
       const clusterThree = server.create("cluster", {
         name: "cluster three",
+        status: "error",
         id: "cluster.three",
       });
       server.create("clusterService", {
@@ -62,11 +64,25 @@ export function makeServer({ environment = 'test' }, urlPrefix: string, apiPath?
       });
       const clusterFour = server.create("cluster", {
         name: "cluster four",
+        status: "error",
         id: "cluster.four",
       });
       server.create("clusterService", {
         cluster: clusterFour,
-        id: "cluster.service.four"
+        status: "error",
+        id: "cluster.service.four.one",
+        name: "cluster service 4-1"
+      });
+      server.create("clusterService", {
+        cluster: clusterFour,
+        status: "error",
+        id: "cluster.service.four.two",
+        name: "cluster service 4-2"
+      });
+      server.create("clusterService", {
+        cluster: clusterFour,
+        id: "cluster.service.four.three",
+        name: "cluster service 4-3"
       });
     },
     routes() {
@@ -93,13 +109,9 @@ export function makeServer({ environment = 'test' }, urlPrefix: string, apiPath?
       })
 
       this.get(':clusterId/list', (schema, request) => {
-        const clusterServices = schema.all("clusterService").models.find(clusterService => clusterService.cluster?.id === request.params.clusterId);
+        const clusterServices = schema.all("clusterService").models.filter(clusterService => clusterService.cluster?.id === request.params.clusterId);
 
-        return [{
-          name: clusterServices?.name,
-          id: clusterServices?.id,
-          status: clusterServices?.status
-        } as MockedClusterService]
+        return clusterServices;
       })
     },
   })
