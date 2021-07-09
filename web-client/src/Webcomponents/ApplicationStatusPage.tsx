@@ -6,7 +6,7 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import ApplicationStatus from "../Components/ApplicationStatus/Component";
+import ApplicationStatus from "../Components/ApplicationStatus/Container";
 
 import reactToWebComponent from "react-to-webcomponent";
 

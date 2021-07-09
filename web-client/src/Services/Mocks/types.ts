@@ -1,17 +1,20 @@
 import {AnyFactories, AnyModels, BelongsTo, FactoryDefinition, ModelDefinition, Registry} from "miragejs/-types";
 import Schema from "miragejs/orm/schema";
 
+export type ClusterStatus = "healthy" | "error";
+
 export interface MockedCluster {
-  status: "healthy" | "error";
+  status: ClusterStatus;
   name: string;
   id: string;
 }
 
 export interface MockedClusterService {
-  status: "healthy" | "error";
+  status: ClusterStatus;
   name: string;
   cluster: BelongsTo<"cluster">;
   id: string;
+  failedAt: string;
 }
 
 export type MockedServerBaseModels = {

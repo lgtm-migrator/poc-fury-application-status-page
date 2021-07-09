@@ -1,5 +1,5 @@
 import {createServer} from "miragejs"
-import {seedsFactory} from "./Seeds";
+import {seedsFactory} from "./Seeds/Factory";
 import {getBaseFactories, getBaseModels} from "./Configuration";
 import {getRoutes} from "./Routes";
 import {MocksScenario} from "./types";
