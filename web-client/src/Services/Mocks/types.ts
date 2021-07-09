@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-import {AnyFactories, AnyModels, BelongsTo, FactoryDefinition, ModelDefinition, Registry} from "miragejs/-types";
+import {BelongsTo, FactoryDefinition, ModelDefinition, Registry} from "miragejs/-types";
 import Schema from "miragejs/orm/schema";
 
 export type ClusterStatus = "healthy" | "error";

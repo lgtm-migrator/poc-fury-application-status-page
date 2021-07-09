@@ -7,4 +7,3 @@
 export interface IStateHandler {
   apiurl: string;
 }
-

@@ -20,4 +20,3 @@ export class BaseLocalizedText {
     return this.translator.changeLanguage(language);
   }
 }
-

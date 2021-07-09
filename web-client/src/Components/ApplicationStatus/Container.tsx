@@ -68,4 +68,3 @@ const ApplicationStatusContainer = (props: ApplicationStatusContainerProps) => {
 };
 
 export default ApplicationStatusContainer;
-
