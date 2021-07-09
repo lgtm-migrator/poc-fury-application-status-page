@@ -7,11 +7,14 @@ import {
 } from "fury-design-system";
 import "./Style.css";
 import {EuiCustomLink} from "../EuiCustomLink";
+import {LocalizedText} from "./LocalizedText";
+import moment from 'moment';
 
 interface ClusterServiceStatusComponentProps {
   language: string;
   releaseNumber: string;
   clusterServiceList: any[];
+  basePath: string;
 }
 
 interface ClusterServiceCardProps {
@@ -43,6 +46,14 @@ const ClusterServiceCard = (props: ClusterServiceCardProps) => {
               <strong>{props.clusterService.name}</strong>
             </p>
           </EuiText>
+          {
+            props.clusterService.status === "error" &&
+            <EuiText size={"s"} >
+                <p>
+                  {LocalizedText.singleton.errorOccurredAt} {moment(props.clusterService.failedAt).format("DD/MM/YYYY HH:mm Z")}
+                </p>
+            </EuiText>
+          }
         </EuiFlexItem>
       </EuiFlexGroup>
     </EuiPanel>
@@ -55,13 +66,13 @@ const getClusterServiceStatusHeader = (clusterServiceList: any[]) => {
   })
   let messageIcon = 'check';
   let messageIconColor = 'success';
-  let message = 'The CompanyName Cluster Custom Name 1 system is fully operational';
+  let message = LocalizedText.singleton.healthyStatusMessage;
   let messageClusterServiceList = '';
 
   if (clusterServiceInError.length > 0) {
     messageIcon = 'cross';
     messageIconColor = 'danger';
-    message = `There's an issue related to:`;
+    message = LocalizedText.singleton.errorStatusMessage;
     messageClusterServiceList = `${clusterServiceInError.map(clusterService => clusterService.name).join('\r\n')}`;
   }
 
@@ -96,9 +107,8 @@ const ClusterServiceStatusComponent = (props: ClusterServiceStatusComponentProps
             paddingSize="l"
           >
             <EuiPageHeaderSection>
-              {/* TODO: Add BasePath */}
-              <EuiCustomLink to={`/`}>
-                <EuiIcon type={"sortLeft"} /> back
+              <EuiCustomLink to={`${props.basePath}/`}>
+                <EuiIcon type={"sortLeft"} /> {LocalizedText.singleton.goBack}
               </EuiCustomLink>
             </EuiPageHeaderSection>
           </EuiPageHeader>

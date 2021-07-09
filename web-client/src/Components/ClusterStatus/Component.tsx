@@ -8,15 +8,18 @@ import {
 } from "fury-design-system";
 import "./Style.css";
 import {EuiCustomLink} from "../EuiCustomLink";
+import { LocalizedText } from './LocalizedText';
 
 interface ClusterStatusComponentProps {
   language: string;
   releaseNumber: string;
   clusterList: any[];
+  basePath: string;
 }
 
 interface ClusterCardProps {
   cluster: any;
+  basePath: string;
 }
 
 const getClusterCardStatusIcon = (status: string) => {
@@ -46,9 +49,8 @@ const ClusterCard = (props: ClusterCardProps) => {
          </EuiText>
        </EuiFlexItem>
        <EuiFlexItem style={{marginLeft: "auto"}} grow={false}>
-         {/* TODO: Add BasePath */}
-         <EuiCustomLink to={`${props.cluster.id}/status`}>
-           see <EuiIcon type={"sortRight"} />
+         <EuiCustomLink to={`${props.basePath}/${props.cluster.id}/status`}>
+           {LocalizedText.singleton.goToClusterServicesButtonMessage} <EuiIcon type={"sortRight"} />
          </EuiCustomLink>
        </EuiFlexItem>
      </EuiFlexGroup>
@@ -62,12 +64,12 @@ const getClusterStatusHeader = (clusterList: any[]) => {
   })
   let messageIcon = 'checkInCircleFilled';
   let messageIconColor = 'success';
-  let message = 'All CompanyName systems are fully operational';
+  let message = LocalizedText.singleton.healthyStatusMessage;
 
   if (clusterInError.length > 0) {
     messageIcon = 'crossInACircleFilled';
     messageIconColor = 'danger';
-    message = `There's an issue with ${clusterInError.map(cluster => cluster.name).join(', ')}`;
+    message = `${LocalizedText.singleton.errorStatusMessage} ${clusterInError.map(cluster => cluster.name).join(', ')}`;
   }
 
   return (
@@ -132,7 +134,7 @@ const ClusterStatusComponent = (props: ClusterStatusComponentProps) => {
               {getClusterStatusHeader(props.clusterList)}
               {props.clusterList.length > 0 ?
                 props.clusterList.map((cluster) =>
-                  <ClusterCard cluster={cluster} key={cluster.id}/>
+                  <ClusterCard cluster={cluster} basePath={props.basePath} key={cluster.id}/>
                 )
               : (
                 <div>No cluster found</div>

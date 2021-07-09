@@ -46,7 +46,7 @@ const ApplicationStatusContainer = (props: ApplicationStatusContainerProps) => {
 
   if (isMocked) {
     logger.info(stateHandler.getState().apiurl);
-    makeServer({ environment: "development" }, stateHandler.getState().apiurl, MocksScenario.scenario2)
+    makeServer({ environment: "development" }, stateHandler.getState().apiurl, MocksScenario.scenario1)
   }
 
   return (

@@ -95,12 +95,20 @@ function getModule() {
   };
 }
 
+function getOutput(env) {
+  if (env.federated) {
+    return {}
+  }
+
+  return {
+    publicPath: '/'
+  }
+}
+
 function generateBaseWebpackConfig(env, mode, dotenv, args) {
   return {
     mode: mode,
-    output: {
-      publicPath: '/'
-    },
+    output: getOutput(env),
     resolve: {
       extensions: [".ts", ".tsx", ".jsx", ".js", ".json"],
     },

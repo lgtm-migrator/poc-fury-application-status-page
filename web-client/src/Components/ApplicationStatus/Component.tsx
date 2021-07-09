@@ -1,9 +1,11 @@
-import React, {PropsWithChildren} from "react";
+import React, {useEffect} from "react";
 import { ClusterStatus } from "../ClusterStatus";
 import { BrowserRouter as Router, Route, Switch, RouteComponentProps } from "react-router-dom";
 import 'fury-design-system/dist/eui_theme_fury_community.css';
 import './Style.css';
 import {ClusterServiceStatus} from "../ClusterServiceStatus";
+import {LocalizedText} from "./LocalizedText";
+import {initialize} from "../../i18n";
 
 interface RouteParams {
   clusterId: string;
@@ -17,6 +19,12 @@ interface ApplicationStatusComponentProps {
 }
 
 const ApplicationStatusComponent = (props: ApplicationStatusComponentProps) => {
+  useEffect(() => {
+    initialize.then(() => {
+      LocalizedText.singleton.changeLanguage(props.language);
+    })
+  }, []);
+
   return (
     <Router>
       <Switch>
@@ -26,6 +34,7 @@ const ApplicationStatusComponent = (props: ApplicationStatusComponentProps) => {
             releaseNumber={props.releaseNumber}
             language={props.language}
             clusterId={propsRoute.match.params.clusterId}
+            basePath={props.basePath}
           />
         } />
         <Route
@@ -35,6 +44,7 @@ const ApplicationStatusComponent = (props: ApplicationStatusComponentProps) => {
               apiUrl={props.apiUrl}
               releaseNumber={props.releaseNumber}
               language={props.language}
+              basePath={props.basePath}
             />
           )}
         />

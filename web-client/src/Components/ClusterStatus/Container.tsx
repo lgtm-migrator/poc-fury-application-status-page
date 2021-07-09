@@ -7,6 +7,7 @@ interface ClusterStatusComponentProps {
   apiUrl: string;
   language: string;
   releaseNumber: string;
+  basePath: string;
 }
 
 const fetchClusterListAsync = async (apiUrl: string) => {
@@ -42,6 +43,7 @@ const ClusterStatusContainer = (props: ClusterStatusComponentProps) => {
           language={props.language}
           releaseNumber={releaseNumber}
           clusterList={clusterList}
+          basePath={props.basePath}
         />
       )}
     </>

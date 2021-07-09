@@ -1,3 +1,9 @@
 {
-  "Fury Application Status Page Title": "Fury Application Status"
+  "Fury Cluster Status Healthy": "Tutti i sistemi di CompanyName sono pienamente operativi",
+  "Fury Cluster Status Error": "C'è un problema con",
+  "Fury Cluster Status Go To Services": "vai",
+  "Fury Cluster Services Status Healthy": "Il sistema CompanyName Cluster Custom Name 1 è completamente operativo",
+  "Fury Cluster Services Status Error": "C'è un problema relativo a:",
+  "Fury Cluster Services Status Error Occurred": "Si è verificato il",
+  "Fury Cluster Service Status Go Back": "indietro"
 }
