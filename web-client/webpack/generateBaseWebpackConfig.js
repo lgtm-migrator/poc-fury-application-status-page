@@ -37,6 +37,7 @@ function getPlugins(dotenv, env) {
       template: "./public/index.htm",
       favicon: "./public/favicon.ico",
       manifest: "./public/manifest.json",
+      filename: "index.htm",
     }),
     new webpack.DefinePlugin({
       "process.env": generateProcessEnv(dotenv, env),
@@ -97,12 +98,12 @@ function getModule() {
 
 function getOutput(env) {
   if (env.federated) {
-    return {}
+    return {};
   }
 
   return {
-    publicPath: '/'
-  }
+    publicPath: "/",
+  };
 }
 
 function generateBaseWebpackConfig(env, mode, dotenv, args) {
