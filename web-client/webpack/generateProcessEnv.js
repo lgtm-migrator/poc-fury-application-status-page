@@ -65,4 +65,3 @@ function generateProcessEnv(dotenv, env) {
 }
 
 module.exports = generateProcessEnv
-

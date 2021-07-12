@@ -1,11 +1,18 @@
-import React, { useState } from "react";
-import { releaseNumber } from "../../constants";
-import { createStateHandler } from "../../Services/createStateHandler";
+/**
+ * Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
+import React, {useState} from "react";
+import {releaseNumber} from "../../constants";
+import {createStateHandler} from "../../Services/createStateHandler";
 import ApplicationStatusComponent from "./Component";
-import { logger } from "../../Services/Logger";
-import {makeServer} from "../../Services/MocksServer";
+import {logger} from "../../Services/Logger";
+import {makeServer} from "../../Services/Mocks/MakeServer";
 import {StateManager} from "fury-component/dist/State/types";
 import {IStateHandler} from "../types";
+import {MocksScenario} from "../../Services/Mocks/types";
 
 interface ApplicationStatusContainerProps {
   apiUrl?: string;
@@ -45,7 +52,7 @@ const ApplicationStatusContainer = (props: ApplicationStatusContainerProps) => {
 
   if (isMocked) {
     logger.info(stateHandler.getState().apiurl);
-    makeServer({ environment: "development" }, stateHandler.getState().apiurl)
+    makeServer({ environment: "development" }, stateHandler.getState().apiurl, MocksScenario.scenario1)
   }
 
   return (
@@ -61,4 +68,3 @@ const ApplicationStatusContainer = (props: ApplicationStatusContainerProps) => {
 };
 
 export default ApplicationStatusContainer;
-

@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
 import React, { useEffect, useState } from "react";
 import { releaseNumber } from "../../constants";
 import ClusterServiceStatusComponent from "./Component";
@@ -9,6 +15,7 @@ interface ClusterServiceStatusComponentProps {
   language: string;
   releaseNumber: string;
   clusterId: string;
+  basePath: string;
 }
 
 const fetchClusterServiceListAsync = async (apiUrl: string, clusterId: string) => {
@@ -46,7 +53,8 @@ const ClusterServiceStatusContainer = (props: ClusterServiceStatusComponentProps
         <ClusterServiceStatusComponent
           language={props.language}
           releaseNumber={releaseNumber}
-          clusterList={clusterServiceList}
+          clusterServiceList={clusterServiceList}
+          basePath={props.basePath}
         />
       )}
     </>

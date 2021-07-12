@@ -17,7 +17,7 @@ function getPlugins(dotenv, env) {
       filename: "remoteEntry.js",
       exposes: {
         "./ApplicationStatusPage":
-          "./src/webcomponents/ApplicationStatusPage.tsx",
+          "./src/Webcomponents/ApplicationStatusPage.tsx",
       },
       shared: {
         react: {
@@ -37,6 +37,7 @@ function getPlugins(dotenv, env) {
       template: "./public/index.htm",
       favicon: "./public/favicon.ico",
       manifest: "./public/manifest.json",
+      filename: "index.htm",
     }),
     new webpack.DefinePlugin({
       "process.env": generateProcessEnv(dotenv, env),
@@ -95,12 +96,20 @@ function getModule() {
   };
 }
 
+function getOutput(env) {
+  if (env.federated) {
+    return {};
+  }
+
+  return {
+    publicPath: "/",
+  };
+}
+
 function generateBaseWebpackConfig(env, mode, dotenv, args) {
   return {
     mode: mode,
-    output: {
-      publicPath: '/'
-    },
+    output: getOutput(env),
     resolve: {
       extensions: [".ts", ".tsx", ".jsx", ".js", ".json"],
     },

@@ -8,8 +8,8 @@ ENV APP_ENV=production
 ENV SERVER_OFFLINE=false
 ENV SERVER_BASE_PATH=""
 ENV API_VERSION="/api/v0/"
-ENV MODULE_KEY="furyapplicationstatuspage"
-ENV RELEASE_TAG="local.dev"
+ENV MODULE_KEY="fury-application-status"
+ENV RELEASE_TAG="0.0.1"
 ENV COMMIT="xxxx"
 
 COPY web-client/package.json /var/tmp/package.json
@@ -37,7 +37,10 @@ RUN mkdir static/
 COPY --from=webapp web-client/dist/ static/
 RUN goreleaser build --debug --snapshot --rm-dist
 
-FROM debian:buster
+FROM debian:buster as release
 
-COPY --from=compile /app/dist/poc-fury-application-status-page-linux_linux_amd64/poc-fury-application-status-page /usr/local/bin/poc-fury-application-status-page
-COPY example-config.yml config.yml
+RUN mkdir -p /app
+WORKDIR /app
+COPY --from=compile /app/dist/poc-fury-application-status-page-linux_linux_amd64/poc-fury-application-status-page /app/poc-fury-application-status-page
+CMD ["/app/poc-fury-application-status-page"]
+

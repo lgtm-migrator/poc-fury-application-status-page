@@ -1,21 +1,42 @@
+/**
+ * Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
 import React from "react";
 import {
   EuiFlexGroup,
   EuiPanel,
   EuiPage,
-  EuiPageBody, EuiPageHeader, EuiPageContent, EuiPageHeaderSection, EuiFlexItem, EuiText, EuiIcon, EuiLink
+  EuiPageBody, EuiPageHeader, EuiPageContent, EuiPageHeaderSection, EuiFlexItem, EuiText, EuiIcon, EuiTitle
 } from "fury-design-system";
 import "./Style.css";
 import {EuiCustomLink} from "../EuiCustomLink";
+import {LocalizedText} from "./LocalizedText";
+import moment from 'moment';
 
 interface ClusterServiceStatusComponentProps {
   language: string;
   releaseNumber: string;
-  clusterList: any[];
+  clusterServiceList: any[];
+  basePath: string;
 }
 
 interface ClusterServiceCardProps {
   clusterService: any;
+}
+
+const getClusterServiceCardStatusIcon = (status: string) => {
+  if (status === 'healthy') {
+    return (
+      <EuiIcon size={"xxl"} type="checkInCircleFilled" color={"success"} />
+    )
+  }
+
+  return (
+    <EuiIcon size={"xxl"} type="crossInACircleFilled" color={"danger"} />
+  )
 }
 
 const ClusterServiceCard = (props: ClusterServiceCardProps) => {
@@ -23,7 +44,7 @@ const ClusterServiceCard = (props: ClusterServiceCardProps) => {
     <EuiPanel paddingSize="s" className="cluster-service-card" color={"transparent"} borderRadius={"none"}>
       <EuiFlexGroup gutterSize="m" alignItems={"center"} responsive={false}>
         <EuiFlexItem grow={false}>
-          <EuiIcon size={"xxl"} type="checkInCircleFilled" color={"success"} />
+          {getClusterServiceCardStatusIcon(props.clusterService.status)}
         </EuiFlexItem>
         <EuiFlexItem grow={false}>
           <EuiText size="s" >
@@ -31,9 +52,54 @@ const ClusterServiceCard = (props: ClusterServiceCardProps) => {
               <strong>{props.clusterService.name}</strong>
             </p>
           </EuiText>
+          {
+            props.clusterService.status === "error" &&
+            <EuiText size={"s"} >
+                <p>
+                  {LocalizedText.singleton.errorOccurredAt} {moment(props.clusterService.failedAt).format("DD/MM/YYYY HH:mm Z")}
+                </p>
+            </EuiText>
+          }
         </EuiFlexItem>
       </EuiFlexGroup>
     </EuiPanel>
+  )
+}
+
+const getClusterServiceStatusHeader = (clusterServiceList: any[]) => {
+  const clusterServiceInError = (clusterServiceList ?? []).filter((clusterService) => {
+    return clusterService.status === "error";
+  })
+  let messageIcon = 'check';
+  let messageIconColor = 'success';
+  let message = LocalizedText.singleton.healthyStatusMessage;
+  let messageClusterServiceList = '';
+
+  if (clusterServiceInError.length > 0) {
+    messageIcon = 'cross';
+    messageIconColor = 'danger';
+    message = LocalizedText.singleton.errorStatusMessage;
+    messageClusterServiceList = `${clusterServiceInError.map(clusterService => clusterService.name).join('\r\n')}`;
+  }
+
+  return (
+    <EuiFlexGroup gutterSize="m" justifyContent={"center"} direction={"column"} responsive={false}>
+      <EuiFlexItem>
+        <EuiIcon size={"xxl"} type={messageIcon} color={messageIconColor} />
+      </EuiFlexItem>
+      <EuiFlexItem className={"cluster-service-status-message"}>
+        <EuiTitle size={"s"} >
+          <h1>
+            {message}
+          </h1>
+        </EuiTitle>
+        <EuiText>
+          <p>
+            {messageClusterServiceList}
+          </p>
+        </EuiText>
+      </EuiFlexItem>
+    </EuiFlexGroup>
   )
 }
 
@@ -47,9 +113,8 @@ const ClusterServiceStatusComponent = (props: ClusterServiceStatusComponentProps
             paddingSize="l"
           >
             <EuiPageHeaderSection>
-              {/* TODO: Add BasePath */}
-              <EuiCustomLink to={`/`}>
-                <EuiIcon type={"sortLeft"} /> back
+              <EuiCustomLink to={`${props.basePath}/`}>
+                <EuiIcon type={"sortLeft"} /> {LocalizedText.singleton.goBack}
               </EuiCustomLink>
             </EuiPageHeaderSection>
           </EuiPageHeader>
@@ -66,8 +131,9 @@ const ClusterServiceStatusComponent = (props: ClusterServiceStatusComponentProps
               color="transparent"
               style={{ maxWidth: "600px", width: "100%" }}
               hasShadow={false}>
-              {props.clusterList.length > 0 ?
-                props.clusterList.map((clusterService) =>
+              {getClusterServiceStatusHeader(props.clusterServiceList)}
+              {props.clusterServiceList.length > 0 ?
+                props.clusterServiceList.map((clusterService) =>
                   <ClusterServiceCard clusterService={clusterService} key={clusterService.id}/>
                 )
                 : (
