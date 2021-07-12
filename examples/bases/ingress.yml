@@ -23,3 +23,4 @@ spec:
                 name: fury-application-status
                 port:
                   name: http
+
