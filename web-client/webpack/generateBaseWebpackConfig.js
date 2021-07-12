@@ -17,7 +17,7 @@ function getPlugins(dotenv, env) {
       filename: "remoteEntry.js",
       exposes: {
         "./ApplicationStatusPage":
-          "./src/webcomponents/ApplicationStatusPage.tsx",
+          "./src/Webcomponents/ApplicationStatusPage.tsx",
       },
       shared: {
         react: {
