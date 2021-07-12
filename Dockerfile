@@ -39,5 +39,8 @@ RUN goreleaser build --debug --snapshot --rm-dist
 
 FROM debian:buster as release
 
-COPY --from=compile /app/dist/poc-fury-application-status-page-linux_linux_amd64/poc-fury-application-status-page /usr/local/bin/poc-fury-application-status-page
-COPY example-config.yml config.yml
+RUN mkdir -p /app
+WORKDIR /app
+COPY --from=compile /app/dist/poc-fury-application-status-page-linux_linux_amd64/poc-fury-application-status-page /app/poc-fury-application-status-page
+CMD [/app/poc-fury-application-status-page]
+
