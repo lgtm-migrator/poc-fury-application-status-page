@@ -21,7 +21,8 @@ spec:
     spec:
       containers:
         - name: fury-application-status
-          image: registry.sighup.io/poc/fury-application-status
+          # remove :mocked when the BE API is ready to be used
+          image: registry.sighup.io/poc/fury-application-status:mocked
           ports:
             - containerPort: 8080
           volumeMounts:

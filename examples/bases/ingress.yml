@@ -13,7 +13,7 @@ metadata:
   name: fury-application-status
 spec:
   rules:
-    - host: fury-application-status.fury.localdomain
+    - host: fury-application-status.demo-app.localdomain
       http:
         paths:
           - path: /
