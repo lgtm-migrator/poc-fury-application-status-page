@@ -14,7 +14,10 @@ module.exports = (env, args) => {
     return {
         ...base,
         devServer: {
-            historyApiFallback: true,
+            historyApiFallback: {
+               rewrites: [{ from: /./, to: "/index.htm" }],
+                index: "index.htm",
+            },
             port: 8085,
         }
     }

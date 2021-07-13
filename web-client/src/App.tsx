@@ -14,23 +14,43 @@ import {Server} from "miragejs/server";
 import {logger} from "./Services/Logger";
 import {MocksScenario} from "./Services/Mocks/types";
 
-const fetchApiPathFromEnvOrRemoteAsync = async () => {
-  const apiPath: string | undefined = process.env.API_PATH;
+const getGroupTitleIfExists = (groupTitle?: string) => {
+ if (groupTitle) {
+   return {
+     groupTitle: groupTitle
+   }
+ }
+
+ return {}
+}
+
+const fetchConfigFromEnvOrRemoteAsync = async () => {
+  const apiPath: string = process.env.API_PATH ?? "/";
+  const groupLabel: string | undefined = process.env.GROUP_LABEL;
+  const groupTitle: string | undefined = process.env.GROUP_TITLE;
   const serverBasePath: string = process.env.SERVER_BASE_PATH ?? '';
 
   // INFO: Allow local development without backend server
   if (process.env.SERVER_OFFLINE === 'true') {
-    return `${ serverBasePath }${ apiPath }`;
-  }
+    if (!groupLabel) {
+      throw new Error('Missing GROUP_LABEL from .env')
+    }
 
-  if (!apiPath) {
-    throw new Error('Missing API_PATH from .env');
+    return {
+      apiPath: `${serverBasePath}${apiPath}`,
+      groupLabel: groupLabel,
+      ...getGroupTitleIfExists(groupTitle)
+    }
   }
 
   // INFO: fetch config from backend server
   const configRes = await fetch(`${ serverBasePath }/config`);
   const json = await configRes.json();
-  return `${ json.Data.externalEndpoint }${ apiPath }`;
+  return {
+    apiPath: `${ json.Data.externalEndpoint }${ apiPath }`,
+    groupLabel: json.Data.groupLabel,
+    ...getGroupTitleIfExists(json.Data.groupTitle)
+  };
 };
 
 function injectMockServer() {
@@ -56,16 +76,26 @@ const mockServer: Server | undefined = injectMockServer();
 
 function App() {
   const [apiUrl, setApiUrl] = useState<string>('');
+  const [groupLabel, setGroupLabel] = useState<string>('');
+  const [groupTitle, setGroupTitle] = useState<string>('');
+
   logger.info(JSON.stringify(process.env))
   useEffect(() => {
     // Bootstrap app state from async fetch config/serviceList
-    fetchApiPathFromEnvOrRemoteAsync()
-      .then(configApiUrl => {
+    fetchConfigFromEnvOrRemoteAsync()
+      .then(config => {
         if (mockServer) {
           mockServer.shutdown();
         }
 
-        setApiUrl(configApiUrl)
+        setApiUrl(config.apiPath);
+        setGroupLabel(config.groupLabel);
+
+        logger.info(config.apiPath);
+
+        if (config.groupTitle) {
+          setGroupTitle(config.groupTitle);
+        }
       });
   }, []);
 
@@ -94,10 +124,12 @@ function App() {
           />
         </div>
         <EuiSpacer size="xxl" />
-        { apiUrl ?
+        { apiUrl && groupLabel ?
           <EuiErrorBoundary>
             <ApplicationStatus
               apiUrl={apiUrl}
+              groupLabel={groupLabel}
+              groupTitle={groupTitle}
             />
           </EuiErrorBoundary>
           :

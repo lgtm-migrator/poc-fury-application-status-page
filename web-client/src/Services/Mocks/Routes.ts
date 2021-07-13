@@ -19,7 +19,9 @@ export function getRoutes(urlPrefix: string, apiPath?: string) {
        Data: {
          listener: "0.0.0.0:8080",
          externalEndpoint: urlPrefix,
-         apiVersion: "/api/v0/",
+         apiVersion: "",
+         groupLabel: "BookInfo",
+         groupTitle: "Book Info Application",
          appEnv: "development",
        }
      }
@@ -31,14 +33,22 @@ export function getRoutes(urlPrefix: string, apiPath?: string) {
      this.namespace = "/api/v0/";
    }
 
-   this.get('list', (schema: Schema<Registry<MockedServerBaseModels, MockedServerBaseFactories>>) => {
-     return schema.all("cluster").models;
+   this.get('group/:group', (schema: Schema<Registry<MockedServerBaseModels, MockedServerBaseFactories>>) => {
+     return {
+       results: schema.all("healthCheck").models ?? []
+     }
    })
 
-   this.get(':clusterId/list', (schema: MockedSchema, request: Request) => {
-     const clusterServices = schema.all("clusterService").models.filter(clusterService => clusterService.cluster?.id === request.params.clusterId);
-     logger.info(JSON.stringify(clusterServices));
-     return clusterServices;
+   this.get('group/:group/target/:target', (schema: MockedSchema, request: Request) => {
+     const healthChecks =
+       schema
+         .all("healthCheck")
+         .models
+         .filter(healthCheck => healthCheck.group === request.params.group && healthCheck.target === request.params.target);
+     logger.info(JSON.stringify(healthChecks));
+     return {
+       results: healthChecks ?? []
+     };
    })
  }
 }

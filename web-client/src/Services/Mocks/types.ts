@@ -4,33 +4,18 @@
  * license that can be found in the LICENSE file.
  */
 
-import {BelongsTo, FactoryDefinition, ModelDefinition, Registry} from "miragejs/-types";
+import {FactoryDefinition, ModelDefinition, Registry} from "miragejs/-types";
 import Schema from "miragejs/orm/schema";
+import {HealthCheck} from "../../Components/types";
 
-export type ClusterStatus = "healthy" | "error";
-
-export interface MockedCluster {
-  status: ClusterStatus;
-  name: string;
-  id: string;
-}
-
-export interface MockedClusterService {
-  status: ClusterStatus;
-  name: string;
-  cluster: BelongsTo<"cluster">;
-  id: string;
-  failedAt: string;
-}
+export interface MockedHealthCheck extends HealthCheck {}
 
 export type MockedServerBaseModels = {
-  cluster: ModelDefinition<MockedCluster>;
-  clusterService: ModelDefinition<MockedClusterService>;
+  healthCheck: ModelDefinition<MockedHealthCheck>;
 }
 
 export type MockedServerBaseFactories = {
-  cluster: FactoryDefinition;
-  clusterService: FactoryDefinition;
+  healthCheck: FactoryDefinition;
 }
 
 export enum MocksScenario {

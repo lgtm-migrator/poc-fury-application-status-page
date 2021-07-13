@@ -4,15 +4,15 @@
  * license that can be found in the LICENSE file.
  */
 
-.euiFlexGroup--gutterMedium > .euiFlexItem.cluster-service-status-message {
+.euiFlexGroup--gutterMedium > .euiFlexItem.target-health-checks-message {
     margin-bottom: 30px;
 }
 
-.euiFlexGroup--gutterMedium > .euiFlexItem.cluster-service-status-message p {
+.euiFlexGroup--gutterMedium > .euiFlexItem.target-health-checks-message p {
     white-space: pre;
 }
 
-.cluster-service-card {
+.target-health-check-card {
     border-bottom: 1px solid #bcbdbf;
     padding-left: 0;
     padding-right: 0;

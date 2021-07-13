@@ -18,9 +18,8 @@ function yamlConfigToAppConfig(offline, configPath) {
     return {
         APP_ENV: yamlConfig.appEnv,
         SERVER_OFFLINE: offline,
-        API_PATH: '/api/v0/',
+        API_PATH: '/',
         SERVER_BASE_PATH: yamlConfig.externalEndpoint,
-        SERVICE_SUPPORT_ID: yamlConfig.serviceToStopId
     };
 }
 
@@ -33,7 +32,6 @@ function envToAppConfig() {
         APP_ENV: process.env.APP_ENV,
         SERVER_OFFLINE: process.env.SERVER_OFFLINE,
         SERVER_BASE_PATH: serverbasepath,
-        SERVICE_SUPPORT_ID: process.env.SERVICE_SUPPORT_ID,
         API_PATH: process.env.API_VERSION,
         MODULE_KEY: process.env.MODULE_KEY,
         RELEASE_TAG: process.env.RELEASE_TAG,

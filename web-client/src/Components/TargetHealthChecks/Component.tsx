@@ -15,20 +15,21 @@ import "./Style.css";
 import {EuiCustomLink} from "../EuiCustomLink";
 import {LocalizedText} from "./LocalizedText";
 import moment from 'moment';
+import {HealthCheck, HealthCheckStatus, TargetHealthCheck} from "../types";
 
-interface ClusterServiceStatusComponentProps {
+interface TargetHealthChecksComponentProps {
   language: string;
   releaseNumber: string;
-  clusterServiceList: any[];
+  targetHealthChecksList: TargetHealthCheck[];
   basePath: string;
 }
 
-interface ClusterServiceCardProps {
-  clusterService: any;
+interface TargetHealthChecksCardProps {
+  targetHealthCheck: TargetHealthCheck;
 }
 
-const getClusterServiceCardStatusIcon = (status: string) => {
-  if (status === 'healthy') {
+const getTargetHealthChecksCardStatusIcon = (status: HealthCheckStatus) => {
+  if (status === "Complete") {
     return (
       <EuiIcon size={"xxl"} type="checkInCircleFilled" color={"success"} />
     )
@@ -39,24 +40,24 @@ const getClusterServiceCardStatusIcon = (status: string) => {
   )
 }
 
-const ClusterServiceCard = (props: ClusterServiceCardProps) => {
+const TargetHealthChecksCard = (props: TargetHealthChecksCardProps) => {
   return (
-    <EuiPanel paddingSize="s" className="cluster-service-card" color={"transparent"} borderRadius={"none"}>
+    <EuiPanel paddingSize="s" className="target-health-check-card" color={"transparent"} borderRadius={"none"}>
       <EuiFlexGroup gutterSize="m" alignItems={"center"} responsive={false}>
         <EuiFlexItem grow={false}>
-          {getClusterServiceCardStatusIcon(props.clusterService.status)}
+          {getTargetHealthChecksCardStatusIcon(props.targetHealthCheck.status)}
         </EuiFlexItem>
         <EuiFlexItem grow={false}>
           <EuiText size="s" >
             <p>
-              <strong>{props.clusterService.name}</strong>
+              <strong>{props.targetHealthCheck.checkName}</strong>
             </p>
           </EuiText>
           {
-            props.clusterService.status === "error" &&
+            props.targetHealthCheck.status === ("Failed") &&
             <EuiText size={"s"} >
                 <p>
-                  {LocalizedText.singleton.errorOccurredAt} {moment(props.clusterService.failedAt).format("DD/MM/YYYY HH:mm Z")}
+                  {LocalizedText.singleton.errorOccurredAt} {moment(props.targetHealthCheck.completedAt).format("DD/MM/YYYY HH:mm Z")}
                 </p>
             </EuiText>
           }
@@ -66,20 +67,20 @@ const ClusterServiceCard = (props: ClusterServiceCardProps) => {
   )
 }
 
-const getClusterServiceStatusHeader = (clusterServiceList: any[]) => {
-  const clusterServiceInError = (clusterServiceList ?? []).filter((clusterService) => {
-    return clusterService.status === "error";
+const getTargetHealthChecksHeader = (targetHealthCheckList: TargetHealthCheck[]) => {
+  const targetHealthCheckInError = (targetHealthCheckList ?? []).filter((targetHealthCheck) => {
+    return targetHealthCheck.status === "Failed";
   })
   let messageIcon = 'check';
   let messageIconColor = 'success';
   let message = LocalizedText.singleton.healthyStatusMessage;
-  let messageClusterServiceList = '';
+  let messageTargetHealthCheckList = '';
 
-  if (clusterServiceInError.length > 0) {
+  if (targetHealthCheckInError.length > 0) {
     messageIcon = 'cross';
     messageIconColor = 'danger';
     message = LocalizedText.singleton.errorStatusMessage;
-    messageClusterServiceList = `${clusterServiceInError.map(clusterService => clusterService.name).join('\r\n')}`;
+    messageTargetHealthCheckList = `${targetHealthCheckInError.map(targetHealthCheck => targetHealthCheck.checkName).join('\r\n')}`;
   }
 
   return (
@@ -87,7 +88,7 @@ const getClusterServiceStatusHeader = (clusterServiceList: any[]) => {
       <EuiFlexItem>
         <EuiIcon size={"xxl"} type={messageIcon} color={messageIconColor} />
       </EuiFlexItem>
-      <EuiFlexItem className={"cluster-service-status-message"}>
+      <EuiFlexItem className={"target-health-checks-message"}>
         <EuiTitle size={"s"} >
           <h1>
             {message}
@@ -95,7 +96,7 @@ const getClusterServiceStatusHeader = (clusterServiceList: any[]) => {
         </EuiTitle>
         <EuiText>
           <p>
-            {messageClusterServiceList}
+            {messageTargetHealthCheckList}
           </p>
         </EuiText>
       </EuiFlexItem>
@@ -103,7 +104,7 @@ const getClusterServiceStatusHeader = (clusterServiceList: any[]) => {
   )
 }
 
-const ClusterServiceStatusComponent = (props: ClusterServiceStatusComponentProps) => {
+const TargetHealthChecksComponent = (props: TargetHealthChecksComponentProps) => {
   return (
     <>
       <EuiPage paddingSize="none" restrictWidth={true}>
@@ -131,13 +132,13 @@ const ClusterServiceStatusComponent = (props: ClusterServiceStatusComponentProps
               color="transparent"
               style={{ maxWidth: "600px", width: "100%" }}
               hasShadow={false}>
-              {getClusterServiceStatusHeader(props.clusterServiceList)}
-              {props.clusterServiceList.length > 0 ?
-                props.clusterServiceList.map((clusterService) =>
-                  <ClusterServiceCard clusterService={clusterService} key={clusterService.id}/>
+              {getTargetHealthChecksHeader(props.targetHealthChecksList)}
+              {props.targetHealthChecksList.length > 0 ?
+                props.targetHealthChecksList.map((targetHealthCheck, index) =>
+                  <TargetHealthChecksCard targetHealthCheck={targetHealthCheck} key={`${targetHealthCheck.checkName}-${index}`}/>
                 )
                 : (
-                  <div>No cluster found</div>
+                  <div>No health check found</div>
                 )}
             </EuiPageContent>
           </EuiPageContent>
@@ -147,4 +148,4 @@ const ClusterServiceStatusComponent = (props: ClusterServiceStatusComponentProps
   );
 };
 
-export default ClusterServiceStatusComponent;
+export default TargetHealthChecksComponent;

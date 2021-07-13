@@ -14,22 +14,23 @@ import {
 } from "fury-design-system";
 import "./Style.css";
 import {EuiCustomLink} from "../EuiCustomLink";
-import { LocalizedText } from './LocalizedText';
+import {LocalizedText} from './LocalizedText';
+import {HealthCheck, HealthCheckStatus, Target} from "../types";
 
-interface ClusterStatusComponentProps {
+interface TargetsComponentProps {
   language: string;
   releaseNumber: string;
-  clusterList: any[];
+  targetList: Target[];
   basePath: string;
 }
 
-interface ClusterCardProps {
-  cluster: any;
+interface TargetCardProps {
+  target: Target;
   basePath: string;
 }
 
-const getClusterCardStatusIcon = (status: string) => {
- if (status === 'healthy') {
+const getTargetCardStatusIcon = (status: HealthCheckStatus) => {
+ if (status === "Complete") {
    return (
      <EuiIcon size={"l"} type="checkInCircleFilled" color={"success"} />
    )
@@ -40,22 +41,22 @@ const getClusterCardStatusIcon = (status: string) => {
  )
 }
 
-const ClusterCard = (props: ClusterCardProps) => {
+const TargetCard = (props: TargetCardProps) => {
  return (
    <EuiPanel paddingSize="s" className="cluster-card" >
      <EuiFlexGroup gutterSize="m" alignItems={"center"} responsive={false}>
        <EuiFlexItem grow={false}>
-         {getClusterCardStatusIcon(props.cluster.status)}
+         {getTargetCardStatusIcon(props.target.status)}
        </EuiFlexItem>
        <EuiFlexItem grow={false}>
          <EuiText size="s" >
            <p>
-             <strong>{props.cluster.name}</strong>
+             <strong>{props.target.target}</strong>
            </p>
          </EuiText>
        </EuiFlexItem>
        <EuiFlexItem style={{marginLeft: "auto"}} grow={false}>
-         <EuiCustomLink to={`${props.basePath}/${props.cluster.id}/status`}>
+         <EuiCustomLink to={`${props.basePath}/${props.target.target}`}>
            {LocalizedText.singleton.goToClusterServicesButtonMessage} <EuiIcon type={"sortRight"} />
          </EuiCustomLink>
        </EuiFlexItem>
@@ -64,18 +65,18 @@ const ClusterCard = (props: ClusterCardProps) => {
  )
 }
 
-const getClusterStatusHeader = (clusterList: any[]) => {
-  const clusterInError = (clusterList ?? []).filter((cluster) => {
-    return cluster.status === "error";
+const getTargetStatusHeader = (targetList: Target[]) => {
+  const targetInError = (targetList ?? []).filter((target) => {
+    return target.status === ("Failed");
   })
   let messageIcon = 'checkInCircleFilled';
   let messageIconColor = 'success';
   let message = LocalizedText.singleton.healthyStatusMessage;
 
-  if (clusterInError.length > 0) {
+  if (targetInError.length > 0) {
     messageIcon = 'crossInACircleFilled';
     messageIconColor = 'danger';
-    message = `${LocalizedText.singleton.errorStatusMessage} ${clusterInError.map(cluster => cluster.name).join(', ')}`;
+    message = `${LocalizedText.singleton.errorStatusMessage} ${targetInError.map(target => target.target).join(', ')}`;
   }
 
   return (
@@ -84,7 +85,7 @@ const getClusterStatusHeader = (clusterList: any[]) => {
         <EuiIcon size={"xxl"} type={messageIcon} color={messageIconColor} />
       </EuiFlexItem>
       <EuiFlexItem>
-        <EuiTitle size={"s"} className={"cluster-status-text"}>
+        <EuiTitle size={"s"} className={"target-status-text"}>
           <h1>
             {message}
           </h1>
@@ -94,7 +95,7 @@ const getClusterStatusHeader = (clusterList: any[]) => {
   )
 }
 
-const ClusterStatusComponent = (props: ClusterStatusComponentProps) => {
+const TargetStatusComponent = (props: TargetsComponentProps) => {
   const breadcrumbs = [
     {
       text: 'All company systems',
@@ -137,10 +138,10 @@ const ClusterStatusComponent = (props: ClusterStatusComponentProps) => {
               color="transparent"
               style={{ maxWidth: "600px", width: "100%" }}
               hasShadow={false}>
-              {getClusterStatusHeader(props.clusterList)}
-              {props.clusterList.length > 0 ?
-                props.clusterList.map((cluster) =>
-                  <ClusterCard cluster={cluster} basePath={props.basePath} key={cluster.id}/>
+              {getTargetStatusHeader(props.targetList)}
+              {props.targetList.length > 0 ?
+                props.targetList.map((target, index) =>
+                  <TargetCard target={target} basePath={props.basePath} key={`${target.target}-${index}`}/>
                 )
               : (
                 <div>No cluster found</div>
@@ -153,4 +154,4 @@ const ClusterStatusComponent = (props: ClusterStatusComponentProps) => {
   );
 };
 
-export default ClusterStatusComponent;
+export default TargetStatusComponent;

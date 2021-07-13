@@ -4,8 +4,8 @@
  * license that can be found in the LICENSE file.
  */
 
-import ClusterServiceStatusContainer from "./Container";
+import TargetHealthChecksContainer from "./Container";
 
 export {
-  ClusterServiceStatusContainer as ClusterServiceStatus
+  TargetHealthChecksContainer as TargetHealthChecks
 }

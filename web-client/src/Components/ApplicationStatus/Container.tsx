@@ -16,6 +16,8 @@ import {MocksScenario} from "../../Services/Mocks/types";
 
 interface ApplicationStatusContainerProps {
   apiUrl?: string;
+  groupLabel: string;
+  groupTitle?: string;
 }
 
 function getBasePath(stateHandler: StateManager<IStateHandler>) {
@@ -39,8 +41,11 @@ const ApplicationStatusContainer = (props: ApplicationStatusContainerProps) => {
 
   if(props.apiUrl) {
     stateHandler.setState({
-      apiurl: props.apiUrl
+      apiurl: props.apiUrl,
+      grouplabel: props.groupLabel,
+      grouptitle: props.groupTitle
     })
+
   }
 
   logger.info(JSON.stringify(stateHandler.getState()));
@@ -48,6 +53,8 @@ const ApplicationStatusContainer = (props: ApplicationStatusContainerProps) => {
   const [currentLanguage] = useState<string>(stateHandler.getLanguage());
   const [basePath] = useState<string>(getBasePath(stateHandler));
   const [apiUrl] = useState<string>(stateHandler.getState().apiurl);
+  const [groupLabel] = useState<string>(stateHandler.getState().grouplabel);
+  const [groupTitle] = useState<string | undefined>(stateHandler.getState()?.grouptitle);
   const isMocked = getIsMocked(stateHandler);
 
   if (isMocked) {
@@ -62,6 +69,8 @@ const ApplicationStatusContainer = (props: ApplicationStatusContainerProps) => {
         releaseNumber={releaseNumber}
         basePath={basePath}
         apiUrl={apiUrl}
+        groupLabel={groupLabel}
+        groupTitle={groupTitle}
       />
     </>
   );

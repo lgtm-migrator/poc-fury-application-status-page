@@ -4,55 +4,85 @@
  * license that can be found in the LICENSE file.
  */
 
-import {ScenarioCluster} from "./types";
+import {MockedHealthCheck} from "../types";
 
-export const scenarioTwoData: ScenarioCluster[] = [
+export const scenarioTwoData: MockedHealthCheck[] = [
   {
-    name: "cluster one",
-    id: "cluster.one",
-    services: [
-      {
-        id: "cluster.service.one",
-        name: "cluster service 1-1"
-      }
-    ]
+    group: "BookInfo",
+    target: "Details",
+    startTime: "2021-07-13T15:02:07Z",
+    completedAt: "2021-07-13T15:02:09Z",
+    duration: "2s",
+    status: "Complete",
+    namespace: "bookinfo",
+    podName: "ep-check-details-1626188520-v8xf5",
+    checkName: "service-endpoints-check",
+    owner: "healthcheck-controller",
+    error: "",
   },
   {
-    name: "cluster two",
-    id: "cluster.two",
-    services: [
-      {
-        id: "cluster.service.two.one",
-        name: "cluster service 2-1"
-      }
-    ]
+    group: "BookInfo",
+    target: "Details",
+    startTime: "2021-07-13T15:03:07Z",
+    completedAt: "2021-07-13T15:03:10Z",
+    duration: "3s",
+    status: "Complete",
+    namespace: "bookinfo",
+    podName: "ep-check-details-1626188580-4cchb",
+    checkName: "service-endpoints-check",
+    owner: "healthcheck-controller",
+    error: "",
   },
   {
-    name: "cluster three",
-    id: "cluster.three",
-    services: [
-      {
-        id: "cluster.service.three" ,
-        name: "cluster service 3-1"
-      }
-    ]
+    group: "BookInfo",
+    target: "Details",
+    startTime: "2021-07-13T15:04:08Z",
+    completedAt: "2021-07-13T15:04:10Z",
+    duration: "2s",
+    status: "Complete",
+    namespace: "bookinfo",
+    podName: "ep-check-details-1626188640-jlf7m",
+    checkName: "service-endpoints-check",
+    owner: "healthcheck-controller",
+    error: "",
   },
   {
-    name: "cluster four",
-    id: "cluster.four",
-    services: [
-      {
-        id: "cluster.service.four.one",
-        name: "cluster service 4-1"
-      },
-      {
-        id: "cluster.service.four.two",
-        name: "cluster service 4-2"
-      },
-      {
-        id: "cluster.service.four.three",
-        name: "cluster service 4-3"
-      }
-    ]
-  }
-]
+    group: "BookInfo",
+    target: "Details",
+    startTime: "2021-07-13T14:50:00Z",
+    completedAt: "2021-07-13T14:50:06Z",
+    duration: "6s",
+    status: "Complete",
+    namespace: "bookinfo",
+    podName: "http-check-details-1626187800-6mz58",
+    checkName: "http-status-check",
+    owner: "healthcheck-controller",
+    error: "",
+  },
+  {
+    group: "BookInfo",
+    target: "Details",
+    startTime: "2021-07-13T14:55:03Z",
+    completedAt: "2021-07-13T14:55:09Z",
+    duration: "6s",
+    status: "Complete",
+    namespace: "bookinfo",
+    podName: "http-check-details-1626188100-d2qth",
+    checkName: "http-status-check",
+    owner: "healthcheck-controller",
+    error: "",
+  },
+  {
+    group: "BookInfo",
+    target: "Details",
+    startTime: "2021-07-13T15:00:06Z",
+    completedAt: "2021-07-13T15:00:10Z",
+    duration: "4s",
+    status: "Complete",
+    namespace: "bookinfo",
+    podName: "http-check-details-1626188400-wxx6t",
+    checkName: "http-status-check",
+    owner: "healthcheck-controller",
+    error: "",
+  },
+];
