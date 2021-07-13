@@ -14,6 +14,9 @@ type YamlConfig struct {
 	Listener         string `json:"listener"`
 	AppEnv           string `json:"appEnv"`
 	ExternalEndpoint string `json:"externalEndpoint"`
+	ApiUrl           string `json:"apiUrl"`
+	GroupLabel       string `json:"groupLabel"`
+	GroupTitle       *string `json:"groupTitle"`
 }
 
 func GetConfig() *viper.Viper {

@@ -47,7 +47,7 @@ const fetchConfigFromEnvOrRemoteAsync = async () => {
   const configRes = await fetch(`${ serverBasePath }/config`);
   const json = await configRes.json();
   return {
-    apiPath: `${ json.Data.externalEndpoint }${ apiPath }`,
+    apiPath: `${ json.Data.apiUrl }${ apiPath }`,
     groupLabel: json.Data.groupLabel,
     ...getGroupTitleIfExists(json.Data.groupTitle)
   };
