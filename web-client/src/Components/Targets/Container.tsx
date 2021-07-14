@@ -78,6 +78,7 @@ const TargetsContainer = (props: TargetsContainerProps) => {
           releaseNumber={releaseNumber}
           targetList={targetList}
           basePath={props.basePath}
+          groupLabel={props.groupLabel}
         />
       )}
     </>

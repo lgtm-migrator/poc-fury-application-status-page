@@ -1,9 +1,9 @@
 {
-  "Fury Cluster Status Healthy": "All CompanyName systems are fully operational",
+  "Fury Cluster Status Healthy": "All {{group}} systems are fully operational",
   "Fury Cluster Status Error": "There's an issue with",
   "Fury Cluster Status Go To Services": "see",
-  "Fury Cluster Services Status Healthy": "The CompanyName Cluster Custom Name 1 system is fully operational",
-  "Fury Cluster Services Status Error": "There's an issue related to:",
-  "Fury Cluster Services Status Error Occurred": "Occurred at",
+  "Fury Cluster Services Status Healthy": "All the {{group}} {{target}} checks are passed",
+  "Fury Cluster Services Status Error": "{{checkNum}} check inside {{group}} {{target}} have failed for:",
+  "Fury Cluster Services Status Error Occurred": "Occurred",
   "Fury Cluster Service Status Go Back": "back"
 }

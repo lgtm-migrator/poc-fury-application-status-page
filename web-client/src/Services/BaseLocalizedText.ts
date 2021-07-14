@@ -6,14 +6,24 @@
 
 import i18n from "../i18n";
 
+interface TranslationParams {
+  [key:string]: string;
+}
+
 export class BaseLocalizedText {
   protected readonly translator: typeof i18n;
 
-  protected readonly translate: (key: string) => string;
+  protected readonly translate: (key: string, params?: TranslationParams) => string;
 
   constructor() {
     this.translator = i18n;
-    this.translate = (key) => i18n.t(key);
+    this.translate = (key, params) => {
+      if (params) {
+        return i18n.t(key, params);
+      }
+
+      return i18n.t(key);
+    }
   }
 
   public changeLanguage(language: string) {

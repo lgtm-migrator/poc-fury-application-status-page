@@ -22,6 +22,8 @@ interface TargetHealthChecksComponentProps {
   releaseNumber: string;
   targetHealthChecksList: TargetHealthCheck[];
   basePath: string;
+  groupLabel: string;
+  target: string;
 }
 
 interface TargetHealthChecksCardProps {
@@ -67,19 +69,19 @@ const TargetHealthChecksCard = (props: TargetHealthChecksCardProps) => {
   )
 }
 
-const getTargetHealthChecksHeader = (targetHealthCheckList: TargetHealthCheck[]) => {
+const getTargetHealthChecksHeader = (targetHealthCheckList: TargetHealthCheck[], groupLabel: string, target: string) => {
   const targetHealthCheckInError = (targetHealthCheckList ?? []).filter((targetHealthCheck) => {
     return targetHealthCheck.status === "Failed";
   })
   let messageIcon = 'check';
   let messageIconColor = 'success';
-  let message = LocalizedText.singleton.healthyStatusMessage;
+  let message = LocalizedText.singleton.healthyStatusMessage(groupLabel, target);
   let messageTargetHealthCheckList = '';
 
   if (targetHealthCheckInError.length > 0) {
     messageIcon = 'cross';
     messageIconColor = 'danger';
-    message = LocalizedText.singleton.errorStatusMessage;
+    message = LocalizedText.singleton.errorStatusMessage(targetHealthCheckInError.length, groupLabel, target);
     messageTargetHealthCheckList = `${targetHealthCheckInError.map(targetHealthCheck => targetHealthCheck.checkName).join('\r\n')}`;
   }
 
@@ -132,7 +134,7 @@ const TargetHealthChecksComponent = (props: TargetHealthChecksComponentProps) =>
               color="transparent"
               style={{ maxWidth: "600px", width: "100%" }}
               hasShadow={false}>
-              {getTargetHealthChecksHeader(props.targetHealthChecksList)}
+              {getTargetHealthChecksHeader(props.targetHealthChecksList, props.groupLabel, props.target)}
               {props.targetHealthChecksList.length > 0 ?
                 props.targetHealthChecksList.map((targetHealthCheck, index) =>
                   <TargetHealthChecksCard targetHealthCheck={targetHealthCheck} key={`${targetHealthCheck.checkName}-${index}`}/>

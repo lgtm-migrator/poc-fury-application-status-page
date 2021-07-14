@@ -10,15 +10,15 @@ export class LocalizedText extends BaseLocalizedText {
 
   public static singleton = new LocalizedText();
 
-  public get healthyStatusMessage() {
-    return this.translate('Fury Cluster Status Healthy');
-  }
-
   public get errorStatusMessage() {
     return this.translate('Fury Cluster Status Error');
   }
 
   public get goToClusterServicesButtonMessage() {
     return this.translate('Fury Cluster Status Go To Services')
+  }
+
+  public healthyStatusMessage(group: string) {
+    return this.translate('Fury Cluster Status Healthy', {group: group});
   }
 }

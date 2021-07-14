@@ -80,6 +80,8 @@ const TargetHealthChecksContainer = (props: TargetHealthChecksComponentProps) =>
           releaseNumber={releaseNumber}
           targetHealthChecksList={clusterServiceList}
           basePath={props.basePath}
+          groupLabel={props.groupLabel}
+          target={props.target}
         />
       )}
     </>

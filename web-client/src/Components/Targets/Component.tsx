@@ -15,13 +15,15 @@ import {
 import "./Style.css";
 import {EuiCustomLink} from "../EuiCustomLink";
 import {LocalizedText} from './LocalizedText';
-import {HealthCheck, HealthCheckStatus, Target} from "../types";
+import {HealthCheckStatus, Target} from "../types";
+import {logger} from "../../Services/Logger";
 
 interface TargetsComponentProps {
   language: string;
   releaseNumber: string;
   targetList: Target[];
   basePath: string;
+  groupLabel: string;
 }
 
 interface TargetCardProps {
@@ -65,13 +67,14 @@ const TargetCard = (props: TargetCardProps) => {
  )
 }
 
-const getTargetStatusHeader = (targetList: Target[]) => {
+const getTargetStatusHeader = (targetList: Target[], groupLabel: string) => {
   const targetInError = (targetList ?? []).filter((target) => {
     return target.status === ("Failed");
   })
   let messageIcon = 'checkInCircleFilled';
   let messageIconColor = 'success';
-  let message = LocalizedText.singleton.healthyStatusMessage;
+  let message = LocalizedText.singleton.healthyStatusMessage(groupLabel);
+  logger.info(`groupLabel: ${groupLabel}`)
 
   if (targetInError.length > 0) {
     messageIcon = 'crossInACircleFilled';
@@ -98,7 +101,7 @@ const getTargetStatusHeader = (targetList: Target[]) => {
 const TargetStatusComponent = (props: TargetsComponentProps) => {
   const breadcrumbs = [
     {
-      text: 'All company systems',
+      text: `All ${props.groupLabel} systems`,
       onClick: (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
       },
@@ -138,7 +141,7 @@ const TargetStatusComponent = (props: TargetsComponentProps) => {
               color="transparent"
               style={{ maxWidth: "600px", width: "100%" }}
               hasShadow={false}>
-              {getTargetStatusHeader(props.targetList)}
+              {getTargetStatusHeader(props.targetList, props.groupLabel)}
               {props.targetList.length > 0 ?
                 props.targetList.map((target, index) =>
                   <TargetCard target={target} basePath={props.basePath} key={`${target.target}-${index}`}/>
