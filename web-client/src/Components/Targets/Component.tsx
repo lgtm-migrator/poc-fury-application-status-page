@@ -15,6 +15,7 @@ import {
 import "./Style.css";
 import {EuiCustomLink} from "../EuiCustomLink";
 import {LocalizedText} from './LocalizedText';
+import { UptimeBar } from "../UptimeBar";
 import {HealthCheckStatus, Target} from "../types";
 import {logger} from "../../Services/Logger";
 
@@ -63,6 +64,7 @@ const TargetCard = (props: TargetCardProps) => {
          </EuiCustomLink>
        </EuiFlexItem>
      </EuiFlexGroup>
+     <UptimeBar />
    </EuiPanel>
  )
 }
