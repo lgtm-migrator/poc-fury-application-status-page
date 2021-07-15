@@ -16,6 +16,7 @@ import {EuiCustomLink} from "../EuiCustomLink";
 import {LocalizedText} from "./LocalizedText";
 import moment from 'moment';
 import {HealthCheck, HealthCheckStatus, TargetHealthCheck} from "../types";
+import { UptimeBar } from "../UptimeBar";
 
 interface TargetHealthChecksComponentProps {
   language: string;
@@ -136,8 +137,13 @@ const TargetHealthChecksComponent = (props: TargetHealthChecksComponentProps) =>
               hasShadow={false}>
               {getTargetHealthChecksHeader(props.targetHealthChecksList, props.groupLabel, props.target)}
               {props.targetHealthChecksList.length > 0 ?
-                props.targetHealthChecksList.map((targetHealthCheck, index) =>
-                  <TargetHealthChecksCard targetHealthCheck={targetHealthCheck} key={`${targetHealthCheck.checkName}-${index}`}/>
+                props.targetHealthChecksList.map((targetHealthCheck, index) => 
+                  (
+                    <>
+                      <TargetHealthChecksCard targetHealthCheck={targetHealthCheck} key={`${targetHealthCheck.checkName}-${index}`}/>
+                      <UptimeBar itemList={props.targetHealthChecksList} viewBoxWidth={100} />
+                    </>
+                  )
                 )
                 : (
                   <div>No health check found</div>

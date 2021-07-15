@@ -64,7 +64,6 @@ const TargetCard = (props: TargetCardProps) => {
          </EuiCustomLink>
        </EuiFlexItem>
      </EuiFlexGroup>
-     <UptimeBar />
    </EuiPanel>
  )
 }
@@ -146,8 +145,13 @@ const TargetStatusComponent = (props: TargetsComponentProps) => {
               {getTargetStatusHeader(props.targetList, props.groupLabel)}
               {props.targetList.length > 0 ?
                 props.targetList.map((target, index) =>
-                  <TargetCard target={target} basePath={props.basePath} key={`${target.target}-${index}`}/>
+                (
+                  <>
+                    <TargetCard target={target} basePath={props.basePath} key={`${target.target}-${index}`}/>
+                    <UptimeBar viewBoxWidth={100} itemList={props.targetList} key={index} />
+                  </>
                 )
+              )
               : (
                 <div>No cluster found</div>
               )}

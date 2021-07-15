@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
 import React from "react";
 import {HealthCheckStatus} from "../types";
 
@@ -15,8 +21,8 @@ interface UptimeBarProps {
 }
 
 const isSuccess = (status: HealthCheckStatus) => {
-  const successColor = '#00a39a';
-  const dangerColor = '#BD271E';
+  const successColor = '#00a39a'; // prenderli da fury theme
+  const dangerColor = '#BD271E'; // prenderli da fury theme
 
   if (status === "Complete") {
     return successColor;
@@ -27,7 +33,7 @@ const isSuccess = (status: HealthCheckStatus) => {
 
 const RectangleUnit = (props: RectangleUnitProps) => {
   return (
-    <rect height="34" width={props.width} x={props.x} y="0" fill={isSuccess(props.status)} className="uptime-day day-0" data-html="true"/>
+    <rect height="3" width={props.width} x={props.x} y="0" fill={isSuccess(props.status)} className="" data-html="true"/>
   )
 }
 
@@ -38,7 +44,7 @@ export const UptimeBar = (props: UptimeBarProps) => {
         {
           props.itemList.map((item, index) => {
             return (
-              <RectangleUnit status={"Complete"} width={props.itemWidth} x={props.viewBoxWidth - index*props.itemOffset - props.itemWidth} />
+              <RectangleUnit status={item.status} width={props.itemWidth} x={props.viewBoxWidth - index*props.itemOffset - props.itemWidth} />
             )
           })
         }
