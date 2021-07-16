@@ -14,57 +14,7 @@ import {Server} from "miragejs/server";
 import {logger} from "./Services/Logger";
 import {MocksScenario} from "./Services/Mocks/types";
 
-const getGroupTitleIfExists = (groupTitle?: string) => {
- if (groupTitle) {
-   return {
-     groupTitle: groupTitle
-   }
- }
-
- return {}
-}
-
-const fetchConfigFromEnvOrRemoteAsync = async () => {
-  const apiPath: string = process.env.API_PATH ?? "/";
-  const groupLabel: string | undefined = process.env.GROUP_LABEL;
-  const groupTitle: string | undefined = process.env.GROUP_TITLE;
-  const serverBasePath: string = process.env.SERVER_BASE_PATH ?? '';
-
-  // INFO: Allow local development without backend server
-  if (process.env.SERVER_OFFLINE === 'true') {
-    if (!groupLabel) {
-      throw new Error('Missing GROUP_LABEL from .env')
-    }
-
-    return {
-      apiPath: `${serverBasePath}${apiPath}`,
-      groupLabel: groupLabel,
-      ...getGroupTitleIfExists(groupTitle)
-    }
-  }
-
-  // INFO: fetch config from backend server
-  const configRes = await fetch(`${ serverBasePath }/config`);
-  const json = await configRes.json();
-  return {
-    apiPath: `${ json.Data.apiUrl }${ apiPath }`,
-    groupLabel: json.Data.groupLabel,
-    ...getGroupTitleIfExists(json.Data.groupTitle)
-  };
-};
-
-function injectMockServer() {
-  if (process.env.APP_ENV === "development") {
-    logger.info('creating mock server')
-    return makeServer(
-      { environment: "development" },
-      process.env.SERVER_BASE_PATH ?? "",
-      MocksScenario.scenario1,
-      process.env.API_PATH ?? ""
-    );
-  }
-}
-
+const mockServer: Server | undefined = injectMockServer();
 const ApplicationStatus = React.lazy(async () => {
   await initialize;
   return import("./Components/ApplicationStatus").then((module) => ({
@@ -72,14 +22,11 @@ const ApplicationStatus = React.lazy(async () => {
   }));
 });
 
-const mockServer: Server | undefined = injectMockServer();
-
-function App() {
+export default function App() {
   const [apiUrl, setApiUrl] = useState<string>('');
   const [groupLabel, setGroupLabel] = useState<string>('');
   const [groupTitle, setGroupTitle] = useState<string>('');
 
-  logger.info(JSON.stringify(process.env))
   useEffect(() => {
     // Bootstrap app state from async fetch config/serviceList
     fetchConfigFromEnvOrRemoteAsync()
@@ -146,4 +93,53 @@ function App() {
   );
 }
 
-export default App;
+function getGroupTitleIfExists(groupTitle?: string) {
+ if (groupTitle) {
+   return {
+     groupTitle: groupTitle
+   }
+ }
+
+ return {}
+}
+
+async function fetchConfigFromEnvOrRemoteAsync() {
+  const apiPath: string = process.env.API_PATH ?? "/";
+  const groupLabel: string | undefined = process.env.GROUP_LABEL;
+  const groupTitle: string | undefined = process.env.GROUP_TITLE;
+  const serverBasePath: string = process.env.SERVER_BASE_PATH ?? '';
+
+  // INFO: Allow local development without backend server
+  if (process.env.SERVER_OFFLINE === 'true') {
+    if (!groupLabel) {
+      throw new Error('Missing GROUP_LABEL from .env')
+    }
+
+    return {
+      apiPath: `${serverBasePath}${apiPath}`,
+      groupLabel: groupLabel,
+      ...getGroupTitleIfExists(groupTitle)
+    }
+  }
+
+  // INFO: fetch config from backend server
+  const configRes = await fetch(`${ serverBasePath }/config`);
+  const json = await configRes.json();
+  return {
+    apiPath: `${ json.Data.apiUrl }${ apiPath }`,
+    groupLabel: json.Data.groupLabel,
+    ...getGroupTitleIfExists(json.Data.groupTitle)
+  };
+}
+
+function injectMockServer() {
+  if (process.env.APP_ENV === "development") {
+    logger.info('creating mock server')
+    return makeServer(
+      { environment: "development" },
+      process.env.SERVER_BASE_PATH ?? "",
+      MocksScenario.scenario1,
+      process.env.API_PATH ?? ""
+    );
+  }
+}

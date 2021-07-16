@@ -4,14 +4,14 @@
  * license that can be found in the LICENSE file.
  */
 
-import React, {useState} from "react";
+import React, {createContext, useState} from "react";
 import {releaseNumber} from "../../constants";
 import {createStateHandler} from "../../Services/createStateHandler";
 import ApplicationStatusComponent from "./Component";
 import {logger} from "../../Services/Logger";
 import {makeServer} from "../../Services/Mocks/MakeServer";
 import {StateManager} from "fury-component/dist/State/types";
-import {IStateHandler} from "../types";
+import {IStateHandler, Target, TargetHealthCheck} from "../types";
 import {MocksScenario} from "../../Services/Mocks/types";
 
 interface ApplicationStatusContainerProps {
@@ -20,23 +20,24 @@ interface ApplicationStatusContainerProps {
   groupTitle?: string;
 }
 
-function getBasePath(stateHandler: StateManager<IStateHandler>) {
-  if (stateHandler.getBasePath) {
-    return stateHandler.getBasePath();
-  }
-
-  return "";
+interface ApplicationContext {
+  language: string;
+  releaseNumber: string;
+  basePath: string;
+  apiUrl: string;
+  groupLabel: string;
+  groupTitle?: string;
 }
 
-function getIsMocked(stateHandler: StateManager<IStateHandler>): boolean {
-  if (stateHandler.getMocked) {
-    return stateHandler.getMocked();
-  }
+export const ApplicationContext = createContext<ApplicationContext>({
+  language: "",
+  releaseNumber: "",
+  basePath: "",
+  apiUrl: "",
+  groupLabel: ""
+});
 
-  return process.env.APP_ENV === "development";
-}
-
-const ApplicationStatusContainer = (props: ApplicationStatusContainerProps) => {
+export default function ApplicationStatusContainer(props: ApplicationStatusContainerProps) {
   const stateHandler = createStateHandler();
 
   if(props.apiUrl) {
@@ -63,17 +64,32 @@ const ApplicationStatusContainer = (props: ApplicationStatusContainerProps) => {
   }
 
   return (
-    <>
-      <ApplicationStatusComponent
-        language={currentLanguage}
-        releaseNumber={releaseNumber}
-        basePath={basePath}
-        apiUrl={apiUrl}
-        groupLabel={groupLabel}
-        groupTitle={groupTitle}
-      />
-    </>
+    <ApplicationContext.Provider value={{
+      language: currentLanguage,
+      releaseNumber: releaseNumber,
+      basePath: basePath,
+      apiUrl: apiUrl,
+      groupLabel: groupLabel,
+      // TODO: add groupTitle only when needed
+      groupTitle: groupTitle
+    }}>
+      <ApplicationStatusComponent />
+    </ApplicationContext.Provider>
   );
-};
+}
 
-export default ApplicationStatusContainer;
+function getBasePath(stateHandler: StateManager<IStateHandler>) {
+  if (stateHandler.getBasePath) {
+    return stateHandler.getBasePath();
+  }
+
+  return "";
+}
+
+function getIsMocked(stateHandler: StateManager<IStateHandler>): boolean {
+  if (stateHandler.getMocked) {
+    return stateHandler.getMocked();
+  }
+
+  return process.env.APP_ENV === "development";
+}

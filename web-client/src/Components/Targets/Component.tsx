@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-import React from "react";
+import React, {useContext} from "react";
 import {
   EuiFlexGroup,
   EuiPanel,
@@ -15,16 +15,11 @@ import {
 import "./Style.css";
 import {EuiCustomLink} from "../EuiCustomLink";
 import {LocalizedText} from './LocalizedText';
-import { UptimeBar } from "../UptimeBar";
 import {HealthCheckStatus, Target} from "../types";
-import {logger} from "../../Services/Logger";
+import {ApplicationContext} from "../ApplicationStatus/Container";
 
 interface TargetsComponentProps {
-  language: string;
-  releaseNumber: string;
   targetList: Target[];
-  basePath: string;
-  groupLabel: string;
 }
 
 interface TargetCardProps {
@@ -32,77 +27,12 @@ interface TargetCardProps {
   basePath: string;
 }
 
-const getTargetCardStatusIcon = (status: HealthCheckStatus) => {
- if (status === "Complete") {
-   return (
-     <EuiIcon size={"l"} type="checkInCircleFilled" color={"success"} />
-   )
- }
+export default function TargetStatusComponent(props: TargetsComponentProps) {
+  const appContextData = useContext(ApplicationContext);
 
- return (
-   <EuiIcon size={"l"} type="crossInACircleFilled" color={"danger"} />
- )
-}
-
-const TargetCard = (props: TargetCardProps) => {
- return (
-   <EuiPanel paddingSize="s" className="cluster-card" >
-     <EuiFlexGroup gutterSize="m" alignItems={"center"} responsive={false}>
-       <EuiFlexItem grow={false}>
-         {getTargetCardStatusIcon(props.target.status)}
-       </EuiFlexItem>
-       <EuiFlexItem grow={false}>
-         <EuiText size="s" >
-           <p>
-             <strong>{props.target.target}</strong>
-           </p>
-         </EuiText>
-       </EuiFlexItem>
-       <EuiFlexItem style={{marginLeft: "auto"}} grow={false}>
-         <EuiCustomLink to={`${props.basePath}/${props.target.target}`}>
-           {LocalizedText.singleton.goToClusterServicesButtonMessage} <EuiIcon type={"sortRight"} />
-         </EuiCustomLink>
-       </EuiFlexItem>
-     </EuiFlexGroup>
-   </EuiPanel>
- )
-}
-
-const getTargetStatusHeader = (targetList: Target[], groupLabel: string) => {
-  const targetInError = (targetList ?? []).filter((target) => {
-    return target.status === ("Failed");
-  })
-  let messageIcon = 'checkInCircleFilled';
-  let messageIconColor = 'success';
-  let message = LocalizedText.singleton.healthyStatusMessage(groupLabel);
-  logger.info(`groupLabel: ${groupLabel}`)
-
-  if (targetInError.length > 0) {
-    messageIcon = 'crossInACircleFilled';
-    messageIconColor = 'danger';
-    message = `${LocalizedText.singleton.errorStatusMessage} ${targetInError.map(target => target.target).join(', ')}`;
-  }
-
-  return (
-    <EuiFlexGroup gutterSize="m" alignItems={"center"} justifyContent={"center"} direction={"column"} responsive={false}>
-      <EuiFlexItem>
-        <EuiIcon size={"xxl"} type={messageIcon} color={messageIconColor} />
-      </EuiFlexItem>
-      <EuiFlexItem>
-        <EuiTitle size={"s"} className={"target-status-text"}>
-          <h1>
-            {message}
-          </h1>
-        </EuiTitle>
-      </EuiFlexItem>
-    </EuiFlexGroup>
-  )
-}
-
-const TargetStatusComponent = (props: TargetsComponentProps) => {
   const breadcrumbs = [
     {
-      text: `All ${props.groupLabel} systems`,
+      text: `All ${appContextData.groupLabel} systems`,
       onClick: (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
       },
@@ -142,25 +72,88 @@ const TargetStatusComponent = (props: TargetsComponentProps) => {
               color="transparent"
               style={{ maxWidth: "600px", width: "100%" }}
               hasShadow={false}>
-              {getTargetStatusHeader(props.targetList, props.groupLabel)}
+              {TargetStatusHeader(props.targetList, appContextData.groupLabel)}
               {props.targetList.length > 0 ?
                 props.targetList.map((target, index) =>
-                (
-                  <>
-                    <TargetCard target={target} basePath={props.basePath} key={`${target.target}-${index}`}/>
-                    <UptimeBar viewBoxWidth={100} itemList={props.targetList} key={index} />
-                  </>
+                  (
+                    <React.Fragment key={`${target.target}-${index}`}>
+                      <TargetCard target={target} basePath={appContextData.basePath} />
+                    </React.Fragment>
+                  )
                 )
-              )
-              : (
-                <div>No cluster found</div>
-              )}
+                : (
+                  <div>No target found</div>
+                )}
             </EuiPageContent>
           </EuiPageContent>
         </EuiPageBody>
       </EuiPage>
     </>
-  );
-};
+  )
+}
 
-export default TargetStatusComponent;
+function TargetStatusHeader(targetList: Target[], groupLabel: string) {
+  const targetInError = (targetList ?? []).filter((target) => {
+    return target.status === ("Failed");
+  })
+  let messageIcon = 'checkInCircleFilled';
+  let messageIconColor = 'success';
+  let message = LocalizedText.singleton.healthyStatusMessage(groupLabel);
+
+  if (targetInError.length > 0) {
+    messageIcon = 'crossInACircleFilled';
+    messageIconColor = 'danger';
+    message = `${LocalizedText.singleton.errorStatusMessage} ${targetInError.map(target => target.target).join(', ')}`;
+  }
+
+  return (
+    <EuiFlexGroup gutterSize="m" alignItems={"center"} justifyContent={"center"} direction={"column"} responsive={false}>
+      <EuiFlexItem>
+        <EuiIcon size={"xxl"} type={messageIcon} color={messageIconColor} />
+      </EuiFlexItem>
+      <EuiFlexItem>
+        <EuiTitle size={"s"} className={"target-status-text"}>
+          <h1>
+            {message}
+          </h1>
+        </EuiTitle>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+  )
+}
+
+function TargetCardStatusIcon(status: HealthCheckStatus) {
+ if (status === "Complete") {
+   return (
+     <EuiIcon size={"l"} type="checkInCircleFilled" color={"success"} />
+   )
+ }
+
+ return (
+   <EuiIcon size={"l"} type="crossInACircleFilled" color={"danger"} />
+ )
+}
+
+function TargetCard(props: TargetCardProps) {
+ return (
+   <EuiPanel paddingSize="s" className="target-card" >
+     <EuiFlexGroup gutterSize="m" alignItems={"center"} responsive={false}>
+       <EuiFlexItem grow={false}>
+         {TargetCardStatusIcon(props.target.status)}
+       </EuiFlexItem>
+       <EuiFlexItem grow={false}>
+         <EuiText size="s" >
+           <p>
+             <strong>{props.target.target}</strong>
+           </p>
+         </EuiText>
+       </EuiFlexItem>
+       <EuiFlexItem style={{marginLeft: "auto"}} grow={false}>
+         <EuiCustomLink to={`${props.basePath}/${props.target.target}`}>
+           {LocalizedText.singleton.goToTargetHealthChecksButtonMessage} <EuiIcon type={"sortRight"} />
+         </EuiCustomLink>
+       </EuiFlexItem>
+     </EuiFlexGroup>
+   </EuiPanel>
+ )
+}

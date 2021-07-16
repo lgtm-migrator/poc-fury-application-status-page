@@ -4,11 +4,11 @@
  * license that can be found in the LICENSE file.
  */
 
-.cluster-card.euiPanel {
+.target-card.euiPanel {
     margin-bottom: 9px;
 }
 
-.cluster-card.euiPanel.euiPanel--borderRadiusMedium {
+.target-card.euiPanel.euiPanel--borderRadiusMedium {
     border-radius: 12px;
 }
 

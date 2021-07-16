@@ -1,9 +1,9 @@
 {
-  "Fury Cluster Status Healthy": "Tutti i sistemi di CompanyName sono pienamente operativi",
-  "Fury Cluster Status Error": "C'è un problema con",
-  "Fury Cluster Status Go To Services": "vai",
-  "Fury Cluster Services Status Healthy": "Il sistema CompanyName Cluster Custom Name 1 è completamente operativo",
-  "Fury Cluster Services Status Error": "C'è un problema relativo a:",
-  "Fury Cluster Services Status Error Occurred": "Si è verificato il",
-  "Fury Cluster Service Status Go Back": "indietro"
+  "Target Status Healthy": "Tutti i sistemi di {{group}} sono pienamente operativi",
+  "Target Status Error": "C'è un problema con",
+  "Target Status Go To Health Checks": "vai",
+  "Target Health Checks Status Healthy": "Il sistema {{group}} {{target}} è completamente operativo",
+  "Target Health Checks Status Error": "C'è un problema relativo a:",
+  "Target Health Checks Status Error Occurred": "Si è verificato il",
+  "Target Health Checks Status Go Back": "indietro"
 }

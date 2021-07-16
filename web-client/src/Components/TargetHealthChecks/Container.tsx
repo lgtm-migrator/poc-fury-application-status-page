@@ -4,34 +4,65 @@
  * license that can be found in the LICENSE file.
  */
 
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { releaseNumber } from "../../constants";
 import TargetHealthChecksComponent from "./Component";
 import { EuiEmptyPrompt, EuiLoadingSpinner } from "fury-design-system";
 import {logger} from "../../Services/Logger";
 import {HealthCheck, TargetHealthCheck} from "../types";
+import {ApplicationContext} from "../ApplicationStatus/Container";
 
 interface TargetHealthChecksComponentProps {
-  apiUrl: string;
-  language: string;
-  releaseNumber: string;
   target: string;
-  groupLabel: string;
-  basePath: string;
 }
 
-const fetchTargetHealthChecksListAsync = async (apiUrl: string, groupLabel: string, target: string) => {
-  const clusterList = await fetch(`${apiUrl}group/${groupLabel}/target/${target}`);
+export default function TargetHealthChecksContainer(props: TargetHealthChecksComponentProps) {
+  const [targetHealthChecksList, setTargetHealthChecksList] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const appContextData = useContext(ApplicationContext);
 
-  return await clusterList.json();
-};
+  useEffect(() => {
+    fetchTargetHealthChecksListAsync(appContextData.apiUrl, appContextData.groupLabel, props.target)
+      .then((targetHealthChecksListJson) => {
+        setTargetHealthChecksList(groupByCheckName(targetHealthChecksListJson.results));
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        logger.error(err);
+        throw new Error("failed to get target health checks list");
+      });
+  }, []);
 
-const groupByCheckName = (targetList: HealthCheck[]): TargetHealthCheck[] => {
-  // TODO: ADD completedAt logic on error more recent
+  return (
+    <>
+      {isLoading ? (
+        <EuiEmptyPrompt
+          title={<h4> Loading... </h4>}
+          body={<EuiLoadingSpinner size="xl" />}
+        />
+      ) : (
+        <TargetHealthChecksComponent
+          releaseNumber={releaseNumber}
+          targetHealthChecksList={targetHealthChecksList}
+          target={props.target}
+        />
+      )}
+    </>
+  );
+}
+
+async function fetchTargetHealthChecksListAsync(apiUrl: string, groupLabel: string, target: string) {
+  const targetHealthChecks = await fetch(`${apiUrl}group/${groupLabel}/target/${target}`);
+
+  return await targetHealthChecks.json();
+}
+
+function groupByCheckName(targetList: HealthCheck[]): TargetHealthCheck[] {
   const getTargetIndexInAccumulator = (target: HealthCheck, accumulator: TargetHealthCheck[]): number => {
     return accumulator.findIndex((checkTarget) => checkTarget.checkName === target.checkName);
   }
 
+  // TODO: ADD completedAt logic on error more recent
   return targetList.reduce((targetAcc, currentTarget) => {
     const targetIndex = getTargetIndexInAccumulator(currentTarget, targetAcc);
     if (targetIndex !== -1 && currentTarget.status === "Failed") {
@@ -48,44 +79,3 @@ const groupByCheckName = (targetList: HealthCheck[]): TargetHealthCheck[] => {
     return targetAcc;
   }, [] as TargetHealthCheck[]);
 }
-
-const TargetHealthChecksContainer = (props: TargetHealthChecksComponentProps) => {
-  const [clusterServiceList, setClusterServiceList] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  logger.info(JSON.stringify(props))
-
-  useEffect(() => {
-    fetchTargetHealthChecksListAsync(props.apiUrl, props.groupLabel, props.target)
-      .then((clusterListJson) => {
-        setClusterServiceList(groupByCheckName(clusterListJson.results));
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        logger.error(err);
-        throw new Error("failed to get cluster list");
-      });
-  }, []);
-
-  return (
-    <>
-      {isLoading ? (
-        <EuiEmptyPrompt
-          title={<h4> Loading... </h4>}
-          body={<EuiLoadingSpinner size="xl" />}
-        />
-      ) : (
-        <TargetHealthChecksComponent
-          language={props.language}
-          releaseNumber={releaseNumber}
-          targetHealthChecksList={clusterServiceList}
-          basePath={props.basePath}
-          groupLabel={props.groupLabel}
-          target={props.target}
-        />
-      )}
-    </>
-  );
-};
-
-export default TargetHealthChecksContainer;

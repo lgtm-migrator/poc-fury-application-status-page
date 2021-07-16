@@ -7,18 +7,17 @@
 import { BaseLocalizedText } from '../../Services/BaseLocalizedText';
 
 export class LocalizedText extends BaseLocalizedText {
-
   public static singleton = new LocalizedText();
 
   public get errorStatusMessage() {
-    return this.translate('Fury Cluster Status Error');
+    return this.translate('Target Status Error');
   }
 
-  public get goToClusterServicesButtonMessage() {
-    return this.translate('Fury Cluster Status Go To Services')
+  public get goToTargetHealthChecksButtonMessage() {
+    return this.translate('Target Status Go To Health Checks')
   }
 
   public healthyStatusMessage(group: string) {
-    return this.translate('Fury Cluster Status Healthy', {group: group});
+    return this.translate('Target Status Healthy', {group: group});
   }
 }

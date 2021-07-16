@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-import React from "react";
+import React, {useContext} from "react";
 import {
   EuiFlexGroup,
   EuiPanel,
@@ -15,15 +15,12 @@ import "./Style.css";
 import {EuiCustomLink} from "../EuiCustomLink";
 import {LocalizedText} from "./LocalizedText";
 import moment from 'moment';
-import {HealthCheck, HealthCheckStatus, TargetHealthCheck} from "../types";
-import { UptimeBar } from "../UptimeBar";
+import {HealthCheckStatus, TargetHealthCheck} from "../types";
+import {ApplicationContext} from "../ApplicationStatus/Container";
 
 interface TargetHealthChecksComponentProps {
-  language: string;
   releaseNumber: string;
   targetHealthChecksList: TargetHealthCheck[];
-  basePath: string;
-  groupLabel: string;
   target: string;
 }
 
@@ -31,7 +28,57 @@ interface TargetHealthChecksCardProps {
   targetHealthCheck: TargetHealthCheck;
 }
 
-const getTargetHealthChecksCardStatusIcon = (status: HealthCheckStatus) => {
+export default function TargetHealthChecksComponent(props: TargetHealthChecksComponentProps) {
+  const appContextData = useContext(ApplicationContext);
+
+  return (
+    <>
+      <EuiPage paddingSize="none" restrictWidth={true}>
+        <EuiPageBody>
+          <EuiPageHeader
+            restrictWidth
+            paddingSize="l"
+          >
+            <EuiPageHeaderSection>
+              <EuiCustomLink to={`${appContextData.basePath}/`}>
+                <EuiIcon type={"sortLeft"} /> {LocalizedText.singleton.goBack}
+              </EuiCustomLink>
+            </EuiPageHeaderSection>
+          </EuiPageHeader>
+          <EuiPageContent
+            borderRadius="none"
+            hasShadow={false}
+            style={{ display: 'flex' }}
+            color="transparent"
+          >
+            <EuiPageContent
+              verticalPosition="center"
+              horizontalPosition="center"
+              paddingSize="none"
+              color="transparent"
+              style={{ maxWidth: "600px", width: "100%" }}
+              hasShadow={false}>
+              {TargetHealthChecksHeader(props.targetHealthChecksList, appContextData.groupLabel, props.target)}
+              {props.targetHealthChecksList.length > 0 ?
+                props.targetHealthChecksList.map((targetHealthCheck, index) =>
+                  (
+                    <React.Fragment key={`${targetHealthCheck.checkName}-${index}`}>
+                      <TargetHealthChecksCard targetHealthCheck={targetHealthCheck} />
+                    </React.Fragment>
+                  )
+                )
+                : (
+                  <div>No health check found</div>
+                )}
+            </EuiPageContent>
+          </EuiPageContent>
+        </EuiPageBody>
+      </EuiPage>
+    </>
+  );
+}
+
+function TargetHealthChecksCardStatusIcon(status: HealthCheckStatus) {
   if (status === "Complete") {
     return (
       <EuiIcon size={"xxl"} type="checkInCircleFilled" color={"success"} />
@@ -43,12 +90,12 @@ const getTargetHealthChecksCardStatusIcon = (status: HealthCheckStatus) => {
   )
 }
 
-const TargetHealthChecksCard = (props: TargetHealthChecksCardProps) => {
+function TargetHealthChecksCard(props: TargetHealthChecksCardProps) {
   return (
     <EuiPanel paddingSize="s" className="target-health-check-card" color={"transparent"} borderRadius={"none"}>
       <EuiFlexGroup gutterSize="m" alignItems={"center"} responsive={false}>
         <EuiFlexItem grow={false}>
-          {getTargetHealthChecksCardStatusIcon(props.targetHealthCheck.status)}
+          {TargetHealthChecksCardStatusIcon(props.targetHealthCheck.status)}
         </EuiFlexItem>
         <EuiFlexItem grow={false}>
           <EuiText size="s" >
@@ -70,7 +117,7 @@ const TargetHealthChecksCard = (props: TargetHealthChecksCardProps) => {
   )
 }
 
-const getTargetHealthChecksHeader = (targetHealthCheckList: TargetHealthCheck[], groupLabel: string, target: string) => {
+function TargetHealthChecksHeader(targetHealthCheckList: TargetHealthCheck[], groupLabel: string, target: string) {
   const targetHealthCheckInError = (targetHealthCheckList ?? []).filter((targetHealthCheck) => {
     return targetHealthCheck.status === "Failed";
   })
@@ -106,54 +153,3 @@ const getTargetHealthChecksHeader = (targetHealthCheckList: TargetHealthCheck[],
     </EuiFlexGroup>
   )
 }
-
-const TargetHealthChecksComponent = (props: TargetHealthChecksComponentProps) => {
-  return (
-    <>
-      <EuiPage paddingSize="none" restrictWidth={true}>
-        <EuiPageBody>
-          <EuiPageHeader
-            restrictWidth
-            paddingSize="l"
-          >
-            <EuiPageHeaderSection>
-              <EuiCustomLink to={`${props.basePath}/`}>
-                <EuiIcon type={"sortLeft"} /> {LocalizedText.singleton.goBack}
-              </EuiCustomLink>
-            </EuiPageHeaderSection>
-          </EuiPageHeader>
-          <EuiPageContent
-            borderRadius="none"
-            hasShadow={false}
-            style={{ display: 'flex' }}
-            color="transparent"
-          >
-            <EuiPageContent
-              verticalPosition="center"
-              horizontalPosition="center"
-              paddingSize="none"
-              color="transparent"
-              style={{ maxWidth: "600px", width: "100%" }}
-              hasShadow={false}>
-              {getTargetHealthChecksHeader(props.targetHealthChecksList, props.groupLabel, props.target)}
-              {props.targetHealthChecksList.length > 0 ?
-                props.targetHealthChecksList.map((targetHealthCheck, index) => 
-                  (
-                    <>
-                      <TargetHealthChecksCard targetHealthCheck={targetHealthCheck} key={`${targetHealthCheck.checkName}-${index}`}/>
-                      <UptimeBar itemList={props.targetHealthChecksList} viewBoxWidth={100} />
-                    </>
-                  )
-                )
-                : (
-                  <div>No health check found</div>
-                )}
-            </EuiPageContent>
-          </EuiPageContent>
-        </EuiPageBody>
-      </EuiPage>
-    </>
-  );
-};
-
-export default TargetHealthChecksComponent;

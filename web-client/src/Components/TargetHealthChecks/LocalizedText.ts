@@ -7,22 +7,21 @@
 import { BaseLocalizedText } from '../../Services/BaseLocalizedText';
 
 export class LocalizedText extends BaseLocalizedText {
-
   public static singleton = new LocalizedText();
 
   public healthyStatusMessage(group: string, target: string) {
-    return this.translate('Fury Cluster Services Status Healthy', {group: group, target: target});
+    return this.translate('Target Health Checks Status Healthy', {group: group, target: target});
   }
 
   public errorStatusMessage(checkNum: number, group: string, target: string) {
-    return this.translate('Fury Cluster Services Status Error', {checkNum: checkNum.toString(), group: group, target: target});
+    return this.translate('Target Health Checks Status Error', {checkNum: checkNum.toString(), group: group, target: target});
   }
 
   public get errorOccurredAt() {
-    return this.translate('Fury Cluster Services Status Error Occurred');
+    return this.translate('Target Health Checks Status Error Occurred');
   }
 
   public get goBack() {
-    return this.translate('Fury Cluster Service Status Go Back')
+    return this.translate('Target Health Checks Status Go Back')
   }
 }

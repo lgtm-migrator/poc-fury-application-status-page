@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-import React, {useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import { Targets } from "../Targets";
 import { BrowserRouter as Router, Route, Switch, RouteComponentProps } from "react-router-dom";
 import 'fury-design-system/dist/eui_theme_fury_community.css';
@@ -12,55 +12,34 @@ import './Style.css';
 import {TargetHealthChecks} from "../TargetHealthChecks";
 import {LocalizedText} from "./LocalizedText";
 import {initialize} from "../../i18n";
+import {ApplicationContext} from "./Container";
 
 interface RouteParams {
   target: string;
 }
 
-interface ApplicationStatusComponentProps {
-  language: string;
-  releaseNumber: string;
-  basePath: string;
-  apiUrl: string;
-  groupTitle?: string;
-  groupLabel: string;
-}
-
-const ApplicationStatusComponent = (props: ApplicationStatusComponentProps) => {
+export default function ApplicationStatusComponent() {
+  const appContextData = useContext(ApplicationContext);
+  
   useEffect(() => {
     initialize.then(() => {
-      LocalizedText.singleton.changeLanguage(props.language);
+      LocalizedText.singleton.changeLanguage(appContextData.language);
     })
   }, []);
 
   return (
     <Router>
       <Switch>
-        <Route path={`${props.basePath}/:target`} component={(propsRoute: RouteComponentProps<RouteParams>) =>
-          <TargetHealthChecks
-            apiUrl={props.apiUrl}
-            releaseNumber={props.releaseNumber}
-            language={props.language}
-            target={propsRoute.match.params.target}
-            groupLabel={props.groupLabel}
-            basePath={props.basePath}
-          />
+        <Route path={`${appContextData.basePath}/:target`} component={(propsRoute: RouteComponentProps<RouteParams>) =>
+          <TargetHealthChecks target={propsRoute.match.params.target} />
         } />
         <Route
-          path={`${props.basePath}/`}
+          path={`${appContextData.basePath}/`}
           render={() => (
-            <Targets
-              apiUrl={props.apiUrl}
-              releaseNumber={props.releaseNumber}
-              language={props.language}
-              basePath={props.basePath}
-              groupLabel={props.groupLabel}
-            />
+            <Targets />
           )}
         />
       </Switch>
     </Router>
   );
-};
-
-export default ApplicationStatusComponent;
+}
