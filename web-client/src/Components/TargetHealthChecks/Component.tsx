@@ -17,19 +17,12 @@ import {LocalizedText} from "./LocalizedText";
 import moment from 'moment';
 import {HealthCheckStatus, TargetHealthCheck} from "../types";
 import {ApplicationContext} from "../ApplicationStatus/Container";
-
-interface TargetHealthChecksComponentProps {
-  releaseNumber: string;
-  targetHealthChecksList: TargetHealthCheck[];
-  target: string;
-}
-
-interface TargetHealthChecksCardProps {
-  targetHealthCheck: TargetHealthCheck;
-}
+import {TargetHealthChecksCardProps, TargetHealthChecksComponentProps} from "./types";
 
 export default function TargetHealthChecksComponent(props: TargetHealthChecksComponentProps) {
   const appContextData = useContext(ApplicationContext);
+  const groupUIText = appContextData.groupTitle ? appContextData.groupTitle : appContextData.groupLabel;
+  const targetUIText = props.targetTitle ? props.targetTitle : props.target;
 
   return (
     <>
@@ -39,11 +32,13 @@ export default function TargetHealthChecksComponent(props: TargetHealthChecksCom
             restrictWidth
             paddingSize="l"
           >
-            <EuiPageHeaderSection>
-              <EuiCustomLink to={`${appContextData.basePath}/`}>
-                <EuiIcon type={"sortLeft"} /> {LocalizedText.singleton.goBack}
-              </EuiCustomLink>
-            </EuiPageHeaderSection>
+            {!props.standalone &&
+              <EuiPageHeaderSection>
+                <EuiCustomLink to={`${appContextData.basePath}/`}>
+                    <EuiIcon type={"sortLeft"}/> {LocalizedText.singleton.goBack}
+                </EuiCustomLink>
+              </EuiPageHeaderSection>
+            }
           </EuiPageHeader>
           <EuiPageContent
             borderRadius="none"
@@ -58,7 +53,7 @@ export default function TargetHealthChecksComponent(props: TargetHealthChecksCom
               color="transparent"
               style={{ maxWidth: "600px", width: "100%" }}
               hasShadow={false}>
-              {TargetHealthChecksHeader(props.targetHealthChecksList, appContextData.groupLabel, props.target)}
+              {TargetHealthChecksHeader(props.targetHealthChecksList, groupUIText, targetUIText)}
               {props.targetHealthChecksList.length > 0 ?
                 props.targetHealthChecksList.map((targetHealthCheck, index) =>
                   (

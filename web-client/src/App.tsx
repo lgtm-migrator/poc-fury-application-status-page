@@ -5,7 +5,7 @@
  */
 
 import React, {Suspense, useEffect, useState} from "react";
-import {EuiEmptyPrompt, EuiErrorBoundary, EuiLoadingSpinner, EuiSpacer} from "fury-design-system";
+import {EuiEmptyPrompt, EuiLoadingSpinner, EuiSpacer} from "fury-design-system";
 import {initialize} from "./i18n";
 import logo from "./Assets/logo.svg";
 import fury from "./Assets/logotype.svg";
@@ -13,6 +13,7 @@ import {makeServer} from "./Services/Mocks/MakeServer";
 import {Server} from "miragejs/server";
 import {logger} from "./Services/Logger";
 import {MocksScenario} from "./Services/Mocks/types";
+import {Config} from "./Components/types";
 
 const mockServer: Server | undefined = injectMockServer();
 const ApplicationStatus = React.lazy(async () => {
@@ -25,24 +26,25 @@ const ApplicationStatus = React.lazy(async () => {
 export default function App() {
   const [apiUrl, setApiUrl] = useState<string>('');
   const [groupLabel, setGroupLabel] = useState<string>('');
-  const [groupTitle, setGroupTitle] = useState<string>('');
+  const [groupTitle, setGroupTitle] = useState<string | undefined>();
+  const [targetLabel, setTargetLabel] = useState<string | undefined>();
+  const [targetTitle, setTargetTitle] = useState<string | undefined>();
+  const [cascadeFailure, setCascadeFailure] = useState<number>(0);
 
   useEffect(() => {
     // Bootstrap app state from async fetch config/serviceList
-    fetchConfigFromEnvOrRemoteAsync()
+    fetchConfigFromEnvOrBackendAsync()
       .then(config => {
         if (mockServer) {
           mockServer.shutdown();
         }
 
-        setApiUrl(config.apiPath);
+        setApiUrl(config.apiUrl);
         setGroupLabel(config.groupLabel);
-
-        logger.info(config.apiPath);
-
-        if (config.groupTitle) {
-          setGroupTitle(config.groupTitle);
-        }
+        setCascadeFailure(config.cascadeFailure);
+        setGroupTitle(config.groupTitle);
+        setTargetLabel(config.targetLabel);
+        setTargetTitle(config.targetTitle);
       });
   }, []);
 
@@ -72,13 +74,14 @@ export default function App() {
         </div>
         <EuiSpacer size="xxl" />
         { apiUrl && groupLabel ?
-          <EuiErrorBoundary>
-            <ApplicationStatus
-              apiUrl={apiUrl}
-              groupLabel={groupLabel}
-              groupTitle={groupTitle}
-            />
-          </EuiErrorBoundary>
+          <ApplicationStatus
+            apiUrl={apiUrl}
+            groupLabel={groupLabel}
+            groupTitle={groupTitle}
+            cascadeFailure={cascadeFailure}
+            targetLabel={targetLabel}
+            targetTitle={targetTitle}
+          />
           :
           <EuiEmptyPrompt
             // Inline style as fallback to render the message for super slow networks
@@ -93,42 +96,48 @@ export default function App() {
   );
 }
 
-function getGroupTitleIfExists(groupTitle?: string) {
- if (groupTitle) {
-   return {
-     groupTitle: groupTitle
-   }
- }
-
- return {}
-}
-
-async function fetchConfigFromEnvOrRemoteAsync() {
+async function fetchConfigFromEnvOrBackendAsync(): Promise<Config> {
   const apiPath: string = process.env.API_PATH ?? "/";
-  const groupLabel: string | undefined = process.env.GROUP_LABEL;
-  const groupTitle: string | undefined = process.env.GROUP_TITLE;
   const serverBasePath: string = process.env.SERVER_BASE_PATH ?? '';
 
   // INFO: Allow local development without backend server
   if (process.env.SERVER_OFFLINE === 'true') {
-    if (!groupLabel) {
-      throw new Error('Missing GROUP_LABEL from .env')
-    }
-
-    return {
-      apiPath: `${serverBasePath}${apiPath}`,
-      groupLabel: groupLabel,
-      ...getGroupTitleIfExists(groupTitle)
-    }
+    return getConfigFromProcessEnv(serverBasePath, apiPath);
   }
 
-  // INFO: fetch config from backend server
+  return await getConfigFromBackend(serverBasePath, apiPath);
+}
+
+function getConfigFromProcessEnv(serverBasePath: string, apiPath: string): Config {
+  if (!process.env.GROUP_LABEL) {
+    throw new Error('Missing GROUP_LABEL from process.env');
+  }
+
+  if (typeof process.env.CASCADE_FAILURE === 'undefined') {
+    throw new Error('Missing CASCADE_FAILURE from process.env');
+  }
+
+  return {
+    apiUrl: `${serverBasePath}${apiPath}`,
+    groupLabel: process.env.GROUP_LABEL,
+    groupTitle: process.env.GROUP_TITLE,
+    cascadeFailure: Number(process.env.CASCADE_FAILURE),
+    targetLabel: process.env.TARGET_LABEL,
+    targetTitle: process.env.TARGET_TITLE
+  }
+}
+
+async function getConfigFromBackend(serverBasePath: string, apiPath: string): Promise<Config> {
   const configRes = await fetch(`${ serverBasePath }/config`);
   const json = await configRes.json();
+
   return {
-    apiPath: `${ json.Data.apiUrl }${ apiPath }`,
+    apiUrl: `${ json.Data.apiUrl }${ apiPath }`,
     groupLabel: json.Data.groupLabel,
-    ...getGroupTitleIfExists(json.Data.groupTitle)
+    cascadeFailure: json.Data.cascadeFailure,
+    groupTitle: json.Data.groupTitle,
+    targetLabel: json.Data.targetLabel,
+    targetTitle: json.Data.targetTitle
   };
 }
 

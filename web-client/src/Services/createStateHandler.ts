@@ -18,6 +18,7 @@ export function createStateHandler(): StateManager<IStateHandler> {
     // INFO: Required in local development, when is not used as a federated module
     defaultState: {
       apiurl: `${process.env.SERVER_BASE_PATH}${process.env.API_PATH}`,
+      cascadefailure: 0,
       grouplabel: ''
     },
     defaultLanguage: "EN",

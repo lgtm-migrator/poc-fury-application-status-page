@@ -20,6 +20,11 @@ function yamlConfigToAppConfig(offline, configPath) {
         SERVER_OFFLINE: offline,
         API_PATH: '/',
         SERVER_BASE_PATH: yamlConfig.externalEndpoint,
+        GROUP_LABEL: yamlConfig.groupLabel,
+        GROUP_TITLE: yamlConfig.groupTitle,
+        TARGET_LABEL: yamlConfig.targetLabel,
+        TARGET_TITLE: yamlConfig.targetTitle,
+        CASCADE_FAILURE: yamlConfig.cascadeFailure
     };
 }
 

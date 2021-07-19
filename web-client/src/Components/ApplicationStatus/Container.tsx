@@ -11,30 +11,17 @@ import ApplicationStatusComponent from "./Component";
 import {logger} from "../../Services/Logger";
 import {makeServer} from "../../Services/Mocks/MakeServer";
 import {StateManager} from "fury-component/dist/State/types";
-import {IStateHandler, Target, TargetHealthCheck} from "../types";
+import {Config, IStateHandler, Target, TargetHealthCheck} from "../types";
 import {MocksScenario} from "../../Services/Mocks/types";
+import {IApplicationContext, ApplicationStatusContainerProps} from "./types";
 
-interface ApplicationStatusContainerProps {
-  apiUrl?: string;
-  groupLabel: string;
-  groupTitle?: string;
-}
-
-interface ApplicationContext {
-  language: string;
-  releaseNumber: string;
-  basePath: string;
-  apiUrl: string;
-  groupLabel: string;
-  groupTitle?: string;
-}
-
-export const ApplicationContext = createContext<ApplicationContext>({
+export const ApplicationContext = createContext<IApplicationContext>({
   language: "",
   releaseNumber: "",
   basePath: "",
   apiUrl: "",
-  groupLabel: ""
+  groupLabel: "",
+  cascadeFailure: 1
 });
 
 export default function ApplicationStatusContainer(props: ApplicationStatusContainerProps) {
@@ -44,19 +31,17 @@ export default function ApplicationStatusContainer(props: ApplicationStatusConta
     stateHandler.setState({
       apiurl: props.apiUrl,
       grouplabel: props.groupLabel,
-      grouptitle: props.groupTitle
+      grouptitle: props.groupTitle,
+      cascadefailure: props.cascadeFailure,
+      targetlabel: props.targetLabel,
+      targettitle: props.targetTitle
     })
-
   }
 
-  logger.info(JSON.stringify(stateHandler.getState()));
-
-  const [currentLanguage] = useState<string>(stateHandler.getLanguage());
-  const [basePath] = useState<string>(getBasePath(stateHandler));
-  const [apiUrl] = useState<string>(stateHandler.getState().apiurl);
-  const [groupLabel] = useState<string>(stateHandler.getState().grouplabel);
-  const [groupTitle] = useState<string | undefined>(stateHandler.getState()?.grouptitle);
   const isMocked = getIsMocked(stateHandler);
+  const applicationContext = buildApplicationContext(stateHandler);
+
+  logger.info(JSON.stringify(applicationContext));
 
   if (isMocked) {
     logger.info(stateHandler.getState().apiurl);
@@ -64,18 +49,24 @@ export default function ApplicationStatusContainer(props: ApplicationStatusConta
   }
 
   return (
-    <ApplicationContext.Provider value={{
-      language: currentLanguage,
-      releaseNumber: releaseNumber,
-      basePath: basePath,
-      apiUrl: apiUrl,
-      groupLabel: groupLabel,
-      // TODO: add groupTitle only when needed
-      groupTitle: groupTitle
-    }}>
+    <ApplicationContext.Provider value={applicationContext}>
       <ApplicationStatusComponent />
     </ApplicationContext.Provider>
   );
+}
+
+function buildApplicationContext(stateHandler: StateManager<IStateHandler>) {
+  return {
+    language: stateHandler.getLanguage(),
+    releaseNumber: releaseNumber,
+    basePath: getBasePath(stateHandler),
+    apiUrl: stateHandler.getState().apiurl,
+    cascadeFailure: stateHandler.getState().cascadefailure,
+    groupLabel: stateHandler.getState().grouplabel,
+    groupTitle: stateHandler.getState()?.grouptitle,
+    targetLabel: stateHandler.getState()?.targetlabel,
+    targetTitle: stateHandler.getState()?.targettitle
+  }
 }
 
 function getBasePath(stateHandler: StateManager<IStateHandler>) {

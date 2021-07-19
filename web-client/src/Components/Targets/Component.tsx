@@ -17,22 +17,15 @@ import {EuiCustomLink} from "../EuiCustomLink";
 import {LocalizedText} from './LocalizedText';
 import {HealthCheckStatus, Target} from "../types";
 import {ApplicationContext} from "../ApplicationStatus/Container";
-
-interface TargetsComponentProps {
-  targetList: Target[];
-}
-
-interface TargetCardProps {
-  target: Target;
-  basePath: string;
-}
+import {TargetCardProps, TargetsComponentProps} from "./types";
 
 export default function TargetStatusComponent(props: TargetsComponentProps) {
   const appContextData = useContext(ApplicationContext);
+  const groupUIText = appContextData.groupTitle ? appContextData.groupTitle : appContextData.groupLabel;
 
   const breadcrumbs = [
     {
-      text: `All ${appContextData.groupLabel} systems`,
+      text: `All ${groupUIText} systems`,
       onClick: (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
       },
@@ -72,7 +65,7 @@ export default function TargetStatusComponent(props: TargetsComponentProps) {
               color="transparent"
               style={{ maxWidth: "600px", width: "100%" }}
               hasShadow={false}>
-              {TargetStatusHeader(props.targetList, appContextData.groupLabel)}
+              {TargetStatusHeader(props.targetList, groupUIText)}
               {props.targetList.length > 0 ?
                 props.targetList.map((target, index) =>
                   (

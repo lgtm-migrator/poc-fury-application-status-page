@@ -11,12 +11,15 @@ import (
 )
 
 type YamlConfig struct {
-	Listener         string `json:"listener"`
-	AppEnv           string `json:"appEnv"`
-	ExternalEndpoint string `json:"externalEndpoint"`
-	ApiUrl           string `json:"apiUrl"`
-	GroupLabel       string `json:"groupLabel"`
-	GroupTitle       *string `json:"groupTitle"`
+	Listener         string   `json:"listener"`
+	AppEnv           string   `json:"appEnv"`
+	ExternalEndpoint string   `json:"externalEndpoint"`
+	ApiUrl           string   `json:"apiUrl"`
+	CascadeFailure   int32    `json:"cascadeFailure"`
+	GroupLabel       string   `json:"groupLabel"`
+	GroupTitle       *string  `json:"groupTitle"`
+	TargetLabel      *string  `json:"targetLabel"`
+	TargetTitle      *string  `json:"targetTitle"`
 }
 
 func GetConfig() *viper.Viper {

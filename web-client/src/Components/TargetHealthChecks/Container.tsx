@@ -9,28 +9,34 @@ import { releaseNumber } from "../../constants";
 import TargetHealthChecksComponent from "./Component";
 import { EuiEmptyPrompt, EuiLoadingSpinner } from "fury-design-system";
 import {logger} from "../../Services/Logger";
-import {HealthCheck, TargetHealthCheck} from "../types";
+import {HealthCheck, HealthCheckResponse, TargetHealthCheck} from "../types";
 import {ApplicationContext} from "../ApplicationStatus/Container";
+import {ErrorWrapper} from "../ErrorWrapper";
+import useErrorHandler from "../../Hooks/UseErrorHandler";
+import {TargetHealthChecksContainerProps} from "./types";
 
-interface TargetHealthChecksComponentProps {
-  target: string;
-}
+export default ErrorWrapper(TargetHealthChecksContainer);
 
-export default function TargetHealthChecksContainer(props: TargetHealthChecksComponentProps) {
+function TargetHealthChecksContainer(props: TargetHealthChecksContainerProps) {
   const [targetHealthChecksList, setTargetHealthChecksList] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const appContextData = useContext(ApplicationContext);
+
+  useErrorHandler(errorMessage);
 
   useEffect(() => {
     fetchTargetHealthChecksListAsync(appContextData.apiUrl, appContextData.groupLabel, props.target)
       .then((targetHealthChecksListJson) => {
-        setTargetHealthChecksList(groupByCheckName(targetHealthChecksListJson.results));
+        if(!targetHealthChecksListJson) throw new Error("targetList is undefined");
+
+        setTargetHealthChecksList(groupByCheckName(targetHealthChecksListJson));
         setIsLoading(false);
       })
-      .catch((err) => {
+      .catch(err => {
         logger.error(err);
-        throw new Error("failed to get target health checks list");
-      });
+        setErrorMessage(err);
+      })
   }, []);
 
   return (
@@ -45,13 +51,15 @@ export default function TargetHealthChecksContainer(props: TargetHealthChecksCom
           releaseNumber={releaseNumber}
           targetHealthChecksList={targetHealthChecksList}
           target={props.target}
+          targetTitle={props.targetTitle}
+          standalone={props.standalone}
         />
       )}
     </>
   );
 }
 
-async function fetchTargetHealthChecksListAsync(apiUrl: string, groupLabel: string, target: string) {
+async function fetchTargetHealthChecksListAsync(apiUrl: string, groupLabel: string, target: string): Promise<HealthCheckResponse> {
   const targetHealthChecks = await fetch(`${apiUrl}group/${groupLabel}/target/${target}`);
 
   return await targetHealthChecks.json();

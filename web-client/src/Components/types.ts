@@ -6,8 +6,11 @@
 
 export interface IStateHandler {
   apiurl: string;
+  cascadefailure: number;
   grouplabel: string;
   grouptitle?: string;
+  targetlabel?: string;
+  targettitle?: string;
 }
 
 export type HealthCheckStatus = "Complete" | "Failed";
@@ -26,9 +29,7 @@ export interface HealthCheck {
   error: string;
 }
 
-export interface HealthCheckResponse {
-  results: HealthCheck[];
-}
+export type HealthCheckResponse = HealthCheck[];
 
 export interface Target {
   status: HealthCheckStatus;
@@ -40,4 +41,13 @@ export interface TargetHealthCheck {
  checkName: string;
  status: HealthCheckStatus;
  error?: string;
+}
+
+export interface Config {
+  apiUrl: string;
+  cascadeFailure: number;
+  groupLabel: string;
+  groupTitle?: string;
+  targetLabel?: string;
+  targetTitle?: string;
 }

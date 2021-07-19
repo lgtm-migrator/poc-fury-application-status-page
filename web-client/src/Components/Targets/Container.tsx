@@ -10,23 +10,30 @@ import { EuiEmptyPrompt, EuiLoadingSpinner } from "fury-design-system";
 import {logger} from "../../Services/Logger";
 import {HealthCheck, HealthCheckResponse, Target} from "../types";
 import {ApplicationContext} from "../ApplicationStatus/Container";
+import {ErrorWrapper} from "../ErrorWrapper";
+import useErrorHandler from "../../Hooks/UseErrorHandler";
 
-export default function TargetsContainer() {
+export default ErrorWrapper(TargetsContainer);
+
+function TargetsContainer() {
   const [targetList, setTargetList] = useState<Target[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const appContextData = useContext(ApplicationContext);
+
+  useErrorHandler(errorMessage);
 
   useEffect(() => {
     fetchTargetListAsync(appContextData.apiUrl, appContextData.groupLabel)
       .then((targetListJson) => {
+        if(!targetListJson) throw new Error("targetList is undefined");
 
-        setTargetList(groupByTarget(targetListJson.results));
+        setTargetList(groupByTarget(targetListJson));
         setIsLoading(false);
       })
       .catch((err) => {
         logger.error(err);
-
-        throw new Error("failed to get target list");
+        setErrorMessage(err);
       });
   }, []);
 
@@ -44,10 +51,10 @@ export default function TargetsContainer() {
   );
 }
 
-async function fetchTargetListAsync(apiUrl: string, groupLabel: string) {
+async function fetchTargetListAsync(apiUrl: string, groupLabel: string): Promise<HealthCheckResponse> {
   const targetList = await fetch(`${apiUrl}group/${groupLabel}`);
 
-  return await targetList.json() as HealthCheckResponse;
+  return await targetList.json();
 }
 
 function groupByTarget(targetList: HealthCheck[]): Target[] {

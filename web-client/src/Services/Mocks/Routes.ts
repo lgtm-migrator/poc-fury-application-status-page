@@ -22,6 +22,9 @@ export function getRoutes(urlPrefix: string, apiPath?: string) {
          apiVersion: "",
          groupLabel: "BookInfo",
          groupTitle: "Book Info Application",
+         cascadeFailure: 0,
+         targetLabel: "",
+         targetTitle: "",
          appEnv: "development",
        }
      }
@@ -34,9 +37,7 @@ export function getRoutes(urlPrefix: string, apiPath?: string) {
    }
 
    this.get('group/:group', (schema: Schema<Registry<MockedServerBaseModels, MockedServerBaseFactories>>) => {
-     return {
-       results: schema.all("healthCheck").models ?? []
-     }
+     return schema.all("healthCheck").models ?? [];
    })
 
    this.get('group/:group/target/:target', (schema: MockedSchema, request: Request) => {
@@ -46,9 +47,8 @@ export function getRoutes(urlPrefix: string, apiPath?: string) {
          .models
          .filter(healthCheck => healthCheck.group === request.params.group && healthCheck.target === request.params.target);
      logger.info(JSON.stringify(healthChecks));
-     return {
-       results: healthChecks ?? []
-     };
+
+     return healthChecks ?? [];
    })
  }
 }
