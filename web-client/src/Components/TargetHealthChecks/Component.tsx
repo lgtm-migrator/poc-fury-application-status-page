@@ -4,12 +4,20 @@
  * license that can be found in the LICENSE file.
  */
 
-import React, {useContext} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {
   EuiFlexGroup,
   EuiPanel,
   EuiPage,
-  EuiPageBody, EuiPageHeader, EuiPageContent, EuiPageHeaderSection, EuiFlexItem, EuiText, EuiIcon, EuiTitle
+  EuiPageBody,
+  EuiPageHeader,
+  EuiPageContent,
+  EuiPageHeaderSection,
+  EuiFlexItem,
+  EuiText,
+  EuiIcon,
+  EuiTitle,
+  EuiEmptyPrompt, EuiLoadingSpinner
 } from "fury-design-system";
 import "./Style.css";
 import {EuiCustomLink} from "../EuiCustomLink";
@@ -18,57 +26,81 @@ import moment from 'moment';
 import {HealthCheckStatus, TargetHealthCheck} from "../types";
 import {ApplicationContext} from "../ApplicationStatus/Container";
 import {TargetHealthChecksCardProps, TargetHealthChecksComponentProps} from "./types";
+import useErrorHandler from "../../Hooks/UseErrorHandler";
 
 export default function TargetHealthChecksComponent(props: TargetHealthChecksComponentProps) {
   const appContextData = useContext(ApplicationContext);
   const groupUIText = appContextData.groupTitle ? appContextData.groupTitle : appContextData.groupLabel;
   const targetUIText = props.targetTitle ? props.targetTitle : props.target;
+  const [error, setError] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useErrorHandler(error);
+
+  useEffect(() => {
+   props.targetHealthChecksStore.targetHealthChecksListGetAll()
+     .then(() => {
+        setIsLoading(false);
+     })
+     .catch(err => {
+        setError(err);
+     })
+  })
 
   return (
     <>
-      <EuiPage paddingSize="none" restrictWidth={true}>
-        <EuiPageBody>
-          <EuiPageHeader
-            restrictWidth
-            paddingSize="l"
-          >
-            {!props.standalone &&
-              <EuiPageHeaderSection>
-                <EuiCustomLink to={`${appContextData.basePath}/`}>
-                    <EuiIcon type={"sortLeft"}/> {LocalizedText.singleton.goBack}
-                </EuiCustomLink>
-              </EuiPageHeaderSection>
-            }
-          </EuiPageHeader>
-          <EuiPageContent
-            borderRadius="none"
-            hasShadow={false}
-            style={{ display: 'flex' }}
-            color="transparent"
-          >
-            <EuiPageContent
-              verticalPosition="center"
-              horizontalPosition="center"
-              paddingSize="none"
-              color="transparent"
-              style={{ maxWidth: "600px", width: "100%" }}
-              hasShadow={false}>
-              {TargetHealthChecksHeader(props.targetHealthChecksList, groupUIText, targetUIText)}
-              {props.targetHealthChecksList.length > 0 ?
-                props.targetHealthChecksList.map((targetHealthCheck, index) =>
-                  (
-                    <React.Fragment key={`${targetHealthCheck.checkName}-${index}`}>
-                      <TargetHealthChecksCard targetHealthCheck={targetHealthCheck} />
-                    </React.Fragment>
-                  )
-                )
-                : (
-                  <div>No health check found</div>
-                )}
-            </EuiPageContent>
-          </EuiPageContent>
-        </EuiPageBody>
-      </EuiPage>
+      {
+        isLoading ?
+        (
+          <EuiEmptyPrompt
+            title={<h4> Loading... </h4>}
+            body={<EuiLoadingSpinner size="xl" />}
+          />
+        ) :
+          <EuiPage paddingSize="none" restrictWidth={true}>
+            <EuiPageBody>
+              <EuiPageHeader
+                restrictWidth
+                paddingSize="l"
+              >
+                {!props.standalone &&
+                <EuiPageHeaderSection>
+                    <EuiCustomLink to={`${appContextData.basePath}/`}>
+                        <EuiIcon type={"sortLeft"}/> {LocalizedText.singleton.goBack}
+                    </EuiCustomLink>
+                </EuiPageHeaderSection>
+                }
+              </EuiPageHeader>
+              <EuiPageContent
+                borderRadius="none"
+                hasShadow={false}
+                style={{ display: 'flex' }}
+                color="transparent"
+              >
+                <EuiPageContent
+                  verticalPosition="center"
+                  horizontalPosition="center"
+                  paddingSize="none"
+                  color="transparent"
+                  style={{ maxWidth: "600px", width: "100%" }}
+                  hasShadow={false}>
+                  {TargetHealthChecksHeader(props.targetHealthChecksStore.targetHealthChecksList, groupUIText, targetUIText)}
+                  {props.targetHealthChecksStore.targetHealthChecksList.length > 0 ?
+                    props.targetHealthChecksStore.targetHealthChecksList.map((targetHealthCheck, index) =>
+                      (
+                        <React.Fragment key={`${targetHealthCheck.checkName}-${index}`}>
+                          <TargetHealthChecksCard targetHealthCheck={targetHealthCheck} />
+                        </React.Fragment>
+                      )
+                    )
+                    : (
+                      <div>No health check found</div>
+                    )}
+                </EuiPageContent>
+              </EuiPageContent>
+            </EuiPageBody>
+          </EuiPage>
+      }
     </>
   );
 }

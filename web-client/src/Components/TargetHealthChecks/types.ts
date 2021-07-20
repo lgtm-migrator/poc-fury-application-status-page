@@ -1,4 +1,5 @@
 import {TargetHealthCheck} from "../types";
+import {TargetHealthChecksStore} from "../../Stores/TargetHealthChecks";
 
 export interface TargetHealthChecksContainerProps {
   target: string;
@@ -8,7 +9,7 @@ export interface TargetHealthChecksContainerProps {
 
 export interface TargetHealthChecksComponentProps {
   releaseNumber: string;
-  targetHealthChecksList: TargetHealthCheck[];
+  targetHealthChecksStore: TargetHealthChecksStore;
   target: string;
   targetTitle?: string;
   standalone?: boolean;

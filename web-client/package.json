@@ -9,6 +9,8 @@
     "i18next": "^20.2.4",
     "loglevel": "^1.7.1",
     "loglevel-remote": "^0.1.0",
+    "mobx": "^6.3.2",
+    "mobx-react": "^7.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-i18next": "^11.8.15",

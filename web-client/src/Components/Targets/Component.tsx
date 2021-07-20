@@ -4,13 +4,21 @@
  * license that can be found in the LICENSE file.
  */
 
-import React, {useContext} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {
   EuiFlexGroup,
   EuiPanel,
   EuiHeaderBreadcrumbs,
   EuiPage,
-  EuiPageBody, EuiPageHeader, EuiPageContent, EuiPageHeaderSection, EuiFlexItem, EuiText, EuiIcon, EuiTitle
+  EuiPageBody,
+  EuiPageHeader,
+  EuiPageContent,
+  EuiPageHeaderSection,
+  EuiFlexItem,
+  EuiText,
+  EuiIcon,
+  EuiTitle,
+  EuiEmptyPrompt, EuiLoadingSpinner
 } from "fury-design-system";
 import "./Style.css";
 import {EuiCustomLink} from "../EuiCustomLink";
@@ -18,10 +26,16 @@ import {LocalizedText} from './LocalizedText';
 import {HealthCheckStatus, Target} from "../types";
 import {ApplicationContext} from "../ApplicationStatus/Container";
 import {TargetCardProps, TargetsComponentProps} from "./types";
+import {observer} from "mobx-react";
+import useErrorHandler from "../../Hooks/UseErrorHandler";
 
-export default function TargetStatusComponent(props: TargetsComponentProps) {
+export default observer(TargetStatusComponent);
+
+function TargetStatusComponent(props: TargetsComponentProps) {
   const appContextData = useContext(ApplicationContext);
   const groupUIText = appContextData.groupTitle ? appContextData.groupTitle : appContextData.groupLabel;
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
 
   const breadcrumbs = [
     {
@@ -35,52 +49,74 @@ export default function TargetStatusComponent(props: TargetsComponentProps) {
       text: '',
       className: 'no-show',
     }
-  ]
+  ];
+
+  useErrorHandler(error);
+
+  useEffect(() => {
+    props.targetsStore.targetListGetAll()
+      .then((targets) => {
+        setIsLoading(false);
+      })
+      .catch(err => {
+        setError(err);
+      })
+  })
+
   return (
     <>
-      <EuiPage paddingSize="none" restrictWidth={true}>
-        <EuiPageBody>
-          <EuiPageHeader
-            restrictWidth
-            paddingSize="l"
-          >
-            <EuiPageHeaderSection>
-              <EuiHeaderBreadcrumbs
-                aria-label="Header breadcrumbs example"
-                breadcrumbs={breadcrumbs}
-                responsive={false}
-                className={"ml-0"}
-              />
-            </EuiPageHeaderSection>
-          </EuiPageHeader>
-          <EuiPageContent
-            borderRadius="none"
-            hasShadow={false}
-            style={{ display: 'flex' }}
-            color="transparent"
-          >
-            <EuiPageContent
-              horizontalPosition="center"
-              paddingSize="none"
-              color="transparent"
-              style={{ maxWidth: "600px", width: "100%" }}
-              hasShadow={false}>
-              {TargetStatusHeader(props.targetList, groupUIText)}
-              {props.targetList.length > 0 ?
-                props.targetList.map((target, index) =>
-                  (
-                    <React.Fragment key={`${target.target}-${index}`}>
-                      <TargetCard target={target} basePath={appContextData.basePath} />
-                    </React.Fragment>
-                  )
-                )
-                : (
-                  <div>No target found</div>
-                )}
-            </EuiPageContent>
-          </EuiPageContent>
-        </EuiPageBody>
-      </EuiPage>
+      {
+        isLoading ?
+          (
+            <EuiEmptyPrompt
+              title={<h4> Loading... </h4>}
+              body={<EuiLoadingSpinner size="xl" />}
+            />
+          ) :
+          <EuiPage paddingSize="none" restrictWidth={true}>
+            <EuiPageBody>
+              <EuiPageHeader
+                restrictWidth
+                paddingSize="l"
+              >
+                <EuiPageHeaderSection>
+                  <EuiHeaderBreadcrumbs
+                    aria-label="Header breadcrumbs example"
+                    breadcrumbs={breadcrumbs}
+                    responsive={false}
+                    className={"ml-0"}
+                  />
+                </EuiPageHeaderSection>
+              </EuiPageHeader>
+              <EuiPageContent
+                borderRadius="none"
+                hasShadow={false}
+                style={{ display: 'flex' }}
+                color="transparent"
+              >
+                <EuiPageContent
+                  horizontalPosition="center"
+                  paddingSize="none"
+                  color="transparent"
+                  style={{ maxWidth: "600px", width: "100%" }}
+                  hasShadow={false}>
+                  {TargetStatusHeader(props.targetsStore.targetList, groupUIText)}
+                  {props.targetsStore.targetList.length > 0 ?
+                    props.targetsStore.targetList.map((target, index) =>
+                      (
+                        <React.Fragment key={`${target.target}-${index}`}>
+                          <TargetCard target={target} basePath={appContextData.basePath} />
+                        </React.Fragment>
+                      )
+                    )
+                    : (
+                      <div>No target found</div>
+                    )}
+                </EuiPageContent>
+              </EuiPageContent>
+            </EuiPageBody>
+          </EuiPage>
+      }
     </>
   )
 }

@@ -1,7 +1,8 @@
 import {Target} from "../types";
+import {TargetsStore} from "../../Stores/Targets";
 
 export interface TargetsComponentProps {
-  targetList: Target[];
+  targetsStore: TargetsStore;
 }
 
 export interface TargetCardProps {
