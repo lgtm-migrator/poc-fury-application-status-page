@@ -8,7 +8,7 @@ import React, {useContext, useEffect, useState} from "react";
 import TargetStatusComponent from "./Component";
 import { EuiEmptyPrompt, EuiLoadingSpinner } from "fury-design-system";
 import {logger} from "../../Services/Logger";
-import {HealthCheck, HealthCheckResponse, Target} from "../types";
+import {HealthCheck, HealthCheckResponse, HealthCheckStatus, Target} from "../types";
 import {ApplicationContext} from "../ApplicationStatus/Container";
 import {ErrorWrapper} from "../ErrorWrapper";
 import useErrorHandler from "../../Hooks/UseErrorHandler";
@@ -28,7 +28,7 @@ function TargetsContainer() {
       .then((targetListJson) => {
         if(!targetListJson) throw new Error("targetList is undefined");
 
-        setTargetList(groupByTarget(targetListJson));
+        setTargetList(groupByTarget(targetListJson, appContextData.cascadeFailure));
         setIsLoading(false);
       })
       .catch((err) => {
@@ -57,23 +57,51 @@ async function fetchTargetListAsync(apiUrl: string, groupLabel: string): Promise
   return await targetList.json();
 }
 
-function groupByTarget(targetList: HealthCheck[]): Target[] {
-  const getTargetIndexInAccumulator = (target: HealthCheck, accumulator: Target[]): number => {
-    return accumulator.findIndex((checkTarget) => checkTarget.target === target.target);
+function getTargetIndexInAccumulator(target: HealthCheck, accumulator: Target[]): number {
+  return accumulator.findIndex((checkTarget) => checkTarget.target === target.target);
+}
+
+function calcNewAggregatedStatus(failedChecksCount: number, totalChecksCount: number, cascadeFailure: number) {
+  if (cascadeFailure === 0) {
+    return failedChecksCount === totalChecksCount ? "Failed" : "Complete";
   }
 
+  return failedChecksCount >= cascadeFailure ? "Failed" : "Complete";
+}
+
+function updateAggregatedTargetData(aggregatedTarget: Target, currentTarget: HealthCheck, cascadeFailure: number): Target {
+  const failedChecksCount = currentTarget.status === "Failed" ? aggregatedTarget.failedChecks + 1 : aggregatedTarget.failedChecks;
+  const totalChecksCount = aggregatedTarget.totalChecks + 1;
+  const aggregatedStatus = calcNewAggregatedStatus(failedChecksCount, totalChecksCount, cascadeFailure);
+
+  return {
+    status: aggregatedStatus,
+    target: aggregatedTarget.target,
+    failedChecks: failedChecksCount,
+    totalChecks: totalChecksCount
+  };
+}
+
+function groupByTarget(targetList: HealthCheck[], cascadeFailure: number): Target[] {
   return targetList.reduce((targetAcc, currentTarget) => {
     const targetIndex = getTargetIndexInAccumulator(currentTarget, targetAcc);
 
-    if (targetIndex !== -1 && currentTarget.status === "Failed") {
-      targetAcc[targetIndex].status = "Failed";
+    if (targetIndex !== -1) {
+      targetAcc[targetIndex] = updateAggregatedTargetData(targetAcc[targetIndex], currentTarget, cascadeFailure);
     }
 
     if (targetIndex === -1) {
-      targetAcc.push({
-        status: currentTarget.status,
-        target: currentTarget.target
-      });
+      const aggregatedTarget: Target = updateAggregatedTargetData({
+          status: currentTarget.status,
+          target: currentTarget.target,
+          failedChecks: 0,
+          totalChecks: 0
+        },
+        currentTarget,
+        cascadeFailure
+      );
+
+      targetAcc.push(aggregatedTarget);
     }
 
     return targetAcc;

@@ -34,6 +34,8 @@ export type HealthCheckResponse = HealthCheck[];
 export interface Target {
   status: HealthCheckStatus;
   target: string;
+  failedChecks: number;
+  totalChecks: number;
 }
 
 export interface TargetHealthCheck {
