@@ -6,7 +6,7 @@ import {Targets} from "../Targets";
 import {ApplicationStatusRouteParams} from "./types";
 import {logger} from "../../Services/Logger";
 
-export default function ApplicationStatusFactory() {
+export default function ApplicationStatusRouterFactory() {
   const appContextData = useContext(ApplicationContext);
 
   logger.info(JSON.stringify(appContextData));

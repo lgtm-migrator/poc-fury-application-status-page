@@ -10,7 +10,7 @@ import './Style.css';
 import {LocalizedText} from "./LocalizedText";
 import {initialize} from "../../i18n";
 import {ApplicationContext} from "./Container";
-import ApplicationStatusFactory from "./Factory";
+import ApplicationStatusRouterFactory from "./Factory";
 
 export default function ApplicationStatusComponent() {
   const appContextData = useContext(ApplicationContext);
@@ -21,5 +21,5 @@ export default function ApplicationStatusComponent() {
     })
   }, []);
 
-  return <ApplicationStatusFactory />
+  return <ApplicationStatusRouterFactory />
 }
