@@ -1,0 +1,33 @@
+# Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fury-application-status-ratings
+  labels:
+    app: fury-application-status-ratings
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fury-application-status-ratings
+  template:
+    metadata:
+      labels:
+        app: fury-application-status-ratings
+    spec:
+      containers:
+        - name: fury-application-status-ratings
+          image: registry.sighup.io/poc/fury-application-status
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: ratings-config-file
+              mountPath: /app/config.yml
+              subPath: config.yml
+      volumes:
+        - name: ratings-config-file
+          configMap:
+            name: ratings-config-file

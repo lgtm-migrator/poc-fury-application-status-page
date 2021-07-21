@@ -5,7 +5,11 @@
 namespace: fury-application-status
 
 resources:
-  - deployment.yml
+  - deployment-master.yml
+  - deployment-product.yml
+  - deployment-reviews.yml
+  - deployment-details.yml
+  - deployment-ratings.yml
   - svc.yml
   - ingress.yml
   - ns.yml

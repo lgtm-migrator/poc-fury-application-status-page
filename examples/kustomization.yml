@@ -8,7 +8,18 @@ resources:
   - ./bases
 
 configMapGenerator:
-  - name: config-file
+  - name: master-config-file
     files:
-      - config.yml=config/fury-application-status-config.yml
-
+      - config.yml=config/master-config-file.yml
+  - name: product-config-file
+    files:
+      - config.yml=config/product-config-file.yml
+  - name: reviews-config-file
+    files:
+      - config.yml=config/reviews-config-file.yml
+  - name: details-config-file
+    files:
+      - config.yml=config/details-config-file.yml
+  - name: ratings-config-file
+    files:
+      - config.yml=config/ratings-config-file.yml

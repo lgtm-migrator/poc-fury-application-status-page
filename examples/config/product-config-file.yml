@@ -8,4 +8,5 @@ listener: 0.0.0.0:8080
 externalEndpoint: http://fury-application-status.fury.localdomain
 apiUrl: http://fip-job-status-api.demo-app.localdomain
 groupLabel: 'BookInfo'
-
+targetLabel: 'Product'
+cascadeFailure: 1

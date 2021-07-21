@@ -9,6 +9,7 @@ import Schema from "miragejs/orm/schema";
 import {Registry} from "miragejs/-types";
 import {MockedSchema, MockedServerBaseFactories, MockedServerBaseModels} from "./types";
 import {Request} from "miragejs";
+import {getAllHealthChecksByGroup, getAllHealthChecksByGroupAndTarget} from "./io";
 
 export function getRoutes(urlPrefix: string, apiPath?: string) {
  return function () {
@@ -36,19 +37,12 @@ export function getRoutes(urlPrefix: string, apiPath?: string) {
      this.namespace = "/api/v0/";
    }
 
-   this.get('group/:group', (schema: Schema<Registry<MockedServerBaseModels, MockedServerBaseFactories>>) => {
-     return schema.all("healthCheck").models ?? [];
+   this.get('group/:group', (schema: Schema<Registry<MockedServerBaseModels, MockedServerBaseFactories>>, request: Request) => {
+     return getAllHealthChecksByGroup(schema, request.params.group) ?? [];
    })
 
    this.get('group/:group/target/:target', (schema: MockedSchema, request: Request) => {
-     const healthChecks =
-       schema
-         .all("healthCheck")
-         .models
-         .filter(healthCheck => healthCheck.group === request.params.group && healthCheck.target === request.params.target);
-     logger.info(JSON.stringify(healthChecks));
-
-     return healthChecks ?? [];
+     return getAllHealthChecksByGroupAndTarget(schema, request.params.group, request.params.target) ?? [];
    })
  }
 }
