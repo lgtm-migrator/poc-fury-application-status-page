@@ -49,6 +49,7 @@
   },
   "scripts": {
     "build": "webpack --mode production --config=webpack.dev.config.js",
+    "test": "yarn jest",
     "webpack-dev": "webpack serve --config=webpack.dev.config.js",
     "dev-base": "webpack serve --config webpack.dev.config.js --env from_yaml=true --env config_path=../config.yml",
     "dev-local-no-backend": "yarn dev-base --env offline=true",

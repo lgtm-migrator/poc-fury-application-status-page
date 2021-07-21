@@ -12,6 +12,19 @@
     white-space: pre;
 }
 
+.target-status-icon {
+    width: 22px;
+    height: 22px;
+}
+
+.euiFlexGroup > .euiFlexItem.target-card-status-text {
+    margin-left: 0;
+}
+
+.euiFlexGroup > .euiFlexItem.target-card-status-text p {
+    font-weight: 600;
+}
+
 .target-health-check-card {
     border-bottom: 1px solid #bcbdbf;
     padding-left: 0;

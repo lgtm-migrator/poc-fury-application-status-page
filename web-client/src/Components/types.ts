@@ -15,7 +15,7 @@ export interface IStateHandler {
 
 export type HealthCheckStatus = "Complete" | "Failed";
 
-export interface HealthCheck {
+export interface IHealthCheck {
   status: HealthCheckStatus;
   group: string;
   target: string;
@@ -29,7 +29,7 @@ export interface HealthCheck {
   error: string;
 }
 
-export type HealthCheckResponse = HealthCheck[];
+export type HealthCheckResponse = IHealthCheck[];
 
 export interface Target {
   status: HealthCheckStatus;
@@ -42,6 +42,7 @@ export interface TargetHealthCheck {
  completedAt?: string;
  checkName: string;
  status: HealthCheckStatus;
+ target: string;
  error?: string;
 }
 

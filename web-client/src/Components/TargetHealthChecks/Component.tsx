@@ -45,7 +45,7 @@ export default function TargetHealthChecksComponent(props: TargetHealthChecksCom
      .catch(err => {
         setError(err);
      })
-  })
+  }, [])
 
   return (
     <>

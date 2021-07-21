@@ -61,7 +61,7 @@ function TargetStatusComponent(props: TargetsComponentProps) {
       .catch(err => {
         setError(err);
       })
-  })
+  }, [])
 
   return (
     <>
@@ -154,29 +154,57 @@ function TargetStatusHeader(targetList: Target[], groupLabel: string) {
 function TargetCardStatusIcon(status: HealthCheckStatus) {
  if (status === "Complete") {
    return (
-     <EuiIcon size={"l"} type="checkInCircleFilled" color={"success"} />
+     <EuiIcon className="target-status-icon" type="checkInCircleFilled" color={"success"} />
    )
  }
 
  return (
-   <EuiIcon size={"l"} type="crossInACircleFilled" color={"danger"} />
+   <EuiIcon className="target-status-icon"  type="crossInACircleFilled" color={"danger"} />
  )
+}
+
+function TargetCardStatusText(target: Target) {
+  if (target.failedChecks === 0) {
+    return `ALL ${target.totalChecks} PASSED`;
+  }
+
+  return `${target.failedChecks}/${target.totalChecks} FAILED`;
 }
 
 function TargetCard(props: TargetCardProps) {
  return (
    <EuiPanel paddingSize="s" className="target-card" >
-     <EuiFlexGroup gutterSize="m" alignItems={"center"} responsive={false}>
-       <EuiFlexItem grow={false}>
-         {TargetCardStatusIcon(props.target.status)}
-       </EuiFlexItem>
-       <EuiFlexItem grow={false}>
-         <EuiText size="s" >
-           <p>
-             <strong>{props.target.target}</strong>
-           </p>
-         </EuiText>
-       </EuiFlexItem>
+     <EuiFlexGroup gutterSize="none" alignItems="center" responsive={false}>
+       <EuiFlexGroup gutterSize="none" justifyContent="flexStart" direction="column" responsive={false}>
+         <EuiFlexGroup gutterSize="s" wrap={false} responsive={false}>
+           <EuiFlexItem grow={false}>
+             {TargetCardStatusIcon(props.target.status)}
+           </EuiFlexItem>
+           <EuiFlexItem grow={false}>
+             <EuiText size="m" >
+               <p>
+                 <strong>{props.target.target}</strong>
+               </p>
+             </EuiText>
+           </EuiFlexItem>
+         </EuiFlexGroup>
+         <EuiFlexGroup responsive={false}>
+           <EuiFlexItem grow={false}>
+             <EuiText size="xs">
+               <p>
+                 HEALTHCHECKS
+               </p>
+             </EuiText>
+           </EuiFlexItem>
+           <EuiFlexItem className={"target-card-status-text"} grow={false}>
+             <EuiText size="xs">
+               <p>
+                 {TargetCardStatusText(props.target)}
+               </p>
+             </EuiText>
+           </EuiFlexItem>
+         </EuiFlexGroup>
+       </EuiFlexGroup>
        <EuiFlexItem style={{marginLeft: "auto"}} grow={false}>
          <EuiCustomLink to={`${props.basePath}/${props.target.target}`}>
            {LocalizedText.singleton.goToTargetHealthChecksButtonMessage} <EuiIcon type={"sortRight"} />

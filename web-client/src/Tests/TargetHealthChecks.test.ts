@@ -46,11 +46,13 @@ describe("Target Health Checks Store - scenario 1", () => {
     const expectedValue: TargetHealthCheck[] = [
       {
         checkName: "service-endpoints-check",
-        status: "Complete"
+        status: "Complete",
+        target: "Ratings"
       },
       {
         checkName: "http-status-check",
-        status: "Failed"
+        status: "Failed",
+        target: "Ratings"
       }
     ];
 
@@ -92,11 +94,13 @@ describe("Target Health Checks Store - scenario 2", () => {
     const expectedValue: TargetHealthCheck[] = [
       {
         checkName: "service-endpoints-check",
-        status: "Complete"
+        status: "Complete",
+        target: "Details"
       },
       {
         checkName: "http-status-check",
-        status: "Complete"
+        status: "Complete",
+        target: "Details"
       }
     ];
 

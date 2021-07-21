@@ -6,9 +6,9 @@
 
 import {FactoryDefinition, ModelDefinition, Registry} from "miragejs/-types";
 import Schema from "miragejs/orm/schema";
-import {HealthCheck} from "../../Components/types";
+import {IHealthCheck} from "../../Components/types";
 
-export interface MockedHealthCheck extends HealthCheck {}
+export interface MockedHealthCheck extends IHealthCheck {}
 
 export type MockedServerBaseModels = {
   healthCheck: ModelDefinition<MockedHealthCheck>;
