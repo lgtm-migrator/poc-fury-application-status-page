@@ -41,11 +41,9 @@ export default function ApplicationStatusContainer(props: ApplicationStatusConta
   const isMocked = getIsMocked(stateHandler);
   const applicationContext = buildApplicationContext(stateHandler);
 
-  logger.info(JSON.stringify(applicationContext));
 
   if (isMocked) {
-    logger.info(stateHandler.getState().apiurl);
-    makeServer({ environment: "development" }, stateHandler.getState().apiurl, MocksScenario.scenario1)
+    makeServer({ environment: "development" }, stateHandler.getState().apiurl, MocksScenario.scenario3)
   }
 
   return (

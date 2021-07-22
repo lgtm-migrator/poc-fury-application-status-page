@@ -3,6 +3,7 @@
  * Use of this source code is governed by a BSD-style
  * license that can be found in the LICENSE file.
  */
+import {Moment} from "moment";
 
 export interface IStateHandler {
   apiurl: string;
@@ -43,6 +44,8 @@ export interface TargetHealthCheck {
  checkName: string;
  status: HealthCheckStatus;
  target: string;
+ lastCheck: Moment;
+ lastIssue?: Moment;
  error?: string;
 }
 

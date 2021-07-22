@@ -12,6 +12,7 @@ import {
 } from "../types";
 import {scenarioOneData} from "./ScenarioOne";
 import {scenarioTwoData} from "./ScenarioTwo";
+import {scenarioThreeData} from "./ScenarioThree";
 import {Server} from "miragejs/server";
 import {Registry} from "miragejs/-types";
 
@@ -31,5 +32,7 @@ export function seedsFactory(scenario: MocksScenario) {
       return generateSeedFromScenario(scenarioOneData);
     case MocksScenario.scenario2:
       return generateSeedFromScenario(scenarioTwoData);
+    case MocksScenario.scenario3:
+      return generateSeedFromScenario(scenarioThreeData);
   }
 }

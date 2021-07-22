@@ -7,6 +7,7 @@ import {injectGlobalWithFetchJson} from "./Utils";
 import {TargetHealthChecksStore} from "../Stores/TargetHealthChecks";
 import {TargetHealthCheck} from "../Components/types";
 import {getAllHealthChecksByGroupAndTarget} from "../Services/Mocks/io";
+import moment from "moment";
 
 const url = "https://dummy.local";
 
@@ -47,12 +48,16 @@ describe("Target Health Checks Store - scenario 1", () => {
       {
         checkName: "service-endpoints-check",
         status: "Complete",
-        target: "Ratings"
+        target: "Ratings",
+        lastCheck: moment("2021-07-13T18:08:07Z"),
+        lastIssue: undefined
       },
       {
         checkName: "http-status-check",
         status: "Failed",
-        target: "Ratings"
+        target: "Ratings",
+        lastCheck: moment("2021-07-13T18:06:03Z"),
+        lastIssue: moment("2021-07-13T18:06:03Z")
       }
     ];
 
@@ -95,12 +100,16 @@ describe("Target Health Checks Store - scenario 2", () => {
       {
         checkName: "service-endpoints-check",
         status: "Complete",
-        target: "Details"
+        target: "Details",
+        lastCheck: moment("2021-07-13T18:08:07Z"),
+        lastIssue: undefined
       },
       {
         checkName: "http-status-check",
         status: "Complete",
-        target: "Details"
+        target: "Details",
+        lastCheck: moment("2021-07-13T18:05:08Z"),
+        lastIssue: undefined
       }
     ];
 

@@ -1,4 +1,5 @@
 import {IHealthCheck, Target, TargetHealthCheck} from "../Components/types";
+import moment from "moment";
 
 export class HealthCheckHandler {
   constructor(private targetList: IHealthCheck[], private cascadeFailure: number = 0) {}
@@ -32,21 +33,49 @@ export class HealthCheckHandler {
     };
   }
 
+  private static updateAggregatedHealthCheckData(aggregatedHealthCheck: TargetHealthCheck, currentHealthCheck: IHealthCheck) {
+    const parsedCheckDate = moment(currentHealthCheck.completedAt);
+
+    const updatedLastIssue = currentHealthCheck.status === "Failed" && (
+      !aggregatedHealthCheck.lastIssue ||
+      parsedCheckDate.isSameOrAfter(aggregatedHealthCheck.lastIssue)
+    ) ? parsedCheckDate : aggregatedHealthCheck.lastIssue;
+
+    if (parsedCheckDate.isSameOrAfter(aggregatedHealthCheck.lastCheck)) {
+      return {
+        ...aggregatedHealthCheck,
+        status: currentHealthCheck.status,
+        lastCheck: parsedCheckDate,
+        lastIssue: updatedLastIssue
+      }
+    }
+
+    return {
+      ...aggregatedHealthCheck,
+      lastIssue: updatedLastIssue
+    }
+  }
+
   public groupByCheckName(): TargetHealthCheck[] {
-    // TODO: ADD completedAt logic on error more recent
     return this.targetList.reduce((targetAcc, currentTarget) => {
       const targetIndex = HealthCheckHandler.getCheckNameIndexInAccumulator(currentTarget, targetAcc);
-      if (targetIndex !== -1 && currentTarget.status === "Failed") {
-        targetAcc[targetIndex].status = "Failed";
-      }
 
       if (targetIndex === -1) {
-        targetAcc.push({
-          status: currentTarget.status,
-          checkName: currentTarget.checkName,
-          target: currentTarget.target
-        });
+        const aggregatedHealthCheck: TargetHealthCheck = {
+            status: currentTarget.status,
+            checkName: currentTarget.checkName,
+            target: currentTarget.target,
+            lastCheck: moment(currentTarget.completedAt),
+            lastIssue: currentTarget.status === "Failed" ? moment(currentTarget.completedAt) : undefined
+        };
+
+        return [...targetAcc, aggregatedHealthCheck];
       }
+
+      targetAcc[targetIndex] = HealthCheckHandler.updateAggregatedHealthCheckData(
+        targetAcc[targetIndex],
+        currentTarget
+      );
 
       return targetAcc;
     }, [] as TargetHealthCheck[]);

@@ -51,19 +51,19 @@ describe("Targets Store - scenario 1", () => {
         failedChecks: 0,
         status: "Complete",
         target: "Details",
-        totalChecks: 6
+        totalChecks: 2
       },
       {
         failedChecks: 0,
         status: "Complete",
         target: "Product",
-        totalChecks: 6
+        totalChecks: 2
       },
       {
         failedChecks: 1,
         status: "Failed",
         target: "Ratings",
-        totalChecks: 4
+        totalChecks: 2
       }
     ]
 
@@ -106,19 +106,19 @@ describe("Targets Store - scenario 2", () => {
         failedChecks: 0,
         status: "Complete",
         target: "Details",
-        totalChecks: 6
+        totalChecks: 2
       },
       {
         failedChecks: 0,
         status: "Complete",
         target: "Product",
-        totalChecks: 6
+        totalChecks: 2
       },
       {
         failedChecks: 0,
         status: "Complete",
         target: "Ratings",
-        totalChecks: 4
+        totalChecks: 2
       }
     ]
 

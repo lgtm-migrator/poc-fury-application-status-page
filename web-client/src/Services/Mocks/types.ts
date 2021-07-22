@@ -20,7 +20,8 @@ export type MockedServerBaseFactories = {
 
 export enum MocksScenario {
   "scenario1",
-  "scenario2"
+  "scenario2",
+  "scenario3"
 }
 
 export type MockedSchema = Schema<Registry<MockedServerBaseModels, MockedServerBaseFactories>>
