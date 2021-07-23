@@ -10,7 +10,11 @@ resources:
   - deployment-reviews.yml
   - deployment-details.yml
   - deployment-ratings.yml
-  - svc.yml
+  - svc-master.yml
+  - svc-details.yml
+  - svc-product.yml
+  - svc-ratings.yml
+  - svc-reviews.yml
   - ingress.yml
   - ns.yml
 

@@ -13,14 +13,53 @@ metadata:
   name: fury-application-status
 spec:
   rules:
-    - host: fury-application-status.demo-app.localdomain
+    - host: fury-application-status-master.demo-app.localdomain
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: fury-application-status
+                name: fury-application-status-master
                 port:
                   name: http
-
+    - host: fury-application-status-details.demo-app.localdomain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fury-application-status-details
+                port:
+                  name: http
+    - host: fury-application-status-product.demo-app.localdomain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fury-application-status-product
+                port:
+                  name: http
+    - host: fury-application-status-ratings.demo-app.localdomain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fury-application-status-ratings
+                port:
+                  name: http
+    - host: fury-application-status-reviews.demo-app.localdomain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fury-application-status-reviews
+                port:
+                  name: http
