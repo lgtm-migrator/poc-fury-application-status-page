@@ -30,8 +30,12 @@
     padding-left: 0;
     padding-right: 0;
     margin-bottom: 9px;
-}
 
-.target-health-check-card.euiPanel .euiText p {
-    margin-bottom: 0;
+    &.euiPanel .euiText p {
+        margin-bottom: 0;
+    }
+
+    .check-title {
+        margin-bottom: 4px;
+    }
 }

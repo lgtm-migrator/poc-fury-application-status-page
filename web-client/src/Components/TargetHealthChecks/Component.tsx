@@ -19,7 +19,7 @@ import {
   EuiTitle,
   EuiEmptyPrompt, EuiLoadingSpinner
 } from "fury-design-system";
-import "./Style.css";
+import "./Style.scss";
 import {EuiCustomLink} from "../EuiCustomLink";
 import {LocalizedText} from "./LocalizedText";
 import moment, {Moment} from 'moment';
@@ -153,12 +153,12 @@ function TargetHealthChecksCard(props: TargetHealthChecksCardProps) {
   return (
     <EuiPanel paddingSize="s" className="target-health-check-card" color={"transparent"} borderRadius={"none"}>
       <EuiFlexGroup gutterSize={"none"} direction={"column"} responsive={false}>
-        <EuiFlexGroup gutterSize="m" alignItems={"center"} responsive={false}>
+        <EuiFlexGroup className={"check-title"} gutterSize="m" alignItems={"center"} responsive={false}>
           <EuiFlexItem grow={false}>
             {TargetHealthChecksCardStatusIcon(props.targetHealthCheck.status)}
           </EuiFlexItem>
           <EuiFlexItem grow={false}>
-            <EuiText size="s" >
+            <EuiText size="m" >
               <p>
                 <strong>{props.targetHealthCheck.checkName}</strong>
               </p>
@@ -166,32 +166,32 @@ function TargetHealthChecksCard(props: TargetHealthChecksCardProps) {
           </EuiFlexItem>
         </EuiFlexGroup>
         <EuiFlexGroup gutterSize={"none"} justifyContent={"spaceBetween"} responsive={false}>
-          <EuiFlexGroup gutterSize={"s"} direction={"column"} justifyContent={"flexStart"} responsive={false}>
+          <EuiFlexGroup className={"font-color-dark-shade font-weight-semi-bold"} gutterSize={"none"} direction={"column"} justifyContent={"flexStart"} responsive={false}>
             <EuiFlexItem grow={false}>
-              <EuiText size={"s"}>
+              <EuiText className={"font-weight-semi-bold"} size={"s"}>
                 <p>
                   {LocalizedText.singleton.lastCheck}
                 </p>
               </EuiText>
             </EuiFlexItem>
             <EuiFlexItem grow={false}>
-              <EuiText size={"s"}>
+              <EuiText className={"font-weight-semi-bold"} size={"s"}>
                 <p>
                   {getHealthCheckTimeDiffString(props.targetHealthCheck.lastCheck)}
                 </p>
               </EuiText>
             </EuiFlexItem>
           </EuiFlexGroup>
-          <EuiFlexGroup gutterSize={"s"} direction={"column"} justifyContent={"flexStart"} responsive={false}>
+          <EuiFlexGroup className={`${props.targetHealthCheck.status === "Failed" ? "font-color-darkest-shade" : "font-color-medium-shade"}`} gutterSize={"none"} direction={"column"} justifyContent={"flexStart"} responsive={false}>
             <EuiFlexItem grow={false}>
-              <EuiText size={"s"} textAlign={"right"}>
+              <EuiText className={"font-weight-semi-bold"} size={"s"} textAlign={"right"}>
                 <p>
-                  {LocalizedText.singleton.lastIssue}
+                  {props.targetHealthCheck.status === "Failed" ? LocalizedText.singleton.issue : LocalizedText.singleton.lastIssue}
                 </p>
               </EuiText>
             </EuiFlexItem>
             <EuiFlexItem grow={false}>
-              <EuiText size={"s"} textAlign={"right"}>
+              <EuiText className={"font-weight-semi-bold"} size={"s"} textAlign={"right"}>
                 <p>
                   {getLastIssueDateString(props.targetHealthCheck.status, props.targetHealthCheck.lastIssue)}
                 </p>

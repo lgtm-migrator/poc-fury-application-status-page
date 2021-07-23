@@ -6,7 +6,7 @@
 
 import React, {useContext, useEffect} from "react";
 import 'fury-design-system/dist/eui_theme_fury_community.css';
-import './Style.css';
+import './Style.scss';
 import {LocalizedText} from "./LocalizedText";
 import {initialize} from "../../i18n";
 import {ApplicationContext} from "./Container";

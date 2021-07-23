@@ -8,10 +8,9 @@ import React, {createContext, useState} from "react";
 import {releaseNumber} from "../../constants";
 import {createStateHandler} from "../../Services/createStateHandler";
 import ApplicationStatusComponent from "./Component";
-import {logger} from "../../Services/Logger";
 import {makeServer} from "../../Services/Mocks/MakeServer";
 import {StateManager} from "fury-component/dist/State/types";
-import {Config, IStateHandler, Target, TargetHealthCheck} from "../types";
+import {IStateHandler} from "../types";
 import {MocksScenario} from "../../Services/Mocks/types";
 import {IApplicationContext, ApplicationStatusContainerProps} from "./types";
 
