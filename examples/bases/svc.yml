@@ -6,14 +6,14 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: fury-application-status
+  name: fury-application-status-master
   labels:
-    app: fury-application-status
+    app: fury-application-status-master
 spec:
   ports:
     - port: 8080
       name: http
       protocol: TCP
   selector:
-    app: fury-application-status
+    app: fury-application-status-master
 

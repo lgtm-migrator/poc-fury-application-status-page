@@ -22,7 +22,7 @@ import {
 import "./Style.css";
 import {EuiCustomLink} from "../EuiCustomLink";
 import {LocalizedText} from "./LocalizedText";
-import moment from 'moment';
+import moment, {Moment} from 'moment';
 import {HealthCheckStatus, TargetHealthCheck} from "../types";
 import {ApplicationContext} from "../ApplicationStatus/Container";
 import {TargetHealthChecksCardProps, TargetHealthChecksComponentProps} from "./types";
@@ -105,6 +105,38 @@ export default function TargetHealthChecksComponent(props: TargetHealthChecksCom
   );
 }
 
+function getHealthCheckTimeDiffString(healthCheckTime: Moment) {
+  const diffInMinutes = (moment().utcOffset(healthCheckTime.format("Z"))).diff(healthCheckTime, "minutes");
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  const minutesOfHours = diffInMinutes - diffInHours * 60;
+
+  if (diffInMinutes === 0) {
+    return LocalizedText.singleton.lastCheckIsNow;
+  }
+
+  if (diffInMinutes >= 60) {
+    if (minutesOfHours === 0) {
+      return LocalizedText.singleton.timeInHours(diffInHours);
+    }
+
+    return LocalizedText.singleton.timeInHoursAndMinutes(diffInHours, minutesOfHours);
+  }
+
+  return LocalizedText.singleton.timeInMinutes(diffInMinutes);
+}
+
+function getLastIssueDateString(status: HealthCheckStatus, lastIssue?: Moment) {
+  if (!lastIssue) {
+    return LocalizedText.singleton.neverAnIssue;
+  }
+
+  if (status === "Failed") {
+    return LocalizedText.singleton.occurringIssue;
+  }
+
+  return getHealthCheckTimeDiffString(lastIssue);
+}
+
 function TargetHealthChecksCardStatusIcon(status: HealthCheckStatus) {
   if (status === "Complete") {
     return (
@@ -120,25 +152,53 @@ function TargetHealthChecksCardStatusIcon(status: HealthCheckStatus) {
 function TargetHealthChecksCard(props: TargetHealthChecksCardProps) {
   return (
     <EuiPanel paddingSize="s" className="target-health-check-card" color={"transparent"} borderRadius={"none"}>
-      <EuiFlexGroup gutterSize="m" alignItems={"center"} responsive={false}>
-        <EuiFlexItem grow={false}>
-          {TargetHealthChecksCardStatusIcon(props.targetHealthCheck.status)}
-        </EuiFlexItem>
-        <EuiFlexItem grow={false}>
-          <EuiText size="s" >
-            <p>
-              <strong>{props.targetHealthCheck.checkName}</strong>
-            </p>
-          </EuiText>
-          {
-            props.targetHealthCheck.status === ("Failed") &&
-            <EuiText size={"s"} >
-                <p>
-                  {LocalizedText.singleton.errorOccurredAt} {moment(props.targetHealthCheck.completedAt).format("DD/MM/YYYY HH:mm Z")}
-                </p>
+      <EuiFlexGroup gutterSize={"none"} direction={"column"} responsive={false}>
+        <EuiFlexGroup gutterSize="m" alignItems={"center"} responsive={false}>
+          <EuiFlexItem grow={false}>
+            {TargetHealthChecksCardStatusIcon(props.targetHealthCheck.status)}
+          </EuiFlexItem>
+          <EuiFlexItem grow={false}>
+            <EuiText size="s" >
+              <p>
+                <strong>{props.targetHealthCheck.checkName}</strong>
+              </p>
             </EuiText>
-          }
-        </EuiFlexItem>
+          </EuiFlexItem>
+        </EuiFlexGroup>
+        <EuiFlexGroup gutterSize={"none"} justifyContent={"spaceBetween"} responsive={false}>
+          <EuiFlexGroup gutterSize={"s"} direction={"column"} justifyContent={"flexStart"} responsive={false}>
+            <EuiFlexItem grow={false}>
+              <EuiText size={"s"}>
+                <p>
+                  {LocalizedText.singleton.lastCheck}
+                </p>
+              </EuiText>
+            </EuiFlexItem>
+            <EuiFlexItem grow={false}>
+              <EuiText size={"s"}>
+                <p>
+                  {getHealthCheckTimeDiffString(props.targetHealthCheck.lastCheck)}
+                </p>
+              </EuiText>
+            </EuiFlexItem>
+          </EuiFlexGroup>
+          <EuiFlexGroup gutterSize={"s"} direction={"column"} justifyContent={"flexStart"} responsive={false}>
+            <EuiFlexItem grow={false}>
+              <EuiText size={"s"} textAlign={"right"}>
+                <p>
+                  {LocalizedText.singleton.lastIssue}
+                </p>
+              </EuiText>
+            </EuiFlexItem>
+            <EuiFlexItem grow={false}>
+              <EuiText size={"s"} textAlign={"right"}>
+                <p>
+                  {getLastIssueDateString(props.targetHealthCheck.status, props.targetHealthCheck.lastIssue)}
+                </p>
+              </EuiText>
+            </EuiFlexItem>
+          </EuiFlexGroup>
+        </EuiFlexGroup>
       </EuiFlexGroup>
     </EuiPanel>
   )

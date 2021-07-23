@@ -5,5 +5,13 @@
   "Target Health Checks Status Healthy": "Il sistema {{group}} {{target}} è completamente operativo",
   "Target Health Checks Status Error": "C'è un problema relativo a:",
   "Target Health Checks Status Error Occurred": "Si è verificato il",
+  "Target Health Checks Status Last Check": "Ultimo controllo",
+  "Target Health Checks Status Last Check Now": "ORA",
+  "Target Health Checks Status Last Issue": "Ultimo problema",
+  "Target Health Checks Status Error Occurring": "IN CORSO",
+  "Target Health Checks Status Error Never": "MAI",
+  "Target Health Checks Status Time Hours": "{{hours}} ore fa",
+  "Target Health Checks Status Time Minutes": "{{minutes}} minuti fa",
+  "Target Health Checks Status Time Hours And Minutes": "{{hours}} ore e {{minutes}} minuti fa",
   "Target Health Checks Status Go Back": "indietro"
 }

@@ -26,6 +26,18 @@ export class BaseLocalizedText {
     }
   }
 
+  public timeInHoursAndMinutes(hours: number, minutes: number) {
+   return this.translate("Target Health Checks Status Time Hours And Minutes", {hours: hours.toString(), minutes: minutes.toString()})
+  }
+
+  public timeInHours(hours: number) {
+    return this.translate("Target Health Checks Status Time Hours", {hours: hours.toString()})
+  }
+
+  public timeInMinutes(minutes: number) {
+    return this.translate("Target Health Checks Status Time Minutes", {minutes: minutes.toString()})
+  }
+
   public changeLanguage(language: string) {
     return this.translator.changeLanguage(language);
   }
