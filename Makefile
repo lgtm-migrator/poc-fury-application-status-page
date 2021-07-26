@@ -23,6 +23,37 @@ ui: require-yarn
 	@yarn --cwd ./web-client build
 	@cp -R ./web-client/build ./static
 
+## test-e2e-local: Runs e2e test on the local machine
+.PHONY: test-e2e-local
+test-e2e-local: docker-build-mocked
+	@./development/e2e-up.sh
+
+## test-e2e-local-down: Tears down the e2e environment once the tests are done
+.PHONY: test-e2e-local-down
+test-e2e-local-down:
+	@./development/e2e-down.sh
+
+# seed: configure fury-application-status
+.PHONY: seed
+seed:
+	-@kubectl create namespace fury-application-status
+	@kubectl apply -f ./development/manifests/mocked/config-map.yml
+	@kubectl apply -f ./development/manifests/mocked/deployment.yml
+	@kubectl apply -f ./development/manifests/mocked/svc.yml
+
+# docker-build-mocked
+.PHONY: docker-build-mocked
+docker-build-mocked:
+	@docker build --target webapp --tag registry.sighup.io/poc/fury-application-status:webapp-mocked -f ./development/images/mocked/Dockerfile .
+	@docker build --target compile --tag registry.sighup.io/poc/fury-application-status:backend-mocked -f ./development/images/mocked/Dockerfile .
+	@docker build --cache-from registry.sighup.io/poc/fury-application-status:webapp-mocked --cache-from registry.sighup.io/poc/fury-application-status:backend-mocked --tag registry.sighup.io/poc/fury-application-status:mocked -f ./development/images/mocked/Dockerfile .
+
+# port-forward: Connect port 8000 to pod fury-application-status
+.PHONY: port-forward
+port-forward:
+	@kubectl wait -n fury-application-status --for=condition=ready pod --all
+	@kubectl port-forward svc/fury-application-status-mocked 8000:8080 --namespace fury-application-status
+
 ## docker-build: Build docker images
 .PHONY: docker-build
 docker-build: require-docker
