@@ -1,11 +1,11 @@
-import {makeServer} from "../Services/Mocks/MakeServer";
-import {MockedServerBaseFactories, MockedServerBaseModels, MocksScenario} from "../Services/Mocks/types";
+import {makeServer} from "../../Services/Mocks/MakeServer";
+import {MockedServerBaseFactories, MockedServerBaseModels, MocksScenario} from "../../Services/Mocks/types";
 import {Server} from "miragejs/server";
 import {Registry} from "miragejs/-types";
-import {seedsFactory} from "../Services/Mocks/Seeds/Factory";
-import {Target, TargetHealthCheck} from "../Components/types";
-import {getAllHealthChecksByGroup, getAllHealthChecksByGroupAndTarget} from "../Services/Mocks/io";
-import {HealthCheckHandler} from "../Services/HealthCheckHandler";
+import {seedsFactory} from "../../Services/Mocks/Seeds/Factory";
+import {Target, TargetHealthCheck} from "../../Components/types";
+import {getAllHealthChecksByGroup, getAllHealthChecksByGroupAndTarget} from "../../Services/Mocks/io";
+import {HealthCheckHandler} from "../../Services/HealthCheckHandler";
 import moment from "moment";
 
 const url = "https://dummy.local";

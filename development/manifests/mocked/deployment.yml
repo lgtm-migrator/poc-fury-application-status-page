@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: fury-application-status-mocked
+  name: fury-application-status-mocked
+  namespace: fury-application-status
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fury-application-status-mocked
+  template:
+    metadata:
+      labels:
+        app: fury-application-status-mocked
+    spec:
+      containers:
+        - image: registry.sighup.io/poc/fury-application-status:mocked
+          name: fury-application-status-mocked
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - mountPath: /app/config.yml
+              name: details-config-file
+              subPath: config.yml
+      volumes:
+        - configMap:
+            name: fury-application-status-mocked-config-file
+          name: details-config-file

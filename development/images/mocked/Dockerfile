@@ -4,8 +4,8 @@
 
 FROM node:lts as webapp
 
-ENV APP_ENV=production
-ENV SERVER_OFFLINE=false
+ENV APP_ENV=development
+ENV SERVER_OFFLINE=true
 ENV SERVER_BASE_PATH=""
 ENV API_VERSION="/"
 ENV MODULE_KEY="fury-application-status"
@@ -16,11 +16,12 @@ COPY web-client/package.json /var/tmp/package.json
 RUN cd /var/tmp && yarn install
 
 COPY web-client web-client
+COPY config.yml config.yml
 
 RUN cd web-client && \
     ln -sfv /var/tmp/node_modules .
 
-RUN yarn --cwd ./web-client build
+RUN yarn --cwd ./web-client build-mocked
 
 FROM golang:1.16-buster AS compile
 
@@ -43,4 +44,3 @@ RUN mkdir -p /app
 WORKDIR /app
 COPY --from=compile /app/dist/poc-fury-application-status-page-linux_linux_amd64/poc-fury-application-status-page /app/poc-fury-application-status-page
 CMD ["/app/poc-fury-application-status-page"]
-
