@@ -13,4 +13,4 @@ sleep 5
 
 make port-forward &
 
-# cd e2e-test && yarn install && yarn test
+cd e2e-test && yarn install && yarn test
