@@ -1,3 +1,3 @@
 import ErrorWrapperContainer from "./Container";
 
-export { ErrorWrapperContainer as ErrorWrapper };
+export { ErrorWrapperContainer as withErrorWrapper };

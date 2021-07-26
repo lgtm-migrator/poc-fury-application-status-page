@@ -4,25 +4,24 @@
  * license that can be found in the LICENSE file.
  */
 
-.euiFlexGroup--gutterMedium > .euiFlexItem.target-health-checks-message {
-    margin-bottom: 30px;
+.euiFlexGroup--gutterMedium {
+   & > .euiFlexItem.target-health-checks-message {
+       margin-bottom: 30px;
+   }
+
+    & > .euiFlexItem.target-health-checks-message p {
+        white-space: pre;
+    }
 }
 
-.euiFlexGroup--gutterMedium > .euiFlexItem.target-health-checks-message p {
-    white-space: pre;
-}
-
-.target-status-icon {
-    width: 22px;
-    height: 22px;
-}
-
-.euiFlexGroup > .euiFlexItem.target-card-status-text {
+.euiFlexGroup {
+  & > .euiFlexItem.target-card-status-text {
     margin-left: 0;
-}
+  }
 
-.euiFlexGroup > .euiFlexItem.target-card-status-text p {
+  & > .euiFlexItem.target-card-status-text p {
     font-weight: 600;
+  }
 }
 
 .target-health-check-card {
@@ -38,4 +37,9 @@
     .check-title {
         margin-bottom: 4px;
     }
+}
+
+.target-status-icon {
+  width: 22px;
+  height: 22px;
 }

@@ -8,11 +8,11 @@ import React, {useContext, useState} from "react";
 import { releaseNumber } from "../../constants";
 import TargetHealthChecksComponent from "./Component";
 import {ApplicationContext} from "../ApplicationStatus/Container";
-import {ErrorWrapper} from "../ErrorWrapper";
+import {withErrorWrapper} from "../ErrorWrapper";
 import {TargetHealthChecksContainerProps} from "./types";
 import {TargetHealthChecksStore} from "../../Stores/TargetHealthChecks";
 
-export default ErrorWrapper(TargetHealthChecksContainer);
+export default withErrorWrapper(TargetHealthChecksContainer);
 
 function TargetHealthChecksContainer(props: TargetHealthChecksContainerProps) {
   const appContextData = useContext(ApplicationContext);

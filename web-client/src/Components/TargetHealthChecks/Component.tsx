@@ -85,17 +85,7 @@ export default function TargetHealthChecksComponent(props: TargetHealthChecksCom
                   style={{ maxWidth: "600px", width: "100%" }}
                   hasShadow={false}>
                   {TargetHealthChecksHeader(props.targetHealthChecksStore.targetHealthChecksList, groupUIText, targetUIText)}
-                  {props.targetHealthChecksStore.targetHealthChecksList.length > 0 ?
-                    props.targetHealthChecksStore.targetHealthChecksList.map((targetHealthCheck, index) =>
-                      (
-                        <React.Fragment key={`${targetHealthCheck.checkName}-${index}`}>
-                          <TargetHealthChecksCard targetHealthCheck={targetHealthCheck} />
-                        </React.Fragment>
-                      )
-                    )
-                    : (
-                      <div>No health check found</div>
-                    )}
+                  {getTargetHealthCheckList(props.targetHealthChecksStore.targetHealthChecksList)}
                 </EuiPageContent>
               </EuiPageContent>
             </EuiPageBody>
@@ -103,105 +93,6 @@ export default function TargetHealthChecksComponent(props: TargetHealthChecksCom
       }
     </>
   );
-}
-
-function getHealthCheckTimeDiffString(healthCheckTime: Moment) {
-  const diffInMinutes = (moment().utcOffset(healthCheckTime.format("Z"))).diff(healthCheckTime, "minutes");
-  const diffInHours = Math.floor(diffInMinutes / 60);
-  const minutesOfHours = diffInMinutes - diffInHours * 60;
-
-  if (diffInMinutes === 0) {
-    return LocalizedText.singleton.lastCheckIsNow;
-  }
-
-  if (diffInMinutes >= 60) {
-    if (minutesOfHours === 0) {
-      return LocalizedText.singleton.timeInHours(diffInHours);
-    }
-
-    return LocalizedText.singleton.timeInHoursAndMinutes(diffInHours, minutesOfHours);
-  }
-
-  return LocalizedText.singleton.timeInMinutes(diffInMinutes);
-}
-
-function getLastIssueDateString(status: HealthCheckStatus, lastIssue?: Moment) {
-  if (!lastIssue) {
-    return LocalizedText.singleton.neverAnIssue;
-  }
-
-  if (status === "Failed") {
-    return LocalizedText.singleton.occurringIssue;
-  }
-
-  return getHealthCheckTimeDiffString(lastIssue);
-}
-
-function TargetHealthChecksCardStatusIcon(status: HealthCheckStatus) {
-  if (status === "Complete") {
-    return (
-      <EuiIcon size={"xxl"} type="checkInCircleFilled" color={"success"} />
-    )
-  }
-
-  return (
-    <EuiIcon size={"xxl"} type="crossInACircleFilled" color={"danger"} />
-  )
-}
-
-function TargetHealthChecksCard(props: TargetHealthChecksCardProps) {
-  return (
-    <EuiPanel paddingSize="s" className="target-health-check-card" color={"transparent"} borderRadius={"none"}>
-      <EuiFlexGroup gutterSize={"none"} direction={"column"} responsive={false}>
-        <EuiFlexGroup className={"check-title"} gutterSize="m" alignItems={"center"} responsive={false}>
-          <EuiFlexItem grow={false}>
-            {TargetHealthChecksCardStatusIcon(props.targetHealthCheck.status)}
-          </EuiFlexItem>
-          <EuiFlexItem grow={false}>
-            <EuiText size="m" >
-              <p>
-                <strong>{props.targetHealthCheck.checkName}</strong>
-              </p>
-            </EuiText>
-          </EuiFlexItem>
-        </EuiFlexGroup>
-        <EuiFlexGroup gutterSize={"none"} justifyContent={"spaceBetween"} responsive={false}>
-          <EuiFlexGroup className={"font-color-dark-shade font-weight-semi-bold"} gutterSize={"none"} direction={"column"} justifyContent={"flexStart"} responsive={false}>
-            <EuiFlexItem grow={false}>
-              <EuiText className={"font-weight-semi-bold"} size={"s"}>
-                <p>
-                  {LocalizedText.singleton.lastCheck}
-                </p>
-              </EuiText>
-            </EuiFlexItem>
-            <EuiFlexItem grow={false}>
-              <EuiText className={"font-weight-semi-bold"} size={"s"}>
-                <p>
-                  {getHealthCheckTimeDiffString(props.targetHealthCheck.lastCheck)}
-                </p>
-              </EuiText>
-            </EuiFlexItem>
-          </EuiFlexGroup>
-          <EuiFlexGroup className={`${props.targetHealthCheck.status === "Failed" ? "font-color-darkest-shade" : "font-color-medium-shade"}`} gutterSize={"none"} direction={"column"} justifyContent={"flexStart"} responsive={false}>
-            <EuiFlexItem grow={false}>
-              <EuiText className={"font-weight-semi-bold"} size={"s"} textAlign={"right"}>
-                <p>
-                  {props.targetHealthCheck.status === "Failed" ? LocalizedText.singleton.issue : LocalizedText.singleton.lastIssue}
-                </p>
-              </EuiText>
-            </EuiFlexItem>
-            <EuiFlexItem grow={false}>
-              <EuiText className={"font-weight-semi-bold"} size={"s"} textAlign={"right"}>
-                <p>
-                  {getLastIssueDateString(props.targetHealthCheck.status, props.targetHealthCheck.lastIssue)}
-                </p>
-              </EuiText>
-            </EuiFlexItem>
-          </EuiFlexGroup>
-        </EuiFlexGroup>
-      </EuiFlexGroup>
-    </EuiPanel>
-  )
 }
 
 function TargetHealthChecksHeader(targetHealthCheckList: TargetHealthCheck[], groupLabel: string, target: string) {
@@ -239,4 +130,126 @@ function TargetHealthChecksHeader(targetHealthCheckList: TargetHealthCheck[], gr
       </EuiFlexItem>
     </EuiFlexGroup>
   )
+}
+
+function getTargetHealthCheckList(targetHealthCheckList: TargetHealthCheck[]) {
+  if ((targetHealthCheckList?.length ?? 0) > 0) {
+    return targetHealthCheckList.map((targetHealthCheck, index) => {
+      return (
+        <React.Fragment key={`${targetHealthCheck.checkName}-${index}`}>
+          <TargetHealthChecksCard targetHealthCheck={targetHealthCheck} />
+        </React.Fragment>
+      );
+    });
+  }
+  return <div>No health check found</div>;
+}
+
+function TargetHealthChecksCard(props: TargetHealthChecksCardProps) {
+  return (
+    <EuiPanel paddingSize="s" className="target-health-check-card" color={"transparent"} borderRadius={"none"}>
+      <EuiFlexGroup gutterSize={"none"} direction={"column"} responsive={false}>
+        <EuiFlexGroup className={"check-title"} gutterSize="m" alignItems={"center"} responsive={false}>
+          <EuiFlexItem grow={false}>
+            {TargetHealthChecksCardStatusIcon(props.targetHealthCheck.status)}
+          </EuiFlexItem>
+          <EuiFlexItem grow={false}>
+            <EuiText size="m">
+              <p>
+                <strong>{props.targetHealthCheck.checkName}</strong>
+              </p>
+            </EuiText>
+          </EuiFlexItem>
+        </EuiFlexGroup>
+        <EuiFlexGroup gutterSize={"none"} justifyContent={"spaceBetween"} responsive={false}>
+          <EuiFlexGroup className={"font-color-dark-shade font-weight-semi-bold"} gutterSize={"none"}
+                        direction={"column"} justifyContent={"flexStart"} responsive={false}>
+            <EuiFlexItem grow={false}>
+              <EuiText className={"font-weight-semi-bold"} size={"s"}>
+                <p>
+                  {LocalizedText.singleton.lastCheck}
+                </p>
+              </EuiText>
+            </EuiFlexItem>
+            <EuiFlexItem grow={false}>
+              <EuiText className={"font-weight-semi-bold"} size={"s"}>
+                <p>
+                  {getHealthCheckTimeDiffString(props.targetHealthCheck.lastCheck)}
+                </p>
+              </EuiText>
+            </EuiFlexItem>
+          </EuiFlexGroup>
+          {getLastIssue(props.targetHealthCheck)}
+        </EuiFlexGroup>
+      </EuiFlexGroup>
+    </EuiPanel>
+  )
+}
+
+function getLastIssue(targetHealthCheck: TargetHealthCheck) {
+  const getClassName = targetHealthCheck.status === "Failed" ? "font-color-darkest-shade" : "font-color-medium-shade";
+  const getText = targetHealthCheck.status === "Failed" ? LocalizedText.singleton.issue : LocalizedText.singleton.lastIssue;
+
+  return <EuiFlexGroup
+    className={`${getClassName}`}
+    gutterSize={"none"} direction={"column"} justifyContent={"flexStart"} responsive={false}>
+    <EuiFlexItem grow={false}>
+      <EuiText className={"font-weight-semi-bold"} size={"s"} textAlign={"right"}>
+        <p>
+          {getText}
+        </p>
+      </EuiText>
+    </EuiFlexItem>
+    <EuiFlexItem grow={false}>
+      <EuiText className={"font-weight-semi-bold"} size={"s"} textAlign={"right"}>
+        <p>
+          {getLastIssueDateString(targetHealthCheck.status, targetHealthCheck.lastIssue)}
+        </p>
+      </EuiText>
+    </EuiFlexItem>
+  </EuiFlexGroup>;
+}
+
+function TargetHealthChecksCardStatusIcon(status: HealthCheckStatus) {
+  if (status === "Complete") {
+    return (
+      <EuiIcon size={"xxl"} type="checkInCircleFilled" color={"success"} />
+    )
+  }
+
+  return (
+    <EuiIcon size={"xxl"} type="crossInACircleFilled" color={"danger"} />
+  )
+}
+
+function getLastIssueDateString(status: HealthCheckStatus, lastIssue?: Moment) {
+  if (!lastIssue) {
+    return LocalizedText.singleton.neverAnIssue;
+  }
+
+  if (status === "Failed") {
+    return LocalizedText.singleton.occurringIssue;
+  }
+
+  return getHealthCheckTimeDiffString(lastIssue);
+}
+
+function getHealthCheckTimeDiffString(healthCheckTime: Moment) {
+  const diffInMinutes = (moment().utcOffset(healthCheckTime.format("Z"))).diff(healthCheckTime, "minutes");
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  const minutesOfHours = diffInMinutes - diffInHours * 60;
+
+  if (diffInMinutes === 0) {
+    return LocalizedText.singleton.lastCheckIsNow;
+  }
+
+  if (diffInMinutes >= 60) {
+    if (minutesOfHours === 0) {
+      return LocalizedText.singleton.timeInHours(diffInHours);
+    }
+
+    return LocalizedText.singleton.timeInHoursAndMinutes(diffInHours, minutesOfHours);
+  }
+
+  return LocalizedText.singleton.timeInMinutes(diffInMinutes);
 }

@@ -7,10 +7,10 @@
 import React, {useContext, useState} from "react";
 import TargetStatusComponent from "./Component";
 import {ApplicationContext} from "../ApplicationStatus/Container";
-import {ErrorWrapper} from "../ErrorWrapper";
+import {withErrorWrapper} from "../ErrorWrapper";
 import {TargetsStore} from "../../Stores/Targets";
 
-export default ErrorWrapper(TargetsContainer);
+export default withErrorWrapper(TargetsContainer);
 
 function TargetsContainer() {
   const appContextData = useContext(ApplicationContext);

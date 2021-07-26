@@ -20,7 +20,7 @@ import {
   EuiTitle,
   EuiEmptyPrompt, EuiLoadingSpinner
 } from "fury-design-system";
-import "./Style.css";
+import "./Style.scss";
 import {EuiCustomLink} from "../EuiCustomLink";
 import {LocalizedText} from './LocalizedText';
 import {HealthCheckStatus, Target} from "../types";
