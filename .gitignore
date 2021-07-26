@@ -8,4 +8,5 @@ node_modules
 build
 .env
 .kubeconfig
+videos
 static
