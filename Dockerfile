@@ -9,7 +9,7 @@ ENV SERVER_OFFLINE=false
 ENV SERVER_BASE_PATH=""
 ENV API_VERSION="/"
 ENV MODULE_KEY="fury-application-status"
-ENV RELEASE_TAG="0.0.1"
+ENV RELEASE_TAG="0.0.2"
 ENV COMMIT="xxxx"
 
 COPY web-client/package.json /var/tmp/package.json
@@ -24,7 +24,7 @@ RUN yarn --cwd ./web-client build
 
 FROM golang:1.16-buster AS compile
 
-RUN apt update && apt install -y libsystemd-dev
+RUN apt update
 RUN curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
 
 WORKDIR /app
