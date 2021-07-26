@@ -22,7 +22,6 @@
     "jsx": "react",
     "downlevelIteration": true
   },
-  "include": [
-    "src"
-  ]
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts"],
+  "include": ["src", "import-raster.d.ts"]
 }
