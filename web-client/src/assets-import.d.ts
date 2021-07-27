@@ -4,6 +4,15 @@
  * license that can be found in the LICENSE file.
  */
 
+/**
+ * This allows typescript to
+ * import raster images without
+ * throwing errors
+ */
+declare module '*.png';
+declare module '*.jpg';
+
+// Same for vector artworks
 declare module "*.svg" {
   const content: any;
   export default content;
