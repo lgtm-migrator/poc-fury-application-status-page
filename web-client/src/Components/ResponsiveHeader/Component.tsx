@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-import React, { useContext } from "react";
+import React from "react";
 import {
   EuiIcon,
   EuiText,
@@ -12,24 +12,20 @@ import {
   EuiHeader,
   EuiHideFor,
   EuiShowFor,
-  EuiTextColor,
   EuiHeaderSectionItem,
 } from "fury-design-system";
-import { logger } from '../../Services/Logger';
-
 import { ResponsiveHeaderProps } from './types';
 import { EuiCustomLink } from "../EuiCustomLink";
 import { LocalizedText } from "./LocalizedText";
 import kasperLogo from '../../Assets/kasper-logo-small.png';
 import './index.scss';
 
-
 /**
  * Responsive header 
  * @param props 
  * @returns 
  */
-export const ResponsiveHeader = (props: ResponsiveHeaderProps) => {
+export function ResponsiveHeader(props: ResponsiveHeaderProps) {
   // TODO: add single group page handling
   // without back button
 
