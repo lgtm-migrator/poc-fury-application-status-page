@@ -14,5 +14,5 @@
   "Target Health Checks Status Time Hours": "{{hours}} ore fa",
   "Target Health Checks Status Time Minutes": "{{minutes}} minuti fa",
   "Target Health Checks Status Time Hours And Minutes": "{{hours}} ore e {{minutes}} minuti fa",
-  "Target Health Checks Status Go Back": "indietro"
+  "Back": "indietro"
 }
