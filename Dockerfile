@@ -7,7 +7,7 @@ FROM node:lts as webapp
 ENV APP_ENV=production
 ENV SERVER_OFFLINE=false
 ENV SERVER_BASE_PATH=""
-ENV API_VERSION="/"
+ENV API_VERSION="/api/"
 ENV MODULE_KEY="fury-application-status"
 ENV RELEASE_TAG="0.0.2"
 ENV COMMIT="xxxx"

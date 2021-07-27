@@ -151,6 +151,7 @@ func listLastChecksAndIssuesByTarget(c *gin.Context) {
 	resp, err := http.Get(remoteApiUrl)
 
 	if err != nil {
+		fmt.Printf("error: %s\n", err.Error())
 		c.JSON(http.StatusBadRequest, &apiResponse{Code: http.StatusBadRequest, ErrorMessage: "cannot get list by target"})
 		return
 	}
