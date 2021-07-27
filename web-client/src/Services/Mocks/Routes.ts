@@ -4,7 +4,6 @@
  * license that can be found in the LICENSE file.
  */
 
-import {logger} from "../Logger";
 import Schema from "miragejs/orm/schema";
 import {Registry} from "miragejs/-types";
 import {MockedSchema, MockedServerBaseFactories, MockedServerBaseModels} from "./types";
@@ -34,6 +33,28 @@ export function getRoutes(urlPrefix: string, apiPath?: string) {
    // We defined a namespace here, if present it'll get prefixed to every route
    // EX: 'list' becomes '/api/v0/list'
    if (apiPath) {
+     this.namespace = "/api/";
+   }
+
+   this.get('lastChecks', (schema: Schema<Registry<MockedServerBaseModels, MockedServerBaseFactories>>) => {
+     return {
+       code: 200,
+       data: getAllHealthChecksByGroup(schema) ?? [],
+       errorMessage: ""
+     }
+   })
+
+   this.get('lastChecksAndIssues/:target', (schema: MockedSchema, request: Request) => {
+     return {
+       code: 200,
+       data: getAllHealthChecksByGroupAndTarget(schema, request.params.target) ?? [],
+       errorMessage: ""
+     }
+   })
+
+   // We defined a namespace here, if present it'll get prefixed to every route
+   // EX: 'list' becomes '/api/v0/list'
+   /*if (apiPath) {
      this.namespace = "/api/v0/";
    }
 
@@ -43,6 +64,6 @@ export function getRoutes(urlPrefix: string, apiPath?: string) {
 
    this.get('group/:group/target/:target', (schema: MockedSchema, request: Request) => {
      return getAllHealthChecksByGroupAndTarget(schema, request.params.group, request.params.target) ?? [];
-   })
+   })*/
  }
 }

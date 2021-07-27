@@ -29,18 +29,18 @@ type embedFileSystem struct {
 }
 
 type HealthCheck struct {
-	Group string
-	Target string
-	StartTime string
-	CompletedAt string
-	Duration string
-	Status string
-	Namespace string
-	PodName string
-	CheckName string
-	Owner string
-	Error string
-	Frequency int
+	Group string `json:"group"`
+	Target string `json:"target"`
+	StartTime string `json:"startTime"`
+	CompletedAt string `json:"completedAt"`
+	Duration string `json:"duration"`
+	Status string `json:"status"`
+	Namespace string `json:"namespace"`
+	PodName string `json:"podName"`
+	CheckName string `json:"checkName"`
+	Owner string `json:"owner"`
+	Error string `json:"error"`
+	Frequency int `json:"frequency"`
 }
 
 type apiResponse struct {
@@ -242,7 +242,7 @@ func main() {
 	})
 	router.Use(static.Serve("/", EmbedFolder(embeded, "static")))
 	router.NoRoute(func(c *gin.Context) {
-		fmt.Println("%s doesn't exists, redirect on /", c.Request.URL.Path)
+		fmt.Printf("%s doesn't exists, redirect on /\n", c.Request.URL.Path)
 		c.FileFromFS("index.htm", EmbedFolder(embeded, "static"))
 	})
 

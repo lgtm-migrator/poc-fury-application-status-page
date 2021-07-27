@@ -30,7 +30,11 @@ export interface IHealthCheck {
   error: string;
 }
 
-export type HealthCheckResponse = IHealthCheck[];
+export type HealthCheckResponse = {
+  code: number;
+  data: IHealthCheck[];
+  errorMessage: string;
+};
 
 export interface Target {
   status: HealthCheckStatus;

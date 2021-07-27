@@ -119,7 +119,7 @@ async function getConfigFromBackend(serverBasePath: string, apiPath: string): Pr
   const json = await configRes.json();
 
   return {
-    apiUrl: `${ json.Data.apiUrl }${ apiPath }`,
+    apiUrl: `${serverBasePath}${apiPath}`,
     groupLabel: json.Data.groupLabel,
     cascadeFailure: json.Data.cascadeFailure,
     groupTitle: json.Data.groupTitle,

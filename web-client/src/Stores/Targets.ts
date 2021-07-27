@@ -23,7 +23,7 @@ export class TargetsStore {
 
     if(!targetListJson) throw new Error("targetList is undefined");
 
-    const healthCheckHandler = new HealthCheckHandler(targetListJson, this.cascadeFailure)
+    const healthCheckHandler = new HealthCheckHandler(targetListJson.data, this.cascadeFailure)
 
     runInAction(() => {
       this.targetList = healthCheckHandler.groupByTarget();
@@ -31,7 +31,7 @@ export class TargetsStore {
   }
 
   private async fetchTargetListAsync(): Promise<HealthCheckResponse> {
-    const targetList = await fetch(`${this.apiUrl}group/${this.groupLabel}`);
+    const targetList = await fetch(`${this.apiUrl}lastChecks`);
 
     return await targetList.json();
   }

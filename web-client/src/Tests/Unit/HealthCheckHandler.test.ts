@@ -35,9 +35,8 @@ describe("HealthCheckHandler - scenario 1", () => {
   })
 
   it("groupByTarget", () => {
-    const groupLabel = "BookInfo";
     const cascadeFailure = 1;
-    const requestDataFromMocks = getAllHealthChecksByGroup(server.schema, groupLabel);
+    const requestDataFromMocks = getAllHealthChecksByGroup(server.schema);
     const healthCheckHandler = new HealthCheckHandler(requestDataFromMocks, cascadeFailure);
 
     const expectedValue: Target[] = [
@@ -65,9 +64,8 @@ describe("HealthCheckHandler - scenario 1", () => {
   })
 
   it("groupByCheckName - Ratings", () => {
-    const groupLabel = "BookInfo";
     const targetLabel = "Ratings";
-    const requestDataFromMocks = getAllHealthChecksByGroupAndTarget(server.schema, groupLabel, targetLabel);
+    const requestDataFromMocks = getAllHealthChecksByGroupAndTarget(server.schema, targetLabel);
     const healthCheckHandler = new HealthCheckHandler(requestDataFromMocks);
 
     const expectedValue: TargetHealthCheck[] = [
@@ -110,9 +108,8 @@ describe("HealthCheckHandler - scenario 2", () => {
   })
 
   it("groupByTarget", () => {
-    const groupLabel = "BookInfo";
     const cascadeFailure = 1;
-    const requestDataFromMocks = getAllHealthChecksByGroup(server.schema, groupLabel);
+    const requestDataFromMocks = getAllHealthChecksByGroup(server.schema);
     const healthCheckHandler = new HealthCheckHandler(requestDataFromMocks, cascadeFailure);
 
     const expectedValue: Target[] = [
@@ -140,9 +137,8 @@ describe("HealthCheckHandler - scenario 2", () => {
   })
 
   it("groupByCheckName - Details", () => {
-    const groupLabel = "BookInfo";
     const targetLabel = "Details";
-    const requestDataFromMocks = getAllHealthChecksByGroupAndTarget(server.schema, groupLabel, targetLabel);
+    const requestDataFromMocks = getAllHealthChecksByGroupAndTarget(server.schema, targetLabel);
     const healthCheckHandler = new HealthCheckHandler(requestDataFromMocks);
 
     const expectedValue: TargetHealthCheck[] = [

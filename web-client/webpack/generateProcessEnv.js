@@ -18,7 +18,7 @@ function yamlConfigToAppConfig(offline, configPath) {
     return {
         APP_ENV: yamlConfig.appEnv,
         SERVER_OFFLINE: offline,
-        API_PATH: '/',
+        API_PATH: '/api/',
         SERVER_BASE_PATH: yamlConfig.externalEndpoint,
         GROUP_LABEL: yamlConfig.groupLabel,
         GROUP_TITLE: yamlConfig.groupTitle,
