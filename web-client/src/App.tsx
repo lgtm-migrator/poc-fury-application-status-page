@@ -5,10 +5,10 @@
  */
 
 import React, {Suspense, useEffect, useState} from "react";
-import {EuiEmptyPrompt, EuiLoadingSpinner, EuiSpacer} from "fury-design-system";
+import {EuiEmptyPrompt, EuiLoadingSpinner} from "fury-design-system";
 import {initialize} from "./i18n";
-import logo from "./Assets/logo.svg";
-import fury from "./Assets/logotype.svg";
+// import logo from "./Assets/logo.svg";
+// import fury from "./Assets/logotype.svg";
 import {makeServer} from "./Services/Mocks/MakeServer";
 import {Server} from "miragejs/server";
 import {logger} from "./Services/Logger";
@@ -59,21 +59,8 @@ export default function App() {
           }
         />
       }>
-        <EuiSpacer size="xxl" />
-        <div style={{ width: "120px", margin: "0 auto" }}>
-          <img
-            src={logo}
-            style={{ width: "40px", margin: "0 auto", display: "block" }}
-            alt=""
-          />
-          <img
-            src={fury}
-            style={{ width: "80px", margin: "20px auto 0", display: "block" }}
-            alt=""
-          />
-        </div>
-        <EuiSpacer size="xxl" />
-        { apiUrl && groupLabel ?
+        { apiUrl && groupLabel
+          ?
           <ApplicationStatus
             apiUrl={apiUrl}
             groupLabel={groupLabel}
