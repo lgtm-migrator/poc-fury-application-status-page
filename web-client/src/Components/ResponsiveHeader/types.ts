@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-};
+export interface ResponsiveHeaderProps {
+  context: any
+  pageName?: string
+}

@@ -6,18 +6,19 @@
 
 import React, {useContext, useEffect, useState} from "react";
 import {
-  EuiFlexGroup,
-  EuiPanel,
+  EuiIcon,
   EuiPage,
+  EuiText,
+  EuiPanel,
+  EuiTitle,
   EuiPageBody,
+  EuiFlexItem,
+  EuiFlexGroup,
   EuiPageHeader,
   EuiPageContent,
+  EuiEmptyPrompt,
+  EuiLoadingSpinner,
   EuiPageHeaderSection,
-  EuiFlexItem,
-  EuiText,
-  EuiIcon,
-  EuiTitle,
-  EuiEmptyPrompt, EuiLoadingSpinner
 } from "fury-design-system";
 import "./Style.scss";
 import {EuiCustomLink} from "../EuiCustomLink";
@@ -25,6 +26,7 @@ import {LocalizedText} from "./LocalizedText";
 import moment, {Moment} from 'moment';
 import {HealthCheckStatus, TargetHealthCheck} from "../types";
 import {ApplicationContext} from "../ApplicationStatus/Container";
+import { ResponsiveHeader } from '../ResponsiveHeader';
 import {TargetHealthChecksCardProps, TargetHealthChecksComponentProps} from "./types";
 import useErrorHandler from "../../Hooks/UseErrorHandler";
 
@@ -50,44 +52,37 @@ export default function TargetHealthChecksComponent(props: TargetHealthChecksCom
   return (
     <>
       {
-        isLoading ?
-        (
-          <EuiEmptyPrompt
+        isLoading
+        ? <EuiEmptyPrompt
             title={<h4> Loading... </h4>}
             body={<EuiLoadingSpinner size="xl" />}
           />
-        ) :
-          <EuiPage paddingSize="none" restrictWidth={true}>
+        : <EuiPage paddingSize="none" restrictWidth={true}>
             <EuiPageBody>
               <EuiPageHeader
                 restrictWidth
                 paddingSize="l"
               >
                 {!props.standalone &&
-                <EuiPageHeaderSection>
+                  <EuiPageHeaderSection>
                     <EuiCustomLink to={`${appContextData.basePath}/`}>
-                        <EuiIcon type={"sortLeft"}/> {LocalizedText.singleton.goBack}
+                      <EuiIcon type={"sortLeft"}/> {LocalizedText.singleton.goBack}
                     </EuiCustomLink>
-                </EuiPageHeaderSection>
+                  </EuiPageHeaderSection>
                 }
               </EuiPageHeader>
-              <EuiPageContent
-                borderRadius="none"
-                hasShadow={false}
-                style={{ display: 'flex' }}
-                color="transparent"
-              >
+              <ResponsiveHeader context={appContextData} pageName={targetUIText} />
                 <EuiPageContent
                   verticalPosition="center"
                   horizontalPosition="center"
-                  paddingSize="none"
+                  paddingSize="l"
                   color="transparent"
                   style={{ maxWidth: "600px", width: "100%" }}
-                  hasShadow={false}>
+                  hasShadow={false}
+                >
                   {TargetHealthChecksHeader(props.targetHealthChecksStore.targetHealthChecksList, groupUIText, targetUIText)}
                   {getTargetHealthCheckList(props.targetHealthChecksStore.targetHealthChecksList)}
                 </EuiPageContent>
-              </EuiPageContent>
             </EuiPageBody>
           </EuiPage>
       }

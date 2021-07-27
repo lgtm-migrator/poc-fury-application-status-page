@@ -28,6 +28,7 @@
     "@types/react-router-dom": "^5.1.7",
     "babel-loader": "^8.2.2",
     "bundle-loader": "^0.5.6",
+    "concurrently": "^6.2.0",
     "css-loader": "^5.2.4",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.1",
@@ -56,7 +57,7 @@
     "webpack-dev": "webpack serve --config=webpack.dev.config.js",
     "dev-base": "webpack serve --config webpack.dev.config.js --env from_yaml=true --env config_path=../config.yml",
     "dev-local-no-backend": "yarn dev-base --env offline=true",
-    "dev-local-with-backend": "yarn dev-base --env offline=false",
+    "dev-local-with-backend": "concurrently \"yarn dev-base --env offline=false\" \"go run ../main.go\"",
     "dev-local-no-backend-federated": "yarn dev-base --env offline=true --env federated=true",
     "dev-local-with-backend-federated": "yarn dev-base --env offline=false --env federated=true"
   },

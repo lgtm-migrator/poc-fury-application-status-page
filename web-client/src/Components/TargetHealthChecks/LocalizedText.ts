@@ -45,7 +45,4 @@ export class LocalizedText extends BaseLocalizedText {
     return this.translate('Target Health Checks Status Error Occurred');
   }
 
-  public get goBack() {
-    return this.translate('Target Health Checks Status Go Back')
-  }
 }

@@ -41,4 +41,9 @@ export class BaseLocalizedText {
   public changeLanguage(language: string) {
     return this.translator.changeLanguage(language);
   }
+
+  public get goBack() {
+    return this.translate('Back')
+  }
+  
 }

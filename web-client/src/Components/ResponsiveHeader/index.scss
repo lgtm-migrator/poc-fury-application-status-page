@@ -4,7 +4,11 @@
  * license that can be found in the LICENSE file.
  */
 
-declare module "*.svg" {
-  const content: any;
-  export default content;
+.kasper-header {
+  .euiHeader {
+    max-width: 1200px;
+    height: 54px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }

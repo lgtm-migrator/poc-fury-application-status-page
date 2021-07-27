@@ -6,19 +6,19 @@
 
 import React, {useContext, useEffect, useState} from "react";
 import {
-  EuiFlexGroup,
-  EuiPanel,
-  EuiHeaderBreadcrumbs,
   EuiPage,
-  EuiPageBody,
-  EuiPageHeader,
-  EuiPageContent,
-  EuiPageHeaderSection,
-  EuiFlexItem,
   EuiText,
   EuiIcon,
+  EuiPanel,
   EuiTitle,
-  EuiEmptyPrompt, EuiLoadingSpinner
+  EuiSpacer,
+  EuiPageBody,
+  EuiFlexItem,
+  EuiFlexGroup,
+  EuiPageHeader,
+  EuiPageContent,
+  EuiEmptyPrompt,
+  EuiLoadingSpinner,
 } from "fury-design-system";
 import "./Style.scss";
 import {EuiCustomLink} from "../EuiCustomLink";
@@ -28,6 +28,7 @@ import {ApplicationContext} from "../ApplicationStatus/Container";
 import {TargetCardProps, TargetsComponentProps} from "./types";
 import {observer} from "mobx-react";
 import useErrorHandler from "../../Hooks/UseErrorHandler";
+import { ResponsiveHeader } from "../ResponsiveHeader";
 
 export default observer(TargetStatusComponent);
 
@@ -36,20 +37,6 @@ function TargetStatusComponent(props: TargetsComponentProps) {
   const groupUIText = appContextData.groupTitle ? appContextData.groupTitle : appContextData.groupLabel;
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
-
-  const breadcrumbs = [
-    {
-      text: `All ${groupUIText} systems`,
-      onClick: (e: React.MouseEvent<HTMLElement>) => {
-        e.preventDefault();
-      },
-      className: 'no-mouse-event'
-    },
-    {
-      text: '',
-      className: 'no-show',
-    }
-  ];
 
   useErrorHandler(error);
 
@@ -66,56 +53,43 @@ function TargetStatusComponent(props: TargetsComponentProps) {
   return (
     <>
       {
-        isLoading ?
-          (
-            <EuiEmptyPrompt
+        isLoading
+          ? <EuiEmptyPrompt
               title={<h4> Loading... </h4>}
               body={<EuiLoadingSpinner size="xl" />}
             />
-          ) :
-          <EuiPage paddingSize="none" restrictWidth={true}>
-            <EuiPageBody>
-              <EuiPageHeader
-                restrictWidth
-                paddingSize="l"
-              >
-                <EuiPageHeaderSection>
-                  <EuiHeaderBreadcrumbs
-                    aria-label="Header breadcrumbs example"
-                    breadcrumbs={breadcrumbs}
-                    responsive={false}
-                    className={"ml-0"}
-                  />
-                </EuiPageHeaderSection>
-              </EuiPageHeader>
-              <EuiPageContent
-                borderRadius="none"
-                hasShadow={false}
-                style={{ display: 'flex' }}
-                color="transparent"
-              >
+          : <EuiPage paddingSize="none" restrictWidth={true}>
+              <EuiPageBody>
+                <EuiPageHeader
+                  restrictWidth
+                  paddingSize="l"
+                  // pageTitle={`${groupUIText} overview`}
+                />
+                <ResponsiveHeader context={appContextData} />
                 <EuiPageContent
                   horizontalPosition="center"
-                  paddingSize="none"
+                  paddingSize="l"
                   color="transparent"
-                  style={{ maxWidth: "600px", width: "100%" }}
-                  hasShadow={false}>
+                  // style={{ maxWidth: "600px", width: "100%" }}
+                  hasShadow={false}
+                >
+                <EuiText color="subdued" size="s">
+                  {`${groupUIText} overview`}
+                </EuiText>
+                <EuiSpacer size="xxl" />
                   {TargetStatusHeader(props.targetsStore.targetList, groupUIText)}
-                  {props.targetsStore.targetList.length > 0 ?
-                    props.targetsStore.targetList.map((target, index) =>
-                      (
-                        <React.Fragment key={`${target.target}-${index}`}>
-                          <TargetCard target={target} basePath={appContextData.basePath} />
-                        </React.Fragment>
-                      )
-                    )
-                    : (
-                      <div>No target found</div>
-                    )}
+                  {
+                    props.targetsStore.targetList.length > 0
+                      ? props.targetsStore.targetList.map((target, index) =>
+                          <React.Fragment key={`${target.target}-${index}`}>
+                            <TargetCard target={target} basePath={appContextData.basePath} />
+                          </React.Fragment>
+                        )
+                      : <div>No target found</div>
+                  }
                 </EuiPageContent>
-              </EuiPageContent>
-            </EuiPageBody>
-          </EuiPage>
+              </EuiPageBody>
+            </EuiPage>
       }
     </>
   )
@@ -136,7 +110,13 @@ function TargetStatusHeader(targetList: Target[], groupLabel: string) {
   }
 
   return (
-    <EuiFlexGroup gutterSize="m" alignItems={"center"} justifyContent={"center"} direction={"column"} responsive={false}>
+    <EuiFlexGroup
+      gutterSize="m"
+      responsive={false}
+      direction={"column"}
+      alignItems={"center"}
+      justifyContent={"center"}
+    >
       <EuiFlexItem>
         <EuiIcon size={"xxl"} type={messageIcon} color={messageIconColor} />
       </EuiFlexItem>
