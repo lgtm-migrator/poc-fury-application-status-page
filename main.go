@@ -179,6 +179,36 @@ func listLastChecksAndIssuesByTarget(c *gin.Context) {
 
 	var resultHealthChecks []HealthCheck
 
+	for _ , healthcheck := range healthChecks {
+		indexFound := -1
+
+		for i := range resultHealthChecks {
+			if resultHealthChecks[i].CheckName == healthcheck.CheckName &&
+				resultHealthChecks[i].Target == healthcheck.Target &&
+				resultHealthChecks[i].Status == healthcheck.Status {
+				indexFound = i
+				break
+			}
+		}
+
+		if indexFound == -1 {
+			resultHealthChecks = append(resultHealthChecks, healthcheck)
+			continue
+		}
+
+		resultTime, resultTimeErr := time.Parse(time.RFC3339, resultHealthChecks[indexFound].CompletedAt)
+		healthcheckTime, healthCheckTimeErr := time.Parse(time.RFC3339, healthcheck.CompletedAt)
+
+		if resultTimeErr != nil || healthCheckTimeErr != nil {
+			c.JSON(http.StatusInternalServerError, &apiResponse{Code: http.StatusInternalServerError, ErrorMessage: "error parsing times"})
+			break
+		}
+
+		if indexFound != -1 && resultTime.Before(healthcheckTime) {
+			resultHealthChecks[indexFound] = healthcheck
+		}
+	}
+
 	c.JSON(http.StatusOK, &apiResponse{Code: http.StatusOK, Data: resultHealthChecks})
 }
 
@@ -220,7 +250,6 @@ func main() {
 
 	api.GET("/lastChecks", listLastChecks)
 	api.GET("/lastChecksAndIssues/:targetLabel", listLastChecksAndIssuesByTarget)
-
 
 	_ = router.Run(appConfig.Listener)
 }
