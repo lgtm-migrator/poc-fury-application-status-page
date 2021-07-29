@@ -30,7 +30,18 @@ export interface IHealthCheck {
   error: string;
 }
 
-export type HealthCheckResponse = IHealthCheck[];
+export interface IErrorHealthCheckCountByDay {
+  dayDate: string;
+  count: number;
+}
+
+export interface ServerResponse<T> {
+ data: T;
+ errorMessage: string;
+}
+
+export type HealthCheckResponse = ServerResponse<IHealthCheck[]>;
+export type ErrorHealthCheckCountByDayResponse = ServerResponse<IErrorHealthCheckCountByDay[]>;
 
 export interface Target {
   status: HealthCheckStatus;
@@ -47,6 +58,17 @@ export interface TargetHealthCheck {
  lastCheck: Moment;
  lastIssue?: Moment;
  error?: string;
+}
+
+export interface ErrorHealthCheckCountByDay extends Omit<IErrorHealthCheckCountByDay, "dayDate"> {
+  dayDate: Moment;
+  healthChecks?: ErrorsReportCheck[];
+}
+
+export interface ErrorsReportCheck {
+  completedAt: Moment;
+  checkName: string;
+  target: string;
 }
 
 export interface Config {

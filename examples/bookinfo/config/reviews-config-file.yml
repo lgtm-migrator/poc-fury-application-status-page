@@ -6,7 +6,7 @@
 appEnv: "production"
 listener: 0.0.0.0:8080
 externalEndpoint: http://fury-application-status.fury.localdomain
-apiUrl: http://fip-job-status-api.demo-app.localdomain
+apiUrl: http://fip-job-status-api.default.svc.cluster.local:8080
 groupLabel: 'BookInfo'
 targetLabel: 'Reviews'
 cascadeFailure: 1

@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
 import {action, makeObservable, observable, runInAction} from 'mobx';
 import {HealthCheckResponse, TargetHealthCheck} from "../Components/types";
 import {HealthCheckHandler} from "../Services/HealthCheckHandler";
@@ -17,7 +23,7 @@ export class TargetHealthChecksStore {
 
     if(!targetHealthChecksListJson) throw new Error("targetHealthChecksList is undefined");
 
-    const healthCheckHandler = new HealthCheckHandler(targetHealthChecksListJson)
+    const healthCheckHandler = new HealthCheckHandler(targetHealthChecksListJson.data)
 
     runInAction(() => {
       this.targetHealthChecksList = healthCheckHandler.groupByCheckName();
@@ -25,7 +31,7 @@ export class TargetHealthChecksStore {
   }
 
   private async fetchTargetHealthChecksListAsync(): Promise<HealthCheckResponse> {
-    const targetHealthChecks = await fetch(`${this.apiUrl}group/${this.groupLabel}/target/${this.targetLabel}`);
+    const targetHealthChecks = await fetch(`${this.apiUrl}lastChecksAndIssues/${this.targetLabel}`);
 
     return await targetHealthChecks.json();
   }

@@ -6,9 +6,11 @@
 
 import {FactoryDefinition, ModelDefinition, Registry} from "miragejs/-types";
 import Schema from "miragejs/orm/schema";
-import {IHealthCheck} from "../../Components/types";
+import {ErrorHealthCheckCountByDay, IErrorHealthCheckCountByDay, IHealthCheck} from "../../Components/types";
 
 export interface MockedHealthCheck extends IHealthCheck {}
+
+export interface MockedErrorHealthCheckCountByDay extends IErrorHealthCheckCountByDay {}
 
 export type MockedServerBaseModels = {
   healthCheck: ModelDefinition<MockedHealthCheck>;
@@ -21,7 +23,8 @@ export type MockedServerBaseFactories = {
 export enum MocksScenario {
   "scenario1",
   "scenario2",
-  "scenario3"
+  "scenario3",
+  "scenario4"
 }
 
 export type MockedSchema = Schema<Registry<MockedServerBaseModels, MockedServerBaseFactories>>

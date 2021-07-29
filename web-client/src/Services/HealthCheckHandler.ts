@@ -1,4 +1,10 @@
-import {IHealthCheck, Target, TargetHealthCheck} from "../Components/types";
+/**
+ * Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
+import {ErrorsReportCheck, IHealthCheck, Target, TargetHealthCheck} from "../Components/types";
 import moment from "moment";
 
 export class HealthCheckHandler {

@@ -14,13 +14,11 @@ import {
   EuiShowFor,
   EuiHeaderSectionItem,
 } from "fury-design-system";
-
 import { ResponsiveHeaderProps } from './types';
 import { EuiCustomLink } from "../EuiCustomLink";
 import { LocalizedText } from "./LocalizedText";
 import kasperLogo from '../../Assets/kasper-logo-small.png';
 import './Style.scss';
-
 
 /**
  * Responsive header 

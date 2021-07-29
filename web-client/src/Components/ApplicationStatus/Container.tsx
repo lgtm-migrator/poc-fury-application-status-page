@@ -42,7 +42,7 @@ export default function ApplicationStatusContainer(props: ApplicationStatusConta
 
 
   if (isMocked) {
-    makeServer({ environment: "development" }, stateHandler.getState().apiurl, MocksScenario.scenario1)
+    makeServer({ environment: "development" }, stateHandler.getState().apiurl, MocksScenario.scenario4)
   }
 
   return (

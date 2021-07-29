@@ -119,7 +119,7 @@ async function getConfigFromBackend(serverBasePath: string, apiPath: string): Pr
   const json = await configRes.json();
 
   return {
-    apiUrl: `${ json.Data.apiUrl }${ apiPath }`,
+    apiUrl: `${serverBasePath}${apiPath}`,
     groupLabel: json.Data.groupLabel,
     cascadeFailure: json.Data.cascadeFailure,
     groupTitle: json.Data.groupTitle,
@@ -134,7 +134,7 @@ function injectMockServer() {
     return makeServer(
       { environment: "development" },
       process.env.SERVER_BASE_PATH ?? "",
-      MocksScenario.scenario1,
+      MocksScenario.scenario4,
       process.env.API_PATH ?? ""
     );
   }
