@@ -4,42 +4,53 @@
  * license that can be found in the LICENSE file.
  */
 
-.euiFlexGroup--gutterMedium {
-   & > .euiFlexItem.target-health-checks-message {
-       margin-bottom: 30px;
-   }
-
-    & > .euiFlexItem.target-health-checks-message p {
-        white-space: pre;
+.kasper {
+  // Page content width
+  .healthchecks-list {
+    .euiPageContent {
+      width: 100%;
+      max-width: 600px;
     }
-}
-
-.euiFlexGroup {
-  & > .euiFlexItem.target-card-status-text {
-    margin-left: 0;
   }
 
-  & > .euiFlexItem.target-card-status-text p {
-    font-weight: 600;
-  }
-}
+  .euiFlexGroup {
 
-.target-health-check-card {
+    & > .euiFlexItem.target-card__status-text {
+      margin-left: 0;
+    }
+
+    & > .euiFlexItem.target-card__status-text p {
+      font-weight: 600;
+    }
+
+    &--gutterMedium {
+      & > .euiFlexItem.target-health-checks-message {
+        margin-bottom: 30px;
+      }
+  
+      & > .euiFlexItem.target-health-checks-message p {
+        white-space: pre;
+      }
+    }
+  }
+
+  .target-health-check-card {
     border-bottom: 1px solid #bcbdbf;
     padding-left: 0;
     padding-right: 0;
     margin-bottom: 9px;
 
     &.euiPanel .euiText p {
-        margin-bottom: 0;
+      margin-bottom: 0;
     }
 
     .check-title {
-        margin-bottom: 4px;
+      margin-bottom: 4px;
     }
-}
+  }
 
-.target-status-icon {
-  width: 22px;
-  height: 22px;
+  .target-status-icon {
+    width: 22px;
+    height: 22px;
+  }
 }

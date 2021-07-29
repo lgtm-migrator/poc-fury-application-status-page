@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-import React, { useContext } from "react";
+import React from "react";
 import {
   EuiIcon,
   EuiText,
@@ -12,39 +12,29 @@ import {
   EuiHeader,
   EuiHideFor,
   EuiShowFor,
-  EuiTextColor,
   EuiHeaderSectionItem,
 } from "fury-design-system";
-import { logger } from '../../Services/Logger';
 
 import { ResponsiveHeaderProps } from './types';
 import { EuiCustomLink } from "../EuiCustomLink";
 import { LocalizedText } from "./LocalizedText";
 import kasperLogo from '../../Assets/kasper-logo-small.png';
-import './index.scss';
+import './Style.scss';
 
 
 /**
  * Responsive header 
- * @param props 
- * @returns 
+ * @param props ResponsiveHeaderProps
+ * @returns different headers based on mobile/desktop devices
  */
 export const ResponsiveHeader = (props: ResponsiveHeaderProps) => {
-  // TODO: add single group page handling
-  // without back button
-
-  console.log('context', props)
   return (
     <div className="kasper-header">
-      <EuiHeader position="fixed">
-        <EuiHeaderSectionItem>
-          
-          {
-            props.pageName
-            ? <EuiCustomLink to={`${props.context.basePath}/`}>
-                <EuiIcon type={"sortLeft"}/> {LocalizedText.singleton.goBack}
-              </EuiCustomLink>
-            : <>
+        {/* DESKTOP MENU */}
+        <EuiHideFor sizes={['xs', 's']}>
+          <EuiHeader position="fixed" className="kasper-header--desktop">
+            <EuiHeaderSectionItem>
+              <>
                 <EuiIcon type={kasperLogo} size="xl" />
                 <EuiText>
                   <h5>
@@ -52,25 +42,48 @@ export const ResponsiveHeader = (props: ResponsiveHeaderProps) => {
                   </h5>
                 </EuiText>
               </>
+            </EuiHeaderSectionItem>
+          </EuiHeader>
+          {props.pageName &&
+            <EuiHeader position="static" className="sub-navigation">
+              <EuiHeaderSectionItem>
+                <EuiCustomLink to={`${props.context.basePath}/`}>
+                  <EuiIcon type={"sortLeft"}/> {LocalizedText.singleton.goBack}
+                </EuiCustomLink>
+              </EuiHeaderSectionItem>
+              <EuiHeaderSectionItem>
+                <EuiTitle size="xs"><p>{props.pageName ? props.pageName : ''}</p></EuiTitle>
+              </EuiHeaderSectionItem>
+            </EuiHeader>
           }
-        </EuiHeaderSectionItem>
-
-        {/* DESKTOP MENU */}
-        <EuiHideFor sizes={['xs', 's']}>
-          <EuiHeaderSectionItem>
-            <EuiTitle size="xs"><p>{props.pageName ? props.pageName : ''}</p></EuiTitle>
-          </EuiHeaderSectionItem>
         </EuiHideFor>
         {/* DESKTOP MENU END */}
 
         {/* MOBILE MENU */}
         <EuiShowFor sizes={['xs', 's']}>
-          <EuiHeaderSectionItem>
-            <EuiTitle size="xs"><p>{props.pageName ? props.pageName : ''}</p></EuiTitle>
-          </EuiHeaderSectionItem>
+          <EuiHeader position="fixed" className="kasper-header--mobile">
+            <EuiHeaderSectionItem>  
+              {
+                props.pageName
+                ? <EuiCustomLink to={`${props.context.basePath}/`}>
+                    <EuiIcon type={"sortLeft"}/> {LocalizedText.singleton.goBack}
+                  </EuiCustomLink>
+                : <>
+                    <EuiIcon type={kasperLogo} size="xl" />
+                    <EuiText>
+                      <h5>
+                        Kasper
+                      </h5>
+                    </EuiText>
+                  </>
+              }
+            </EuiHeaderSectionItem>
+            <EuiHeaderSectionItem>
+              <EuiTitle size="xs"><p>{props.pageName ? props.pageName : ''}</p></EuiTitle>
+            </EuiHeaderSectionItem>
+          </EuiHeader>
         </EuiShowFor>
         {/* MOBILE MENU END */}
-      </EuiHeader>
     </div>
   )
 }

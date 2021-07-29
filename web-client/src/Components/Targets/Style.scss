@@ -4,14 +4,33 @@
  * license that can be found in the LICENSE file.
  */
 
-.target-card.euiPanel {
-    margin-bottom: 9px;
-}
+.kasper {
+	.target-list {
+		.euiPageContent {
+			width: 100%;
+			max-width: 600px;
+		}
+	}
 
-.target-card.euiPanel.euiPanel--borderRadiusMedium {
-    border-radius: 12px;
-}
+	.target-status-text {
+		margin-bottom: 30px;
+	}
 
-.target-status-text {
-    margin-bottom: 30px;
+	.target-card {
+
+		&.euiPanel {
+			margin-bottom: 9px;
+			height: 64px;
+			padding: 13px 16px;
+
+			&--borderRadiusMedium {
+				border-radius: 12px;
+			}
+		}
+
+		&__link {
+			margin-left: auto;
+			font-size: 16px;
+		}
+	}
 }

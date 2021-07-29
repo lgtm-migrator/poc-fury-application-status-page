@@ -49,7 +49,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div className="App kasper">
       <Suspense fallback={
         <EuiEmptyPrompt
           // Inline style as fallback to render the message for super slow networks

@@ -57,7 +57,11 @@ export default function TargetHealthChecksComponent(props: TargetHealthChecksCom
             title={<h4> Loading... </h4>}
             body={<EuiLoadingSpinner size="xl" />}
           />
-        : <EuiPage paddingSize="none" restrictWidth={true}>
+        : <EuiPage
+            paddingSize="none"
+            restrictWidth={true}
+            className="healthchecks-list"
+          >
             <EuiPageBody>
               <EuiPageHeader
                 restrictWidth
@@ -66,7 +70,7 @@ export default function TargetHealthChecksComponent(props: TargetHealthChecksCom
                 {!props.standalone &&
                   <EuiPageHeaderSection>
                     <EuiCustomLink to={`${appContextData.basePath}/`}>
-                      <EuiIcon type={"sortLeft"}/> {LocalizedText.singleton.goBack}
+                      <EuiIcon type="sortLeft" /> {LocalizedText.singleton.goBack}
                     </EuiCustomLink>
                   </EuiPageHeaderSection>
                 }
@@ -77,7 +81,6 @@ export default function TargetHealthChecksComponent(props: TargetHealthChecksCom
                   horizontalPosition="center"
                   paddingSize="l"
                   color="transparent"
-                  style={{ maxWidth: "600px", width: "100%" }}
                   hasShadow={false}
                 >
                   {TargetHealthChecksHeader(props.targetHealthChecksStore.targetHealthChecksList, groupUIText, targetUIText)}
@@ -107,21 +110,26 @@ function TargetHealthChecksHeader(targetHealthCheckList: TargetHealthCheck[], gr
   }
 
   return (
-    <EuiFlexGroup gutterSize="m" justifyContent={"center"} direction={"column"} responsive={false}>
+    <EuiFlexGroup
+      gutterSize="m"
+      justifyContent="center"
+      direction="column"
+      responsive={false}
+    >
       <EuiFlexItem>
-        <EuiIcon size={"xxl"} type={messageIcon} color={messageIconColor} />
+        <EuiIcon size="xxl" type={messageIcon} color={messageIconColor} />
       </EuiFlexItem>
-      <EuiFlexItem className={"target-health-checks-message"}>
-        <EuiTitle size={"s"} >
+      <EuiFlexItem className="target-health-checks-message">
+        <EuiTitle size="s">
           <h1>
             {message}
           </h1>
         </EuiTitle>
-        <EuiText>
-          <p>
+        <EuiTitle size="s" className="test">
+          <h1>
             {messageTargetHealthCheckList}
-          </p>
-        </EuiText>
+          </h1>
+        </EuiTitle>
       </EuiFlexItem>
     </EuiFlexGroup>
   )
@@ -142,9 +150,23 @@ function getTargetHealthCheckList(targetHealthCheckList: TargetHealthCheck[]) {
 
 function TargetHealthChecksCard(props: TargetHealthChecksCardProps) {
   return (
-    <EuiPanel paddingSize="s" className="target-health-check-card" color={"transparent"} borderRadius={"none"}>
-      <EuiFlexGroup gutterSize={"none"} direction={"column"} responsive={false}>
-        <EuiFlexGroup className={"check-title"} gutterSize="m" alignItems={"center"} responsive={false}>
+    <EuiPanel
+      paddingSize="s"
+      className="target-health-check-card"
+      color="transparent"
+      borderRadius="none"
+    >
+      <EuiFlexGroup
+        gutterSize="none"
+        direction="column"
+        responsive={false}
+      >
+        <EuiFlexGroup
+          className="check-title"
+          gutterSize="m"
+          alignItems="center"
+          responsive={false}
+        >
           <EuiFlexItem grow={false}>
             {TargetHealthChecksCardStatusIcon(props.targetHealthCheck.status)}
           </EuiFlexItem>
@@ -156,18 +178,27 @@ function TargetHealthChecksCard(props: TargetHealthChecksCardProps) {
             </EuiText>
           </EuiFlexItem>
         </EuiFlexGroup>
-        <EuiFlexGroup gutterSize={"none"} justifyContent={"spaceBetween"} responsive={false}>
-          <EuiFlexGroup className={"font-color-dark-shade font-weight-semi-bold"} gutterSize={"none"}
-                        direction={"column"} justifyContent={"flexStart"} responsive={false}>
+        <EuiFlexGroup
+          gutterSize="none"
+          responsive={false}
+          justifyContent="spaceBetween"
+        >
+          <EuiFlexGroup
+            gutterSize="none"
+            direction="column"
+            responsive={false}
+            justifyContent="flexStart"
+            className="font-color-dark-shade font-weight-semi-bold"
+          >
             <EuiFlexItem grow={false}>
-              <EuiText className={"font-weight-semi-bold"} size={"s"}>
+              <EuiText className="font-weight-semi-bold" size="s">
                 <p>
                   {LocalizedText.singleton.lastCheck}
                 </p>
               </EuiText>
             </EuiFlexItem>
             <EuiFlexItem grow={false}>
-              <EuiText className={"font-weight-semi-bold"} size={"s"}>
+              <EuiText className="font-weight-semi-bold" size="s">
                 <p>
                   {getHealthCheckTimeDiffString(props.targetHealthCheck.lastCheck)}
                 </p>
@@ -182,38 +213,55 @@ function TargetHealthChecksCard(props: TargetHealthChecksCardProps) {
 }
 
 function getLastIssue(targetHealthCheck: TargetHealthCheck) {
+  // TODO: refactor usign ElasticUI v36.1.0 custom color feature
+  // in this way color={JSLOGIC ? 'default' : '#98A2B3'}
   const getClassName = targetHealthCheck.status === "Failed" ? "font-color-darkest-shade" : "font-color-medium-shade";
   const getText = targetHealthCheck.status === "Failed" ? LocalizedText.singleton.issue : LocalizedText.singleton.lastIssue;
 
-  return <EuiFlexGroup
-    className={`${getClassName}`}
-    gutterSize={"none"} direction={"column"} justifyContent={"flexStart"} responsive={false}>
-    <EuiFlexItem grow={false}>
-      <EuiText className={"font-weight-semi-bold"} size={"s"} textAlign={"right"}>
-        <p>
-          {getText}
-        </p>
-      </EuiText>
-    </EuiFlexItem>
-    <EuiFlexItem grow={false}>
-      <EuiText className={"font-weight-semi-bold"} size={"s"} textAlign={"right"}>
-        <p>
-          {getLastIssueDateString(targetHealthCheck.status, targetHealthCheck.lastIssue)}
-        </p>
-      </EuiText>
-    </EuiFlexItem>
-  </EuiFlexGroup>;
+  return (
+    <EuiFlexGroup
+      gutterSize="none"
+      direction="column"
+      justifyContent="flexStart"
+      responsive={false}
+    >
+      <EuiFlexItem grow={false}>
+        <EuiText
+          size="s"
+          textAlign="right"
+          className={`font-weight-semi-bold ${getClassName}`}
+          // color={targetHealthCheck.status === "Failed" ? "default" : "#98A2B3"}
+        >
+          <p>
+            {getText}
+          </p>
+        </EuiText>
+      </EuiFlexItem>
+      <EuiFlexItem grow={false}>
+        <EuiText
+          size="s"
+          textAlign="right"
+          className={`font-weight-semi-bold ${getClassName}`}
+          // color={targetHealthCheck.status === "Failed" ? "default" : "subdued"}
+        >
+          <p>
+            {getLastIssueDateString(targetHealthCheck.status, targetHealthCheck.lastIssue)}
+          </p>
+        </EuiText>
+      </EuiFlexItem>
+    </EuiFlexGroup>
+  )
 }
 
 function TargetHealthChecksCardStatusIcon(status: HealthCheckStatus) {
   if (status === "Complete") {
     return (
-      <EuiIcon size={"xxl"} type="checkInCircleFilled" color={"success"} />
+      <EuiIcon size="xxl" type="checkInCircleFilled" color="success" />
     )
   }
 
   return (
-    <EuiIcon size={"xxl"} type="crossInACircleFilled" color={"danger"} />
+    <EuiIcon size="xxl" type="crossInACircleFilled" color="danger" />
   )
 }
 
