@@ -125,7 +125,7 @@ function TargetHealthChecksHeader(targetHealthCheckList: TargetHealthCheck[], gr
             {message}
           </h1>
         </EuiTitle>
-        <EuiTitle size="s" className="test">
+        <EuiTitle size="s" className="title-light">
           <h1>
             {messageTargetHealthCheckList}
           </h1>
