@@ -44,5 +44,4 @@ export class LocalizedText extends BaseLocalizedText {
   public get errorOccurredAt() {
     return this.translate('Target Health Checks Status Error Occurred');
   }
-
 }

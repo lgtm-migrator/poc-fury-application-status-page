@@ -10,7 +10,7 @@ import {Server} from "miragejs/server";
 import {Registry} from "miragejs/-types";
 import {seedsFactory} from "../../Services/Mocks/Seeds/Factory";
 import {Target, TargetHealthCheck} from "../../Components/types";
-import {getAllHealthChecksByGroup, getAllHealthChecksByGroupAndTarget} from "../../Services/Mocks/io";
+import {getAllHealthChecksByGroup, getAllHealthChecksByGroupAndTarget} from "../../Services/Mocks/IO";
 import {HealthCheckHandler} from "../../Services/HealthCheckHandler";
 import moment from "moment";
 

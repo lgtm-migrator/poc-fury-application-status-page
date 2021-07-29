@@ -11,6 +11,7 @@ import {TargetHealthChecks} from "../TargetHealthChecks";
 import {Targets} from "../Targets";
 import {ApplicationStatusRouteParams} from "./types";
 import {logger} from "../../Services/Logger";
+import {ErrorsReport} from "../ErrorsReport";
 
 export default function ApplicationStatusRouterFactory() {
   const appContextData = useContext(ApplicationContext);
@@ -41,6 +42,10 @@ export default function ApplicationStatusRouterFactory() {
   return (
     <Router>
       <Switch>
+        <Route
+          path={`${appContextData.basePath}/errors-report`}
+          component={() => <ErrorsReport />}
+        />
         <Route
           path={`${appContextData.basePath}/:target`}
           component={(propsRoute: RouteComponentProps<ApplicationStatusRouteParams>) =>

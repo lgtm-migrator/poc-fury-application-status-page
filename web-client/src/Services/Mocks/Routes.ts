@@ -4,11 +4,14 @@
  * license that can be found in the LICENSE file.
  */
 
-import Schema from "miragejs/orm/schema";
-import {Registry} from "miragejs/-types";
-import {MockedSchema, MockedServerBaseFactories, MockedServerBaseModels} from "./types";
+import {MockedSchema} from "./types";
 import {Request} from "miragejs";
-import {getAllHealthChecksByGroup, getAllHealthChecksByGroupAndTarget} from "./io";
+import {
+  getAllFailedHealthChecksByDay,
+  getAllFailedHealthCountByDay,
+  getAllHealthChecksByGroup,
+  getAllHealthChecksByGroupAndTarget
+} from "./IO";
 
 export function getRoutes(urlPrefix: string, apiPath?: string) {
  return function () {
@@ -36,9 +39,8 @@ export function getRoutes(urlPrefix: string, apiPath?: string) {
      this.namespace = "/api/";
    }
 
-   this.get('lastChecks', (schema: Schema<Registry<MockedServerBaseModels, MockedServerBaseFactories>>) => {
+   this.get('lastChecks', (schema: MockedSchema) => {
      return {
-       code: 200,
        data: getAllHealthChecksByGroup(schema) ?? [],
        errorMessage: ""
      }
@@ -46,8 +48,21 @@ export function getRoutes(urlPrefix: string, apiPath?: string) {
 
    this.get('lastChecksAndIssues/:target', (schema: MockedSchema, request: Request) => {
      return {
-       code: 200,
        data: getAllHealthChecksByGroupAndTarget(schema, request.params.target) ?? [],
+       errorMessage: ""
+     }
+   })
+
+   this.get('lastFailedChecks', (schema: MockedSchema) => {
+      return {
+        data: getAllFailedHealthCountByDay(schema),
+        errorMessage: ""
+      }
+   })
+
+   this.get('lastFailedChecks/day/:day', (schema: MockedSchema, request: Request) => {
+     return {
+       data: getAllFailedHealthChecksByDay(schema, request.params.day) ?? [],
        errorMessage: ""
      }
    })

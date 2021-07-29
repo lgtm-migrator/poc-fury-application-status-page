@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-import {IHealthCheck, Target, TargetHealthCheck} from "../Components/types";
+import {ErrorsReportCheck, IHealthCheck, Target, TargetHealthCheck} from "../Components/types";
 import moment from "moment";
 
 export class HealthCheckHandler {

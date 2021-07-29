@@ -15,6 +15,7 @@ import {scenarioTwoData} from "./ScenarioTwo";
 import {scenarioThreeData} from "./ScenarioThree";
 import {Server} from "miragejs/server";
 import {Registry} from "miragejs/-types";
+import {scenarioFourData} from "./ScenarioFour";
 
 function generateSeedFromScenario(scenarioData: MockedHealthCheck[]) {
   return function(server: Server<Registry<MockedServerBaseModels, MockedServerBaseFactories>>) {
@@ -34,5 +35,7 @@ export function seedsFactory(scenario: MocksScenario) {
       return generateSeedFromScenario(scenarioTwoData);
     case MocksScenario.scenario3:
       return generateSeedFromScenario(scenarioThreeData);
+    case MocksScenario.scenario4:
+      return generateSeedFromScenario(scenarioFourData);
   }
 }
