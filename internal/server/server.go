@@ -57,6 +57,8 @@ func addRoutes(engine *gin.Engine, appConfig *config.YamlConfig, embedded embed.
 
 	api.GET("/lastChecks", resources.ListLastChecks)
 	api.GET("/lastChecksAndIssues/:targetLabel", resources.ListLastChecksAndIssuesByTarget)
+	api.GET("lastFailedChecks/day/:day", resources.FailedHealthChecksFilterByDay)
+	api.GET("lastFailedChecks", resources.FailedHealthCheckGroupByDay)
 }
 
 func (e EmbedFileSystem) Exists(prefix string, path string) bool {
