@@ -26,7 +26,7 @@ export class LocalizedText extends BaseLocalizedText {
   }
 
   public get lastIssue() {
-    return this.translate('Target Health Checks Status Last Issue');
+    return this.translate('Target Health Checks Status No Issue');
   }
 
   public get issue() {
@@ -34,7 +34,7 @@ export class LocalizedText extends BaseLocalizedText {
   }
 
   public get occurringIssue() {
-    return this.translate('Target Health Checks Status Error Occurring');
+    return this.translate('Target Health Checks Status Error Reported');
   }
 
   public get neverAnIssue() {
