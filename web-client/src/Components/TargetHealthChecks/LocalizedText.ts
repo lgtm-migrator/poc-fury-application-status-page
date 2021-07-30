@@ -34,11 +34,11 @@ export class LocalizedText extends BaseLocalizedText {
   }
 
   public get occurringIssue() {
-    return this.translate('Target Health Checks Status Error Reported');
+    return this.translate('Target Health Checks Status Error Occurring');
   }
 
   public get neverAnIssue() {
-    return this.translate('Target Health Checks Status Error Never');
+    return this.translate('Target Health Checks Status Error Reported');
   }
 
   public get errorOccurredAt() {
