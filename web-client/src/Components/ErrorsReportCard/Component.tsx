@@ -115,6 +115,10 @@ function getTimeString(time: moment.Moment) {
 
   switch(currentServerTime.diff(time, "days")) {
     case 0:
+      if (currentServerTime.days() != time.days()) {
+        return "Yesterday"
+      }
+
       return "Today";
     case 1:
       return "Yesterday";
