@@ -48,6 +48,7 @@ export function getAllFailedHealthCountByDay(
 
       return accumulator;
     }, [])
+    .sort(sortForTimeDesc)
 }
 
 export function getAllFailedHealthChecksByDay(
@@ -60,6 +61,15 @@ export function getAllFailedHealthChecksByDay(
     .all("healthCheck")
     .models
     .filter(healthCheck => healthCheck.status === "Failed" && moment(healthCheck.completedAt).isSame(parsedDay, "day"))
+}
+
+function sortForTimeDesc(a: MockedErrorHealthCheckCountByDay, b: MockedErrorHealthCheckCountByDay) {
+  const timeDiff = moment(a.dayDate).diff(moment(b.dayDate))
+
+  if (timeDiff >= 0)
+    return -1;
+
+  return 1;
 }
 
 function findIndexOfElemSameDayData(acc: MockedErrorHealthCheckCountByDay[], healthCheckTime: moment.Moment) {
