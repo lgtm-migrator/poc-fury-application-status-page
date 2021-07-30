@@ -15,7 +15,6 @@ import {
   EuiPageBody,
   EuiFlexItem,
   EuiFlexGroup,
-  EuiPageHeader,
   EuiPageContent,
   EuiEmptyPrompt,
   EuiLoadingSpinner,
@@ -60,10 +59,6 @@ function TargetStatusComponent(props: TargetsComponentProps) {
             />
           : <EuiPage paddingSize="none" restrictWidth={true} className="target-list">
               <EuiPageBody>
-                <EuiPageHeader
-                  restrictWidth
-                  paddingSize="l"
-                />
                 <ResponsiveHeader context={appContextData} />
                 <EuiPageContent
                   horizontalPosition="center"

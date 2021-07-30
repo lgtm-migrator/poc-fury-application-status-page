@@ -7,8 +7,6 @@
 .kasper {
   .kasper-header {
     .euiHeader {
-      // max-width: 1200px;
-      height: 54px;
       margin-left: auto;
       margin-right: auto;
 
@@ -20,6 +18,7 @@
         }
       }
       &.kasper-header--mobile {
+        height: 54px;
         padding-left: 16px;
         padding-right: 16px;
       }
@@ -30,6 +29,7 @@
         border-top: none;
         box-shadow: none;
         background: transparent;
+        margin-top: 8px;
         padding-left: 16px;
         padding-right: 16px;
       }

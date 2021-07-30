@@ -63,19 +63,11 @@ export default function TargetHealthChecksComponent(props: TargetHealthChecksCom
             className="healthchecks-list"
           >
             <EuiPageBody>
-              <EuiPageHeader
-                restrictWidth
-                paddingSize="l"
-              >
-                {!props.standalone &&
-                  <EuiPageHeaderSection>
-                    <EuiCustomLink to={`${appContextData.basePath}/`}>
-                      <EuiIcon type="sortLeft" /> {LocalizedText.singleton.goBack}
-                    </EuiCustomLink>
-                  </EuiPageHeaderSection>
-                }
-              </EuiPageHeader>
-              <ResponsiveHeader context={appContextData} pageName={targetUIText} />
+              <ResponsiveHeader
+                context={appContextData}
+                pageName={targetUIText}
+                standalone={props.standalone}
+              />
                 <EuiPageContent
                   verticalPosition="center"
                   horizontalPosition="center"

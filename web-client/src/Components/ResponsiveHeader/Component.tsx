@@ -10,6 +10,7 @@ import {
   EuiText,
   EuiTitle,
   EuiHeader,
+  EuiSpacer,
   EuiHideFor,
   EuiShowFor,
   EuiHeaderSectionItem,
@@ -42,27 +43,36 @@ export const ResponsiveHeader = (props: ResponsiveHeaderProps) => {
               </>
             </EuiHeaderSectionItem>
           </EuiHeader>
+          {/* Handling healthchecks page both nested and standalone */}
           {props.pageName &&
-            <EuiHeader position="static" className="sub-navigation">
-              <EuiHeaderSectionItem>
-                <EuiCustomLink to={`${props.context.basePath}/`}>
-                  <EuiIcon type={"sortLeft"}/> {LocalizedText.singleton.goBack}
-                </EuiCustomLink>
-              </EuiHeaderSectionItem>
-              <EuiHeaderSectionItem>
-                <EuiTitle size="xs"><p>{props.pageName ? props.pageName : ''}</p></EuiTitle>
-              </EuiHeaderSectionItem>
-            </EuiHeader>
+            <>
+              <EuiHeader position="fixed" className="sub-navigation">
+                <EuiHeaderSectionItem>
+                  {!props.standalone &&
+                    <EuiCustomLink to={`${props.context.basePath}/`}>
+                      <EuiIcon type="sortLeft" /> {LocalizedText.singleton.goBack}
+                    </EuiCustomLink>
+                  }
+                </EuiHeaderSectionItem>
+                <EuiHeaderSectionItem>
+                  <EuiTitle size="xs"><p>{props.pageName ? props.pageName : ''}</p></EuiTitle>
+                </EuiHeaderSectionItem>
+              </EuiHeader>
+              <EuiSpacer size="l" />
+              <EuiSpacer size="xl" />
+            </>
           }
+          <EuiSpacer size="xxl" />
         </EuiHideFor>
         {/* DESKTOP MENU END */}
 
         {/* MOBILE MENU */}
         <EuiShowFor sizes={['xs', 's']}>
           <EuiHeader position="fixed" className="kasper-header--mobile">
+            {/* Handling healthchecks page both nested and standalone */}
             <EuiHeaderSectionItem>  
               {
-                props.pageName
+                !props.standalone && props.pageName
                 ? <EuiCustomLink to={`${props.context.basePath}/`}>
                     <EuiIcon type={"sortLeft"}/> {LocalizedText.singleton.goBack}
                   </EuiCustomLink>
@@ -80,6 +90,7 @@ export const ResponsiveHeader = (props: ResponsiveHeaderProps) => {
               <EuiTitle size="xs"><p>{props.pageName ? props.pageName : ''}</p></EuiTitle>
             </EuiHeaderSectionItem>
           </EuiHeader>
+          <EuiSpacer size="xxl" />
         </EuiShowFor>
         {/* MOBILE MENU END */}
     </div>
