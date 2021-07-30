@@ -1,0 +1,22 @@
+/**
+ * Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
+
+
+.error-card {
+  min-height: 40px;
+  &__header {
+    background-color: white;
+  }
+  &__accordion {
+    position: relative;
+    & .euiAccordion__triggerWrapper {
+      position: absolute;
+      right: 0;
+      top: -35px
+    }
+  }
+}

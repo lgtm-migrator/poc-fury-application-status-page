@@ -1,8 +1,14 @@
+/**
+ * Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
 import React, {useContext, useEffect, useState} from "react";
 import {ErrorsReportComponentProps} from "./types";
 import {ApplicationContext} from "../ApplicationStatus/Container";
 import useErrorHandler from "../../Hooks/UseErrorHandler";
-import {EuiEmptyPrompt, EuiLoadingSpinner, EuiPage, EuiPageContent} from "fury-design-system";
+import {EuiEmptyPrompt, EuiLoadingSpinner, EuiPage, EuiPageContent, EuiSpacer, EuiPageBody} from "fury-design-system";
 import {ResponsiveHeader} from "../ResponsiveHeader";
 import moment from "moment";
 import {observer} from "mobx-react";
@@ -37,23 +43,26 @@ function ErrorsReportComponent(props: ErrorsReportComponentProps) {
            body={<EuiLoadingSpinner size="xl" />}
          />
        : <EuiPage paddingSize="none" restrictWidth={true}>
-           <ResponsiveHeader context={appContextData} pageName={props.pageName} />
-           <EuiPageContent
-             verticalPosition="center"
-             horizontalPosition="center"
-             paddingSize="l"
-             color="transparent"
-             style={{ maxWidth: "600px", width: "100%" }}
-             hasShadow={false}
-           >
-             {props.errorsReportStore.errorsReportChecksCountList.map((errorReportChecksElem, index) => {
-               return (
-                 <React.Fragment key={`errorCheckList-${index}`}>
-                   <ErrorsReportCard errorHealthCheckCountByDay={errorReportChecksElem} />
-                 </React.Fragment>
-               );
-             })}
-           </EuiPageContent>
+          <EuiPageBody>
+            <ResponsiveHeader context={appContextData} pageName={props.pageName} />
+            {/* <EuiPageContent
+              verticalPosition="center"
+              horizontalPosition="center"
+              paddingSize="none"
+              color="transparent"
+              // style={{ maxWidth: "600px", width: "100%" }}
+              hasShadow={false}
+            > */}
+            <EuiSpacer size="xxl" />
+              {props.errorsReportStore.errorsReportChecksCountList.map((errorReportChecksElem, index) => {
+                return (
+                  <React.Fragment key={`errorCheckList-${index}`}>
+                    <ErrorsReportCard errorHealthCheckCountByDay={errorReportChecksElem} />
+                  </React.Fragment>
+                );
+              })}
+            {/* </EuiPageContent> */}
+          </EuiPageBody>
          </EuiPage>
      }
    </>

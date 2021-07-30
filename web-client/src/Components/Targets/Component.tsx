@@ -67,9 +67,24 @@ function TargetStatusComponent(props: TargetsComponentProps) {
                   hasShadow={false}
                   grow={true}
                 >
-                <EuiText color="subdued" size="s">
-                  {`${groupUIText} overview`}
-                </EuiText>
+
+                <EuiFlexGroup direction="row" wrap>
+                  <EuiFlexItem grow={1}>
+                    <div>
+                      <EuiText color="subdued" size="s">
+                        {`${groupUIText} overview`}
+                      </EuiText>
+                    </div>
+                  </EuiFlexItem>
+                  <EuiFlexItem grow={1}>
+                    <div>
+                      <EuiCustomLink to="/errors-report">
+                        Errors Report <EuiIcon type="sortRight" />
+                      </EuiCustomLink>
+                    </div>
+                  </EuiFlexItem>
+                </EuiFlexGroup>
+
                 <EuiSpacer size="xxl" />
                   {TargetStatusHeader(props.targetsStore.targetList, groupUIText)}
                   {

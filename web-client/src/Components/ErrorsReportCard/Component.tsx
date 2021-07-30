@@ -1,16 +1,19 @@
 import React, {useState} from "react";
 import useErrorHandler from "../../Hooks/UseErrorHandler";
 import {
-  EuiAccordion,
-  EuiEmptyPrompt,
-  EuiFlexGroup,
+  EuiText,
   EuiFlexItem,
+  EuiAccordion,
+  EuiFlexGroup,
+  EuiBasicTable,
+  EuiEmptyPrompt,
   EuiLoadingSpinner,
-  EuiPanel, EuiText
 } from "fury-design-system";
 import moment from "moment";
 import {ErrorsReportCardComponentProps} from "./types";
 import {observer} from "mobx-react";
+
+import './Style.scss';
 
 export default observer(ErrorsReportCardComponent);
 
@@ -32,56 +35,77 @@ function ErrorsReportCardComponent(props: ErrorsReportCardComponentProps) {
 
   return (
     <>
-      <EuiPanel paddingSize="s" className="service-card">
-        <EuiFlexGroup gutterSize="l">
-          <EuiFlexItem grow={false}>
-            <EuiText size="s" className="service-name">
-              <p>
-                <strong>{getTimeString(props.errorHealthCheckCountByDay.dayDate)}</strong>
-              </p>
-            </EuiText>
-          </EuiFlexItem>
-          <EuiFlexItem grow={false}>
-            <EuiText size="s" className="service-name">
-              <p>
-                <strong>{`${props.errorHealthCheckCountByDay.count} ISSUES`}</strong>
-              </p>
-            </EuiText>
+      <div className="error-card">
+        <EuiFlexGroup direction="column">
+          <EuiFlexGroup direction="row" responsive={false} className="error-card__header">
+            <EuiFlexItem grow={false}>
+              <EuiText size="s" className="" textAlign="left" color="subdued">
+                <strong>
+                  {getTimeString(props.errorHealthCheckCountByDay.dayDate)}
+                </strong>
+              </EuiText>
+            </EuiFlexItem>
+            <EuiFlexItem grow={false}>
+              <EuiText size="s" className="" textAlign="right" color="subdued">
+                <strong>
+                  {`${props.errorHealthCheckCountByDay.count} ISSUES`}
+                </strong>
+              </EuiText>
+            </EuiFlexItem>
+          </EuiFlexGroup>
+          <EuiFlexItem>
+            <EuiAccordion
+              // paddingSize="xs"
+              id={`${props.errorsReportChecksStore.id}.accordion`}
+              // arrowDisplay="right"
+              // initialIsOpen={true}
+              buttonContent="Open"
+              className="error-card__accordion"
+              buttonClassName="error-card__accordion-button"
+              onToggle={(isOpen) => {
+                if (isOpen && typeof props.errorsReportChecksStore.errorsReportChecksList === 'undefined') {
+                  loadList();
+                  return;
+                }
+              }}
+            >
+              {
+                isLoading
+                ?
+                  <EuiEmptyPrompt
+                    title={<h4> Loading... </h4>}
+                    body={<EuiLoadingSpinner size="xl" />}
+                  />
+                :
+                  <>
+                    <EuiBasicTable
+                      responsive={false}
+                      columns={[
+                        {field: 'target', name: 'Service'},
+                        {field: 'checkName', name: 'check type'},
+                        {field: 'date', name: 'when'}
+                      ]}
+                      items={
+                        props.errorsReportChecksStore.errorsReportChecksList
+                        ? props.errorsReportChecksStore.errorsReportChecksList.map((prova) => {
+                          return (
+                            {
+                              target: prova.target,
+                              checkName: prova.checkName,
+                              date: prova.completedAt.format("HH:MM Z")
+                            }
+                          )
+                          })
+                        : []
+                      }
+                      >
+                      </EuiBasicTable>
+                  </>
+              }
+            </EuiAccordion>
           </EuiFlexItem>
         </EuiFlexGroup>
-        <EuiAccordion
-          paddingSize="xs"
-          id={`${props.errorsReportChecksStore.id}.accordion`}
-          buttonContent={"Open"}
-          className="accordion-logs"
-          buttonClassName="accordion-button"
-          onToggle={(isOpen) => {
-            if (isOpen && typeof props.errorsReportChecksStore.errorsReportChecksList === 'undefined') {
-              loadList();
-              return;
-            }
-          }}
-        >
-          {
-            isLoading ?
-              <EuiEmptyPrompt
-                title={<h4> Loading... </h4>}
-                body={<EuiLoadingSpinner size="xl" />}
-              /> :
-              <>
-                {props.errorsReportChecksStore.errorsReportChecksList?.map((prova) => {
-                  return (
-                    <>
-                      <div>{prova.target}</div>
-                      <div>{prova.checkName}</div>
-                      <div>{prova.completedAt.format("HH:MM Z")}</div>
-                    </>
-                  )
-                })}
-              </>
-          }
-        </EuiAccordion>
-      </EuiPanel>
+      </div>
     </>
   )
 }

@@ -71,16 +71,16 @@ function TargetHealthChecksComponent(props: TargetHealthChecksComponentProps) {
                 pageName={targetUIText}
                 standalone={props.standalone}
               />
-                <EuiPageContent
-                  verticalPosition="center"
-                  horizontalPosition="center"
-                  paddingSize="l"
-                  color="transparent"
-                  hasShadow={false}
-                >
-                  {TargetHealthChecksHeader(props.targetHealthChecksStore.targetHealthChecksList, groupUIText, targetUIText)}
-                  {getTargetHealthCheckList(props.targetHealthChecksStore.targetHealthChecksList)}
-                </EuiPageContent>
+              <EuiPageContent
+                verticalPosition="center"
+                horizontalPosition="center"
+                paddingSize="l"
+                color="transparent"
+                hasShadow={false}
+              >
+                {TargetHealthChecksHeader(props.targetHealthChecksStore.targetHealthChecksList, groupUIText, targetUIText)}
+                {getTargetHealthCheckList(props.targetHealthChecksStore.targetHealthChecksList)}
+              </EuiPageContent>
             </EuiPageBody>
           </EuiPage>
       }
