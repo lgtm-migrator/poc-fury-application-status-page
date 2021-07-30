@@ -11,6 +11,7 @@
       margin-right: auto;
 
       &.kasper-header--desktop {
+        z-index: 1001;
         padding-left: 13%;
         padding-right: 13%;
         @media screen and (min-width: 1365px) {
@@ -28,8 +29,7 @@
         // overrides EuiHeader styles
         border-top: none;
         box-shadow: none;
-        background: transparent;
-        margin-top: 8px;
+        background: #fafbfd;
         padding-left: 16px;
         padding-right: 16px;
       }
