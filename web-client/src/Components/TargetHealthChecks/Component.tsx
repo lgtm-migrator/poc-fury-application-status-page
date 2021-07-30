@@ -29,8 +29,11 @@ import {ApplicationContext} from "../ApplicationStatus/Container";
 import { ResponsiveHeader } from '../ResponsiveHeader';
 import {TargetHealthChecksCardProps, TargetHealthChecksComponentProps} from "./types";
 import useErrorHandler from "../../Hooks/UseErrorHandler";
+import {observer} from "mobx-react";
 
-export default function TargetHealthChecksComponent(props: TargetHealthChecksComponentProps) {
+export default observer(TargetHealthChecksComponent);
+
+function TargetHealthChecksComponent(props: TargetHealthChecksComponentProps) {
   const appContextData = useContext(ApplicationContext);
   const groupUIText = appContextData.groupTitle ? appContextData.groupTitle : appContextData.groupLabel;
   const targetUIText = props.targetTitle ? props.targetTitle : props.target;

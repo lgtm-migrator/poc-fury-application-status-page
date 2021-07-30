@@ -6,23 +6,23 @@ import {action, makeObservable, observable, runInAction} from "mobx";
 import moment from "moment";
 
 export class ErrorsReportStore {
-  public errorsReportChecksList: ErrorHealthCheckCountByDay[] = [];
+  public errorsReportChecksCountList: ErrorHealthCheckCountByDay[] = [];
 
   constructor(private apiUrl: string) {
     makeObservable(this, {
-      errorsReportChecksList: observable,
-      errorsReportChecksListGetAll: action,
+      errorsReportChecksCountList: observable,
+      errorsReportChecksCountListGetAll: action,
     });
   }
 
-  public async errorsReportChecksListGetAll() {
-    const errorsReportChecksListJson = await this.fetchErrorsReportChecksListAsync();
+  public async errorsReportChecksCountListGetAll() {
+    const errorsReportChecksCountListJson = await this.fetchErrorsReportChecksCountListAsync();
 
-    if(!errorsReportChecksListJson) throw new Error("errorsReportChecksList is undefined");
+    if(!errorsReportChecksCountListJson) throw new Error("errorsReportChecksList is undefined");
 
     // TODO remove map from there
     runInAction(() => {
-      this.errorsReportChecksList = errorsReportChecksListJson.data.map((errorReportDataElem) => {
+      this.errorsReportChecksCountList = errorsReportChecksCountListJson.data.map((errorReportDataElem) => {
         return {
           ...errorReportDataElem,
           dayDate: moment(errorReportDataElem.dayDate)
@@ -31,7 +31,7 @@ export class ErrorsReportStore {
     })
   }
 
-  private async fetchErrorsReportChecksListAsync(): Promise<ErrorHealthCheckCountByDayResponse> {
+  private async fetchErrorsReportChecksCountListAsync(): Promise<ErrorHealthCheckCountByDayResponse> {
     const errorsReportChecks = await fetch(`${this.apiUrl}lastFailedChecks`);
 
     return await errorsReportChecks.json();

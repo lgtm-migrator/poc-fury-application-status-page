@@ -5,8 +5,12 @@ import useErrorHandler from "../../Hooks/UseErrorHandler";
 import {EuiEmptyPrompt, EuiLoadingSpinner, EuiPage, EuiPageContent} from "fury-design-system";
 import {ResponsiveHeader} from "../ResponsiveHeader";
 import moment from "moment";
+import {observer} from "mobx-react";
+import {ErrorsReportCard} from "../ErrorsReportCard";
 
-export default function ErrorsReportComponent(props: ErrorsReportComponentProps) {
+export default observer(ErrorsReportComponent);
+
+function ErrorsReportComponent(props: ErrorsReportComponentProps) {
   const appContextData = useContext(ApplicationContext);
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -14,7 +18,7 @@ export default function ErrorsReportComponent(props: ErrorsReportComponentProps)
   useErrorHandler(error);
 
   useEffect(() => {
-    props.errorsReportStore.errorsReportChecksListGetAll()
+    props.errorsReportStore.errorsReportChecksCountListGetAll()
       .then(() => {
         setIsLoading(false);
       })
@@ -42,13 +46,10 @@ export default function ErrorsReportComponent(props: ErrorsReportComponentProps)
              style={{ maxWidth: "600px", width: "100%" }}
              hasShadow={false}
            >
-             {props.errorsReportStore.errorsReportChecksList.map((errorReportChecks, index) => {
+             {props.errorsReportStore.errorsReportChecksCountList.map((errorReportChecksElem, index) => {
                return (
                  <React.Fragment key={`errorCheckList-${index}`}>
-                   <div>
-                     {getTimeString(errorReportChecks.dayDate)}
-                     {`${errorReportChecks.count} ISSUES`}
-                   </div>
+                   <ErrorsReportCard errorHealthCheckCountByDay={errorReportChecksElem} />
                  </React.Fragment>
                );
              })}
@@ -57,17 +58,4 @@ export default function ErrorsReportComponent(props: ErrorsReportComponentProps)
      }
    </>
  )
-}
-
-function getTimeString(time: moment.Moment) {
-  const currentServerTime = moment().utcOffset(time.format("Z"));
-
-  switch(currentServerTime.diff(time, "days")) {
-    case 0:
-      return "Today";
-    case 1:
-      return "Yesterday";
-    default:
-      return time.format("Do MMMM")
-  }
 }

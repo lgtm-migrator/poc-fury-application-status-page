@@ -4,6 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 import {Moment} from "moment";
+import {ErrorsReportCheck} from "./ErrorsReportCard/types";
 
 export interface IStateHandler {
   apiurl: string;
@@ -62,13 +63,6 @@ export interface TargetHealthCheck {
 
 export interface ErrorHealthCheckCountByDay extends Omit<IErrorHealthCheckCountByDay, "dayDate"> {
   dayDate: Moment;
-  healthChecks?: ErrorsReportCheck[];
-}
-
-export interface ErrorsReportCheck {
-  completedAt: Moment;
-  checkName: string;
-  target: string;
 }
 
 export interface Config {

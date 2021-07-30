@@ -4,8 +4,9 @@
  * license that can be found in the LICENSE file.
  */
 
-import {ErrorsReportCheck, IHealthCheck, Target, TargetHealthCheck} from "../Components/types";
+import {IHealthCheck, Target, TargetHealthCheck} from "../Components/types";
 import moment from "moment";
+import {ErrorsReportCheck} from "../Components/ErrorsReportCard/types";
 
 export class HealthCheckHandler {
   constructor(private targetList: IHealthCheck[], private cascadeFailure: number = 0) {}
