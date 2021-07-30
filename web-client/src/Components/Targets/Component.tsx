@@ -15,7 +15,6 @@ import {
   EuiPageBody,
   EuiFlexItem,
   EuiFlexGroup,
-  EuiPageHeader,
   EuiPageContent,
   EuiEmptyPrompt,
   EuiLoadingSpinner,
@@ -58,20 +57,15 @@ function TargetStatusComponent(props: TargetsComponentProps) {
               title={<h4> Loading... </h4>}
               body={<EuiLoadingSpinner size="xl" />}
             />
-          : <EuiPage paddingSize="none" restrictWidth={true}>
+          : <EuiPage paddingSize="none" restrictWidth={true} className="target-list">
               <EuiPageBody>
-                <EuiPageHeader
-                  restrictWidth
-                  paddingSize="l"
-                  // pageTitle={`${groupUIText} overview`}
-                />
                 <ResponsiveHeader context={appContextData} />
                 <EuiPageContent
                   horizontalPosition="center"
                   paddingSize="l"
                   color="transparent"
-                  // style={{ maxWidth: "600px", width: "100%" }}
                   hasShadow={false}
+                  grow={true}
                 >
                 <EuiText color="subdued" size="s">
                   {`${groupUIText} overview`}
@@ -113,15 +107,15 @@ function TargetStatusHeader(targetList: Target[], groupLabel: string) {
     <EuiFlexGroup
       gutterSize="m"
       responsive={false}
-      direction={"column"}
-      alignItems={"center"}
-      justifyContent={"center"}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
     >
       <EuiFlexItem>
-        <EuiIcon size={"xxl"} type={messageIcon} color={messageIconColor} />
+        <EuiIcon size="xxl" type={messageIcon} color={messageIconColor} />
       </EuiFlexItem>
       <EuiFlexItem>
-        <EuiTitle size={"s"} className={"target-status-text"}>
+        <EuiTitle size="s" className="target-status-text">
           <h1>
             {message}
           </h1>
@@ -134,12 +128,12 @@ function TargetStatusHeader(targetList: Target[], groupLabel: string) {
 function TargetCardStatusIcon(status: HealthCheckStatus) {
  if (status === "Complete") {
    return (
-     <EuiIcon className="target-status-icon" type="checkInCircleFilled" color={"success"} />
+     <EuiIcon className="target-status-icon" type="checkInCircleFilled" color="success" />
    )
  }
 
  return (
-   <EuiIcon className="target-status-icon"  type="crossInACircleFilled" color={"danger"} />
+   <EuiIcon className="target-status-icon" type="crossInACircleFilled" color="danger" />
  )
 }
 
@@ -176,7 +170,7 @@ function TargetCard(props: TargetCardProps) {
                </p>
              </EuiText>
            </EuiFlexItem>
-           <EuiFlexItem className={"target-card-status-text"} grow={false}>
+           <EuiFlexItem className={"target-card__status-text"} grow={false}>
              <EuiText size="xs">
                <p>
                  {TargetCardStatusText(props.target)}
@@ -185,9 +179,9 @@ function TargetCard(props: TargetCardProps) {
            </EuiFlexItem>
          </EuiFlexGroup>
        </EuiFlexGroup>
-       <EuiFlexItem style={{marginLeft: "auto"}} grow={false}>
+       <EuiFlexItem className="target-card__link" grow={false}>
          <EuiCustomLink to={`${props.basePath}/${props.target.target}`}>
-           {LocalizedText.singleton.goToTargetHealthChecksButtonMessage} <EuiIcon type={"sortRight"} />
+           {LocalizedText.singleton.goToTargetHealthChecksButtonMessage} <EuiIcon type="sortRight" />
          </EuiCustomLink>
        </EuiFlexItem>
      </EuiFlexGroup>

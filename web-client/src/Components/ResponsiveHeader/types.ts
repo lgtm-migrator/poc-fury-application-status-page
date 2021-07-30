@@ -7,4 +7,5 @@
 export interface ResponsiveHeaderProps {
   context: any
   pageName?: string
+  standalone?: boolean
 }

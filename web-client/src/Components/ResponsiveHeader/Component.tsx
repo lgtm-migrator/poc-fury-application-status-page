@@ -10,6 +10,7 @@ import {
   EuiText,
   EuiTitle,
   EuiHeader,
+  EuiSpacer,
   EuiHideFor,
   EuiShowFor,
   EuiHeaderSectionItem,
@@ -18,29 +19,21 @@ import { ResponsiveHeaderProps } from './types';
 import { EuiCustomLink } from "../EuiCustomLink";
 import { LocalizedText } from "./LocalizedText";
 import kasperLogo from '../../Assets/kasper-logo-small.png';
-import './index.scss';
+import './Style.scss';
 
 /**
  * Responsive header 
- * @param props 
- * @returns 
+ * @param props ResponsiveHeaderProps
+ * @returns different headers based on mobile/desktop devices
  */
-export function ResponsiveHeader(props: ResponsiveHeaderProps) {
-  // TODO: add single group page handling
-  // without back button
-
-  console.log('context', props)
+export const ResponsiveHeader = (props: ResponsiveHeaderProps) => {
   return (
     <div className="kasper-header">
-      <EuiHeader position="fixed">
-        <EuiHeaderSectionItem>
-          
-          {
-            props.pageName
-            ? <EuiCustomLink to={`${props.context.basePath}/`}>
-                <EuiIcon type={"sortLeft"}/> {LocalizedText.singleton.goBack}
-              </EuiCustomLink>
-            : <>
+        {/* DESKTOP MENU */}
+        <EuiHideFor sizes={['xs', 's']}>
+          <EuiHeader position="fixed" className="kasper-header--desktop">
+            <EuiHeaderSectionItem>
+              <>
                 <EuiIcon type={kasperLogo} size="xl" />
                 <EuiText>
                   <h5>
@@ -48,25 +41,58 @@ export function ResponsiveHeader(props: ResponsiveHeaderProps) {
                   </h5>
                 </EuiText>
               </>
+            </EuiHeaderSectionItem>
+          </EuiHeader>
+          {/* Handling healthchecks page both nested and standalone */}
+          {props.pageName &&
+            <>
+              <EuiHeader position="fixed" className="sub-navigation">
+                <EuiHeaderSectionItem>
+                  {!props.standalone &&
+                    <EuiCustomLink to={`${props.context.basePath}/`}>
+                      <EuiIcon type="sortLeft" /> {LocalizedText.singleton.goBack}
+                    </EuiCustomLink>
+                  }
+                </EuiHeaderSectionItem>
+                <EuiHeaderSectionItem>
+                  <EuiTitle size="xs"><p>{props.pageName ? props.pageName : ''}</p></EuiTitle>
+                </EuiHeaderSectionItem>
+              </EuiHeader>
+              <EuiSpacer size="l" />
+              <EuiSpacer size="xl" />
+            </>
           }
-        </EuiHeaderSectionItem>
-
-        {/* DESKTOP MENU */}
-        <EuiHideFor sizes={['xs', 's']}>
-          <EuiHeaderSectionItem>
-            <EuiTitle size="xs"><p>{props.pageName ? props.pageName : ''}</p></EuiTitle>
-          </EuiHeaderSectionItem>
+          <EuiSpacer size="xxl" />
         </EuiHideFor>
         {/* DESKTOP MENU END */}
 
         {/* MOBILE MENU */}
         <EuiShowFor sizes={['xs', 's']}>
-          <EuiHeaderSectionItem>
-            <EuiTitle size="xs"><p>{props.pageName ? props.pageName : ''}</p></EuiTitle>
-          </EuiHeaderSectionItem>
+          <EuiHeader position="fixed" className="kasper-header--mobile">
+            {/* Handling healthchecks page both nested and standalone */}
+            <EuiHeaderSectionItem>  
+              {
+                !props.standalone && props.pageName
+                ? <EuiCustomLink to={`${props.context.basePath}/`}>
+                    <EuiIcon type={"sortLeft"}/> {LocalizedText.singleton.goBack}
+                  </EuiCustomLink>
+                : <>
+                    <EuiIcon type={kasperLogo} size="xl" />
+                    <EuiText>
+                      <h5>
+                        Kasper
+                      </h5>
+                    </EuiText>
+                  </>
+              }
+            </EuiHeaderSectionItem>
+            <EuiHeaderSectionItem>
+              <EuiTitle size="xs"><p>{props.pageName ? props.pageName : ''}</p></EuiTitle>
+            </EuiHeaderSectionItem>
+          </EuiHeader>
+          <EuiSpacer size="xxl" />
         </EuiShowFor>
         {/* MOBILE MENU END */}
-      </EuiHeader>
     </div>
   )
 }
