@@ -270,21 +270,5 @@ function getLastIssueDateString(status: HealthCheckStatus, lastIssue?: Moment) {
 }
 
 function getHealthCheckTimeDiffString(healthCheckTime: Moment) {
-  const diffInMinutes = (moment().utcOffset(healthCheckTime.format("Z"))).diff(healthCheckTime, "minutes");
-  const diffInHours = Math.floor(diffInMinutes / 60);
-  const minutesOfHours = diffInMinutes - diffInHours * 60;
-
-  if (diffInMinutes === 0) {
-    return LocalizedText.singleton.lastCheckIsNow;
-  }
-
-  if (diffInMinutes >= 60) {
-    if (minutesOfHours === 0) {
-      return LocalizedText.singleton.timeInHours(diffInHours);
-    }
-
-    return LocalizedText.singleton.timeInHoursAndMinutes(diffInHours, minutesOfHours);
-  }
-
-  return LocalizedText.singleton.timeInMinutes(diffInMinutes);
+ return healthCheckTime.from(moment().utc());
 }

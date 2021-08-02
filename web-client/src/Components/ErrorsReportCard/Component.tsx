@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import useErrorHandler from "../../Hooks/UseErrorHandler";
-import { LocalizedText } from "./LocalizedText";
+import {LocalizedText} from "./LocalizedText";
 import {
   EuiText,
   EuiFlexItem,
@@ -71,8 +71,8 @@ function ErrorsReportCardComponent(props: ErrorsReportCardComponentProps) {
               buttonClassName="error-card__accordion-button"
               onToggle={(isOpen) => {
                 isOpen
-                ? setAccordionOpen(true)
-                : setAccordionOpen(false)
+                  ? setAccordionOpen(true)
+                  : setAccordionOpen(false)
 
                 if (isOpen && typeof props.errorsReportChecksStore.errorsReportChecksList === 'undefined') {
                   loadList();
@@ -82,12 +82,12 @@ function ErrorsReportCardComponent(props: ErrorsReportCardComponentProps) {
             >
               {
                 isLoading
-                ?
+                  ?
                   <>
                     <EuiText textAlign="center"> {LocalizedText.singleton.loading} </EuiText>
-                    <EuiText textAlign="center"><EuiLoadingSpinner size="l" /></EuiText>
+                    <EuiText textAlign="center"><EuiLoadingSpinner size="l"/></EuiText>
                   </>
-                :
+                  :
                   <>
                     <EuiBasicTable
                       className="error-card__table"
@@ -101,16 +101,16 @@ function ErrorsReportCardComponent(props: ErrorsReportCardComponentProps) {
                       ]}
                       items={
                         props.errorsReportChecksStore.errorsReportChecksList
-                        ? props.errorsReportChecksStore.errorsReportChecksList.map((prova) => {
-                          return (
-                            {
-                              target: prova.target,
-                              checkName: prova.checkName,
-                              date: `${prova.completedAt.format('HH:mm')} UTC`
-                            }
-                          )
+                          ? props.errorsReportChecksStore.errorsReportChecksList.map((issueElem) => {
+                            return (
+                              {
+                                target: issueElem.target,
+                                checkName: issueElem.checkName,
+                                date: getRelativeTime(issueElem.completedAt)
+                              }
+                            )
                           })
-                        : []
+                          : []
                       }
                     />
                   </>
@@ -123,10 +123,22 @@ function ErrorsReportCardComponent(props: ErrorsReportCardComponentProps) {
   )
 }
 
+function getRelativeTime(healthCheckTime: moment.Moment) {
+  const currentServerTime = moment().utc();
+  const isToday = currentServerTime.diff(healthCheckTime.utc(), "days") === 0 &&
+    currentServerTime.utc().date() === healthCheckTime.utc().date();
+
+  if (isToday) {
+    return healthCheckTime.from(moment().utc());
+  }
+
+  return `${healthCheckTime.format('HH:mm')} UTC`;
+}
+
 function getTimeString(time: moment.Moment) {
   const currentServerTime = moment().utc();
 
-  switch(currentServerTime.diff(time.utc(), "days")) {
+  switch (currentServerTime.diff(time.utc(), "days")) {
     case 0:
       if (currentServerTime.utc().date() != time.utc().date()) {
         return "Yesterday"
