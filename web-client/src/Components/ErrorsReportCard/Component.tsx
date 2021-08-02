@@ -124,11 +124,9 @@ function ErrorsReportCardComponent(props: ErrorsReportCardComponentProps) {
 }
 
 function getTimeString(time: moment.Moment) {
-  // Translate NOW to server time
   const currentServerTime = moment().utc();
 
-  // console.log('days', currentServerTime.date(), time.utc().date())
-  switch(currentServerTime.diff(time, "days")) {
+  switch(currentServerTime.diff(time.utc(), "days")) {
     case 0:
       if (currentServerTime.utc().date() != time.utc().date()) {
         return "Yesterday"

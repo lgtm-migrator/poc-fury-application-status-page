@@ -6,10 +6,10 @@
 
 import {IHealthCheck, Target, TargetHealthCheck} from "../Components/types";
 import moment from "moment";
-import {ErrorsReportCheck} from "../Components/ErrorsReportCard/types";
 
 export class HealthCheckHandler {
-  constructor(private targetList: IHealthCheck[], private cascadeFailure: number = 0) {}
+  constructor(private targetList: IHealthCheck[], private cascadeFailure: number = 0) {
+  }
 
   private static getCheckNameIndexInAccumulator = (target: IHealthCheck, accumulator: TargetHealthCheck[]): number => {
     return accumulator.findIndex((checkTarget) => checkTarget.checkName === target.checkName && checkTarget.target === target.target);
@@ -64,51 +64,72 @@ export class HealthCheckHandler {
   }
 
   public groupByCheckName(): TargetHealthCheck[] {
-    return this.targetList.reduce((targetAcc, currentTarget) => {
-      const targetIndex = HealthCheckHandler.getCheckNameIndexInAccumulator(currentTarget, targetAcc);
+    return this.targetList
+      .reduce((targetAcc, currentTarget) => {
+        const targetIndex = HealthCheckHandler.getCheckNameIndexInAccumulator(currentTarget, targetAcc);
 
-      if (targetIndex === -1) {
-        const aggregatedHealthCheck: TargetHealthCheck = {
+        if (targetIndex === -1) {
+          const aggregatedHealthCheck: TargetHealthCheck = {
             status: currentTarget.status,
             checkName: currentTarget.checkName,
             target: currentTarget.target,
             lastCheck: moment(currentTarget.completedAt),
             lastIssue: currentTarget.status === "Failed" ? moment(currentTarget.completedAt) : undefined
-        };
+          };
 
-        return [...targetAcc, aggregatedHealthCheck];
-      }
+          return [...targetAcc, aggregatedHealthCheck];
+        }
 
-      targetAcc[targetIndex] = HealthCheckHandler.updateAggregatedHealthCheckData(
-        targetAcc[targetIndex],
-        currentTarget
-      );
+        targetAcc[targetIndex] = HealthCheckHandler.updateAggregatedHealthCheckData(
+          targetAcc[targetIndex],
+          currentTarget
+        );
 
-      return targetAcc;
-    }, [] as TargetHealthCheck[]);
+        return targetAcc;
+      }, [] as TargetHealthCheck[])
+      .sort(sortHealthChecksByParam("checkName"))
   }
 
   public groupByTarget(): Target[] {
     const groupedByCheckName = this.groupByCheckName();
 
-    return groupedByCheckName.reduce((targetAcc, currentTarget) => {
-      const targetIndex = HealthCheckHandler.getTargetIndexInAccumulator(currentTarget, targetAcc);
+    return groupedByCheckName
+      .reduce((targetAcc, currentTarget) => {
+        const targetIndex = HealthCheckHandler.getTargetIndexInAccumulator(currentTarget, targetAcc);
 
-      if (targetIndex === -1) {
-        const aggregatedTarget: Target = this.updateAggregatedTargetData({
-            status: currentTarget.status,
-            target: currentTarget.target,
-            failedChecks: 0,
-            totalChecks: 0
-          },
-          currentTarget
-        );
+        if (targetIndex === -1) {
+          const aggregatedTarget: Target = this.updateAggregatedTargetData({
+              status: currentTarget.status,
+              target: currentTarget.target,
+              failedChecks: 0,
+              totalChecks: 0
+            },
+            currentTarget
+          );
 
-        return [...targetAcc, aggregatedTarget];
+          return [...targetAcc, aggregatedTarget];
+        }
+
+        targetAcc[targetIndex] = this.updateAggregatedTargetData(targetAcc[targetIndex], currentTarget);
+        return targetAcc;
+      }, [] as Target[])
+      .sort(sortHealthChecksByParam("target"))
+  }
+}
+
+
+function sortHealthChecksByParam(param: "target" | "checkName") {
+  return (a: Target & TargetHealthCheck, b: Target & TargetHealthCheck) => {
+    if (a.status === "Failed" && b.status !== "Failed") return -1
+
+    if (a.status === b.status) {
+      if (a[param] < b[param]) {
+        return -1
+      } else {
+        return 1
       }
+    }
 
-      targetAcc[targetIndex] = this.updateAggregatedTargetData(targetAcc[targetIndex], currentTarget);
-      return targetAcc;
-    }, [] as Target[]);
+    return 1
   }
 }
