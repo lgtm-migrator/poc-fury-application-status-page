@@ -7,7 +7,6 @@ import (
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/sighupio/poc-fury-application-status-page/internal/config"
-	"github.com/sighupio/poc-fury-application-status-page/internal/resources"
 	"io/fs"
 	"net/http"
 )
@@ -55,10 +54,10 @@ func addRoutes(engine *gin.Engine, appConfig *config.YamlConfig, embedded embed.
 
 	api := engine.Group("/api")
 
-	api.GET("/lastChecks", resources.ListLastChecks)
-	api.GET("/lastChecksAndIssues/:targetLabel", resources.ListLastChecksAndIssuesByTarget)
-	api.GET("lastFailedChecks/day/:day", resources.FailedHealthChecksFilterByDay)
-	api.GET("lastFailedChecks", resources.FailedHealthCheckGroupByDay)
+	api.GET("/lastChecks", listLastChecks)
+	api.GET("/lastChecksAndIssues/:targetLabel", listLastChecksAndIssuesByTarget)
+	api.GET("lastFailedChecks/day/:day", failedHealthChecksFilterByDay)
+	api.GET("lastFailedChecks", failedHealthCheckGroupByDay)
 }
 
 func (e EmbedFileSystem) Exists(prefix string, path string) bool {
