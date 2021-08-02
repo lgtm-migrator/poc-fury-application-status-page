@@ -54,7 +54,11 @@ function ErrorsReportComponent(props: ErrorsReportComponentProps) {
                 props.errorsReportStore.errorsReportChecksCountList.length &&
                 <div style={{ padding: '0 16px' }}>
                   <EuiText size="m" color="subdued" textAlign="left">
-                    <i>Last {reportDays > 1 && reportDays} {`${reportDays > 1 ? 'days' : 'day'}`} report</i>
+                    <i>{
+                      reportDays > 1
+                      ? LocalizedText.singleton.errorsReportSubtitleMultiple(reportDays)
+                      : LocalizedText.singleton.errorsReportSubtitleSingle
+                    }</i>
                   </EuiText>
                   <EuiSpacer size="l" />
                 </div>

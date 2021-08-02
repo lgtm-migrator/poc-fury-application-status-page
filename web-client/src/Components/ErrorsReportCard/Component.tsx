@@ -106,7 +106,7 @@ function ErrorsReportCardComponent(props: ErrorsReportCardComponentProps) {
                             {
                               target: prova.target,
                               checkName: prova.checkName,
-                              date: prova.completedAt.format("HH:MM Z")
+                              date: `${prova.completedAt.format('HH:mm')} UTC`
                             }
                           )
                           })
@@ -124,11 +124,13 @@ function ErrorsReportCardComponent(props: ErrorsReportCardComponentProps) {
 }
 
 function getTimeString(time: moment.Moment) {
-  const currentServerTime = moment().utcOffset(time.format("Z"));
+  // Translate NOW to server time
+  const currentServerTime = moment().utc();
 
+  // console.log('days', currentServerTime.date(), time.utc().date())
   switch(currentServerTime.diff(time, "days")) {
     case 0:
-      if (currentServerTime.days() != time.days()) {
+      if (currentServerTime.utc().date() != time.utc().date()) {
         return "Yesterday"
       }
 
