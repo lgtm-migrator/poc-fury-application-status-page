@@ -14,14 +14,11 @@ import {
   EuiPageBody,
   EuiFlexItem,
   EuiFlexGroup,
-  EuiPageHeader,
   EuiPageContent,
   EuiEmptyPrompt,
   EuiLoadingSpinner,
-  EuiPageHeaderSection,
 } from "fury-design-system";
 import "./Style.scss";
-import {EuiCustomLink} from "../EuiCustomLink";
 import {LocalizedText} from "./LocalizedText";
 import moment, {Moment} from 'moment';
 import {HealthCheckStatus, TargetHealthCheck} from "../types";
@@ -57,7 +54,7 @@ function TargetHealthChecksComponent(props: TargetHealthChecksComponentProps) {
       {
         isLoading
         ? <EuiEmptyPrompt
-            title={<h4> Loading... </h4>}
+            title={<h4> {LocalizedText.singleton.loading} </h4>}
             body={<EuiLoadingSpinner size="xl" />}
           />
         : <EuiPage

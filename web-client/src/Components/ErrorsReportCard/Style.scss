@@ -5,18 +5,98 @@
  */
 
 
+// TODO: same as index.scss style and webpack file, use elastic theme correctly imported
+$euiColorLightestShade: #F5F7FA;
+$euiColorLightShade: #D3DAE6;
+$euiColorMediumShade: #98A2B3;
+$euiColorDarkShade: #69707D;
+$euiColorDarkestShade: #343741;
+
+$accordion-button-width: 90px;
 
 .error-card {
-  min-height: 40px;
+  border-bottom: 1px solid $euiColorLightShade;
+
   &__header {
     background-color: white;
+    width: 100%;
+    padding: 10px 0;
   }
+
+  &__date {
+    padding-left: 16px;
+    color: $euiColorMediumShade;
+  }
+
+  &__issues-qt {
+    margin-top: 1px;
+    padding-right: $accordion-button-width;
+  }
+
+  &__accordion-container.euiFlexItem {
+    margin: 0;
+    margin-bottom: 0 !important;
+  }
+
   &__accordion {
     position: relative;
+
     & .euiAccordion__triggerWrapper {
       position: absolute;
       right: 0;
-      top: -35px
+      top: -34px
+    }
+  }
+
+  &__accordion-button {
+    padding-right: 10px;
+    font-size: small;
+    color: #68288C;
+  }
+
+  &__table {
+    table {
+      background-color: $euiColorLightestShade;
+      border-left: 8px solid $euiColorLightestShade;
+      border-right: 8px solid $euiColorLightestShade;
+
+      .euiTableHeaderCell {
+        color: $euiColorMediumShade;
+
+        .euiTableCellContent {
+          padding: 8px 8px 0 8px;
+        }
+      }
+
+      .euiTableHeaderCell,
+      .euiTableRowCell  {
+        border: none;
+      }
+
+      th:last-child {
+        .euiTableCellContent{
+          justify-content: flex-end;
+        }
+      }
+
+      .euiTableRow:not(:last-child) {
+        border-bottom: 1px dashed $euiColorLightShade;
+      }
+
+      .euiTableRow td {
+        font-weight: 600;
+        color: $euiColorDarkShade;
+      }
+
+      .euiTableRow td:first-child .euiTableCellContent {
+        color: $euiColorDarkestShade;
+      }
+
+      .euiTableRow td:last-child .euiTableCellContent {
+        font-weight: 300;
+        font-style: italic;
+        justify-content: flex-end;
+      }
     }
   }
 }

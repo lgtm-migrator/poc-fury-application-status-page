@@ -22,8 +22,9 @@ function ErrorsReportCardContainer(props: ErrorsReportCardContainerProps) {
       {
         errorsReportChecksStore &&
         <ErrorsReportCardComponent
-            errorsReportChecksStore={errorsReportChecksStore}
-            errorHealthCheckCountByDay={props.errorHealthCheckCountByDay}
+          accordionOpen={props.accordionOpen}
+          errorsReportChecksStore={errorsReportChecksStore}
+          errorHealthCheckCountByDay={props.errorHealthCheckCountByDay}
         />
       }
     </>

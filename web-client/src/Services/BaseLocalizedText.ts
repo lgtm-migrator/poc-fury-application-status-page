@@ -45,5 +45,25 @@ export class BaseLocalizedText {
   public get goBack() {
     return this.translate('Back')
   }
+
+  public get open() {
+    return this.translate('Open')
+  }
+
+  public get close() {
+    return this.translate('Close')
+  }
+
+  public get loading() {
+    return this.translate('Loading')
+  }
+
+  public get errorsReportSubtitleSingle() {
+    return this.translate('Errors Report Subtitle Single')
+  }
+
+  public errorsReportSubtitleMultiple(reportDays: number) {
+    return this.translate('Errors Report Subtitle Multiple', {reportDays: reportDays.toString()})
+  }
   
 }
