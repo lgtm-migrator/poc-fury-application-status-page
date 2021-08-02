@@ -2,6 +2,7 @@
   "Target Status Healthy": "All {{group}} systems are fully operational",
   "Target Status Error": "There's an issue with",
   "Target Status Go To Health Checks": "see",
+
   "Target Health Checks Status Healthy": "All the {{group}} {{target}} checks are passed",
   "Target Health Checks Status Error": "{{checkNum}} check inside {{group}} {{target}} have failed for:",
   "Target Health Checks Status Error Occurred": "Occurred",
@@ -14,5 +15,13 @@
   "Target Health Checks Status Time Hours": "{{hours}} hours ago",
   "Target Health Checks Status Time Minutes": "{{minutes}} minutes ago",
   "Target Health Checks Status Time Hours And Minutes": "{{hours}} hours and {{minutes}} minutes ago",
+
+  "Errors Report": "Errors Report",
+  "Errors Report Subtitle Sigle": "Last day report",
+  "Errors Report Subtitle Multiple": "Last {{reportDays}} days report",
+
+  "Open": "open",
+  "Close": "close",
+  "Loading": "Loading...",
   "Back": "back"
 }

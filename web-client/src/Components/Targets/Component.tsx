@@ -54,7 +54,7 @@ function TargetStatusComponent(props: TargetsComponentProps) {
       {
         isLoading
           ? <EuiEmptyPrompt
-              title={<h4> Loading... </h4>}
+              title={<h4> {LocalizedText.singleton.loading} </h4>}
               body={<EuiLoadingSpinner size="xl" />}
             />
           : <EuiPage paddingSize="none" restrictWidth={true} className="target-list">
@@ -68,20 +68,18 @@ function TargetStatusComponent(props: TargetsComponentProps) {
                   grow={true}
                 >
 
-                <EuiFlexGroup direction="row" wrap>
-                  <EuiFlexItem grow={1}>
-                    <div>
-                      <EuiText color="subdued" size="s">
-                        {`${groupUIText} overview`}
-                      </EuiText>
-                    </div>
+                <EuiFlexGroup direction="row" responsive={false}>
+                  <EuiFlexItem>
+                    <EuiText color="subdued" size="s">
+                      {`${groupUIText} overview`}
+                    </EuiText>
                   </EuiFlexItem>
-                  <EuiFlexItem grow={1}>
-                    <div>
+                  <EuiFlexItem>
+                    <EuiText textAlign="right" size="s">
                       <EuiCustomLink to="/errors-report">
                         Errors Report <EuiIcon type="sortRight" />
                       </EuiCustomLink>
-                    </div>
+                    </EuiText> 
                   </EuiFlexItem>
                 </EuiFlexGroup>
 

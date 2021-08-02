@@ -23,14 +23,14 @@ export class ErrorsReportChecksStore {
       this.errorsReportChecksList = errorsReportChecksListJson.data.map((errorReportDataElem) => {
         return {
           ...errorReportDataElem,
-          completedAt: moment(errorReportDataElem.completedAt)
+          completedAt: moment(errorReportDataElem.completedAt).utc()
         }
       });
     })
   }
 
   private async fetchErrorsReportChecksListAsync(): Promise<HealthCheckResponse> {
-    const errorsReportChecks = await fetch(`${this.apiUrl}lastFailedChecks/day/${this.day.format("")}`);
+    const errorsReportChecks = await fetch(`${this.apiUrl}lastFailedChecks/day/${this.day.format("YYYY-MM-DD")}`);
 
     return await errorsReportChecks.json();
   }

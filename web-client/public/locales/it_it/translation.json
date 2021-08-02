@@ -2,6 +2,7 @@
   "Target Status Healthy": "Tutti i sistemi di {{group}} sono pienamente operativi",
   "Target Status Error": "C'è un problema con",
   "Target Status Go To Health Checks": "vai",
+
   "Target Health Checks Status Healthy": "Il sistema {{group}} {{target}} è completamente operativo",
   "Target Health Checks Status Error": "C'è un problema relativo a:",
   "Target Health Checks Status Error Occurred": "Si è verificato il",
@@ -14,5 +15,13 @@
   "Target Health Checks Status Time Hours": "{{hours}} ore fa",
   "Target Health Checks Status Time Minutes": "{{minutes}} minuti fa",
   "Target Health Checks Status Time Hours And Minutes": "{{hours}} ore e {{minutes}} minuti fa",
+
+  "Errors Report": "Report Errori",
+  "Errors Report Subtitle Sigle": "Report di ieri",
+  "Errors Report Subtitle Multiple": "Report degli ultimi {{reportDays}} giorni",
+
+  "Open": "apri",
+  "Close": "chiudi",
+  "Loading": "Caricamento...",
   "Back": "indietro"
 }

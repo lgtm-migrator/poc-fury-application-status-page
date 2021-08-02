@@ -1,12 +1,12 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import useErrorHandler from "../../Hooks/UseErrorHandler";
+import { LocalizedText } from "./LocalizedText";
 import {
   EuiText,
   EuiFlexItem,
   EuiAccordion,
   EuiFlexGroup,
   EuiBasicTable,
-  EuiEmptyPrompt,
   EuiLoadingSpinner,
 } from "fury-design-system";
 import moment from "moment";
@@ -19,6 +19,7 @@ export default observer(ErrorsReportCardComponent);
 
 function ErrorsReportCardComponent(props: ErrorsReportCardComponentProps) {
   const [error, setError] = useState<string>('');
+  const [accordionOpen, setAccordionOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useErrorHandler(error);
@@ -33,36 +34,46 @@ function ErrorsReportCardComponent(props: ErrorsReportCardComponentProps) {
       })
   }
 
+  useEffect(() => {
+    props.accordionOpen && loadList();
+  }, [props.accordionOpen])
+
   return (
     <>
       <div className="error-card">
-        <EuiFlexGroup direction="column">
-          <EuiFlexGroup direction="row" responsive={false} className="error-card__header">
-            <EuiFlexItem grow={false}>
-              <EuiText size="s" className="" textAlign="left" color="subdued">
+        <EuiFlexGroup direction="column" gutterSize="none">
+          <EuiFlexGroup direction="row" responsive={false} className="error-card__header" gutterSize="none">
+            <EuiFlexItem grow={1}>
+              <EuiText size="s" className="error-card__date" textAlign="left" color="subdued">
                 <strong>
                   {getTimeString(props.errorHealthCheckCountByDay.dayDate)}
                 </strong>
               </EuiText>
             </EuiFlexItem>
-            <EuiFlexItem grow={false}>
-              <EuiText size="s" className="" textAlign="right" color="subdued">
+            <EuiFlexItem grow={1}>
+              <EuiText size="xs" className="error-card__issues-qt" textAlign="right">
                 <strong>
                   {`${props.errorHealthCheckCountByDay.count} ISSUES`}
                 </strong>
               </EuiText>
             </EuiFlexItem>
           </EuiFlexGroup>
-          <EuiFlexItem>
+          <EuiFlexItem className="error-card__accordion-container">
             <EuiAccordion
-              // paddingSize="xs"
-              id={`${props.errorsReportChecksStore.id}.accordion`}
-              // arrowDisplay="right"
-              // initialIsOpen={true}
-              buttonContent="Open"
+              id={`${props.errorsReportChecksStore.id}-accordion`}
+              arrowDisplay="right"
+              initialIsOpen={props.accordionOpen}
+              buttonContent={accordionOpen
+                ? LocalizedText.singleton.close
+                : LocalizedText.singleton.open
+              }
               className="error-card__accordion"
               buttonClassName="error-card__accordion-button"
               onToggle={(isOpen) => {
+                isOpen
+                ? setAccordionOpen(true)
+                : setAccordionOpen(false)
+
                 if (isOpen && typeof props.errorsReportChecksStore.errorsReportChecksList === 'undefined') {
                   loadList();
                   return;
@@ -72,18 +83,21 @@ function ErrorsReportCardComponent(props: ErrorsReportCardComponentProps) {
               {
                 isLoading
                 ?
-                  <EuiEmptyPrompt
-                    title={<h4> Loading... </h4>}
-                    body={<EuiLoadingSpinner size="xl" />}
-                  />
+                  <>
+                    <EuiText textAlign="center"> {LocalizedText.singleton.loading} </EuiText>
+                    <EuiText textAlign="center"><EuiLoadingSpinner size="l" /></EuiText>
+                  </>
                 :
                   <>
                     <EuiBasicTable
+                      className="error-card__table"
+                      tableLayout="auto"
                       responsive={false}
+                      // textOnly={true}
                       columns={[
-                        {field: 'target', name: 'Service'},
-                        {field: 'checkName', name: 'check type'},
-                        {field: 'date', name: 'when'}
+                        {field: 'target', name: 'SERVICE'},
+                        {field: 'checkName', name: 'CHECK TYPE'},
+                        {field: 'date', name: 'WHEN'}
                       ]}
                       items={
                         props.errorsReportChecksStore.errorsReportChecksList
@@ -92,14 +106,13 @@ function ErrorsReportCardComponent(props: ErrorsReportCardComponentProps) {
                             {
                               target: prova.target,
                               checkName: prova.checkName,
-                              date: prova.completedAt.format("HH:MM Z")
+                              date: `${prova.completedAt.format('HH:mm')} UTC`
                             }
                           )
                           })
                         : []
                       }
-                      >
-                      </EuiBasicTable>
+                    />
                   </>
               }
             </EuiAccordion>
@@ -111,11 +124,13 @@ function ErrorsReportCardComponent(props: ErrorsReportCardComponentProps) {
 }
 
 function getTimeString(time: moment.Moment) {
-  const currentServerTime = moment().utcOffset(time.format("Z"));
+  // Translate NOW to server time
+  const currentServerTime = moment().utc();
 
+  // console.log('days', currentServerTime.date(), time.utc().date())
   switch(currentServerTime.diff(time, "days")) {
     case 0:
-      if (currentServerTime.days() != time.days()) {
+      if (currentServerTime.utc().date() != time.utc().date()) {
         return "Yesterday"
       }
 
