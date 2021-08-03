@@ -129,9 +129,18 @@ function getRelativeTime(healthCheckTime: moment.Moment) {
     currentServerTime.utc().date() === healthCheckTime.utc().date();
 
   if (isToday) {
-    return healthCheckTime.from(moment().utc());
+    // Returning diff times in hours and minutes because
+    // the momentjs .from() method does not support it together
+    const diffInMinutes = moment().utc().diff(healthCheckTime.utc(), 'minutes');
+    if (diffInMinutes > 60) {
+      const diff = moment().utc().diff(healthCheckTime.utc());
+      if (moment(diff).utc().minutes() === 0) {
+        return LocalizedText.singleton.timeInHours(moment(diff).utc().hours());
+      }
+      return LocalizedText.singleton.timeInHoursAndMinutes(moment(diff).utc().hours(), moment(diff).utc().minutes())
+    }
+    return LocalizedText.singleton.timeInMinutes(diffInMinutes);
   }
-
   return `${healthCheckTime.format('HH:mm')} UTC`;
 }
 

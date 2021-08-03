@@ -13,8 +13,8 @@
   "Target Health Checks Status Error Occurring": "OCCURRING",
   "Target Health Checks Status Error Reported": "REPORTED",
   "Target Health Checks Status Time Hours": "{{hours}} hours ago",
-  "Target Health Checks Status Time Minutes": "{{minutes}} minutes ago",
-  "Target Health Checks Status Time Hours And Minutes": "{{hours}} hours and {{minutes}} minutes ago",
+  "Target Health Checks Status Time Minutes": "{{minutes}} mins ago",
+  "Target Health Checks Status Time Hours And Minutes": "{{hours}}h and {{minutes}}m ago",
 
   "Errors Report": "Errors Report",
   "Errors Report Subtitle Sigle": "Last day report",

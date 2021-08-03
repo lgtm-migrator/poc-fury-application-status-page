@@ -14,7 +14,7 @@
   "Target Health Checks Status Error Reported": "RIPORTATO",
   "Target Health Checks Status Time Hours": "{{hours}} ore fa",
   "Target Health Checks Status Time Minutes": "{{minutes}} minuti fa",
-  "Target Health Checks Status Time Hours And Minutes": "{{hours}} ore e {{minutes}} minuti fa",
+  "Target Health Checks Status Time Hours And Minutes": "{{hours}}h e {{minutes}}m fa",
 
   "Errors Report": "Report Errori",
   "Errors Report Subtitle Sigle": "Report di ieri",
