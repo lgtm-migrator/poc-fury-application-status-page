@@ -1,63 +1,31 @@
 package server
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/sighupio/poc-fury-application-status-page/internal/config"
 	"github.com/sighupio/poc-fury-application-status-page/internal/resources"
-	"io"
-	"io/ioutil"
 	"net/http"
 )
 
 type ApiResponseHealthCheck struct {
-	Data []resources.HealthCheck `json:"data"`
-	ErrorMessage string `json:"errorMessage"`
+	Data         resources.HealthChecks `json:"data"`
+	ErrorMessage string                 `json:"errorMessage"`
 }
 
 func listLastChecks(c *gin.Context) {
-	cfg, ok := c.MustGet("config").(config.YamlConfig)
-
-	if !ok {
-		c.JSON(http.StatusInternalServerError, &ApiResponseHealthCheck{ErrorMessage: "cannot read config file"})
-		return
-	}
-
-	remoteApiUrl := fmt.Sprintf("%s/group/%s", cfg.ApiUrl, cfg.GroupLabel)
-
-	resp, err := http.Get(remoteApiUrl)
+	healthChecks, err := remoteDataGet(c, &RequestConfig{
+		ConfigError:        "Cannot read config yaml file",
+		RemoteRequestError: "Cannot get list, reason: ",
+		BodyCloseError:     "IO error on get list, reason: ",
+		BodyParseError:     "Cannot read content on get list, reason: ",
+		JsonParseError:     "Cannot convert data to JSON, reason: ",
+	})
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, &ApiResponseHealthCheck{ErrorMessage: "cannot get list"})
+		c.JSON(http.StatusInternalServerError, &ApiResponseHealthCheck{ErrorMessage: err.Error()})
 		return
 	}
 
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, &ApiResponseHealthCheck{ErrorMessage: "IO error on get list"})
-			return
-		}
-	}(resp.Body)
-
-	body, err := ioutil.ReadAll(resp.Body)
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, &ApiResponseHealthCheck{ErrorMessage: "cannot read content on get list"})
-		return
-	}
-
-	var healthChecks []resources.HealthCheck
-
-	err = json.Unmarshal(body, &healthChecks)
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, &ApiResponseHealthCheck{ErrorMessage: "cannot convert to json"})
-		return
-	}
-
-	resultHealthChecks, err := resources.FilterHealthChecksByCheckNameTarget(&healthChecks)
+	resultHealthChecks, err := healthChecks.FilterByCheckNameTarget()
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, &ApiResponseHealthCheck{ErrorMessage: err.Error()})
@@ -70,48 +38,21 @@ func listLastChecks(c *gin.Context) {
 func listLastChecksAndIssuesByTarget(c *gin.Context) {
 	targetLabel := c.Param("targetLabel")
 
-	cfg, ok := c.MustGet("config").(config.YamlConfig)
-
-	if !ok {
-		c.JSON(http.StatusInternalServerError, &ApiResponseHealthCheck{ErrorMessage: "cannot read config file"})
-		return
-	}
-
-	remoteApiUrl := fmt.Sprintf("%s/group/%s/target/%s", cfg.ApiUrl, cfg.GroupLabel, targetLabel)
-
-	resp, err := http.Get(remoteApiUrl)
+	healthChecks, err := remoteDataGet(c, &RequestConfig{
+		TargetLabel:        targetLabel,
+		ConfigError:        "Cannot read config yaml file",
+		RemoteRequestError: "Cannot get list by target, reason: ",
+		BodyCloseError:     "IO error on get list by target, reason: ",
+		BodyParseError:     "Cannot read content on get list by target, reason: ",
+		JsonParseError:     "Cannot convert data to JSON, reason: ",
+	})
 
 	if err != nil {
-		fmt.Printf("error: %s\n", err.Error())
-		c.JSON(http.StatusBadRequest, &ApiResponseHealthCheck{ErrorMessage: "cannot get list by target"})
+		c.JSON(http.StatusInternalServerError, &ApiResponseHealthCheck{ErrorMessage: err.Error()})
 		return
 	}
 
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, &ApiResponseHealthCheck{ErrorMessage: "IO error on get list by target"})
-			return
-		}
-	}(resp.Body)
-
-	body, err := ioutil.ReadAll(resp.Body)
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, &ApiResponseHealthCheck{ErrorMessage: "cannot read content on get list by target"})
-		return
-	}
-
-	var healthChecks []resources.HealthCheck
-
-	err = json.Unmarshal(body, &healthChecks)
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, &ApiResponseHealthCheck{ErrorMessage: "cannot convert to json"})
-		return
-	}
-
-	resultHealthChecks, err := resources.FilterHealthChecksByCheckNameTargetStatus(&healthChecks)
+	resultHealthChecks, err := healthChecks.FilterByCheckNameTargetStatus()
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, &ApiResponseHealthCheck{ErrorMessage: err.Error()})
