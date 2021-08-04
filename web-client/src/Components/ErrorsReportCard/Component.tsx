@@ -36,6 +36,7 @@ function ErrorsReportCardComponent(props: ErrorsReportCardComponentProps) {
 
   useEffect(() => {
     props.accordionOpen && loadList();
+    props.accordionOpen && setAccordionOpen(true);
   }, [props.accordionOpen])
 
   return (
