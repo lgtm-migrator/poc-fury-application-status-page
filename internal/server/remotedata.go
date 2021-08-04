@@ -6,14 +6,17 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"github.com/sighupio/poc-fury-application-status-page/internal/config"
+	"github.com/sighupio/poc-fury-application-status-page/internal/mocks"
 	"github.com/sighupio/poc-fury-application-status-page/internal/resources"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/http/httptest"
 )
 
 type RequestConfig struct {
 	TargetLabel        string
+	MockedScenario     string
 	FailedFilter       bool
 	ConfigError        string
 	RemoteRequestError string
@@ -32,17 +35,7 @@ func remoteDataGet(c *gin.Context, r *RequestConfig) (resources.HealthChecks, er
 		return healthChecks, errors.New(r.ConfigError)
 	}
 
-	remoteApiUrl := fmt.Sprintf("%s/group/%s", cfg.ApiUrl, cfg.GroupLabel)
-
-	if r.TargetLabel != "" {
-		remoteApiUrl = fmt.Sprintf("%s/group/%s/target/%s", cfg.ApiUrl, cfg.GroupLabel, r.TargetLabel)
-	}
-
-	if r.FailedFilter {
-		remoteApiUrl = fmt.Sprintf("%s/group/%s?status=Failed&limit=500", cfg.ApiUrl, cfg.GroupLabel)
-	}
-
-	resp, err := http.Get(remoteApiUrl)
+	resp, err := getFactory(cfg, r)
 
 	if err != nil {
 		return healthChecks, errors.New(r.RemoteRequestError + err.Error())
@@ -68,4 +61,34 @@ func remoteDataGet(c *gin.Context, r *RequestConfig) (resources.HealthChecks, er
 	}
 
 	return healthChecks, bodyCloseErr
+}
+
+func getFactory(cfg config.YamlConfig, r *RequestConfig) (resp *http.Response, err error) {
+	if r.TargetLabel != "" {
+		remoteApiUrl := fmt.Sprintf("%s/group/%s/target/%s", cfg.ApiUrl, cfg.GroupLabel, r.TargetLabel)
+		return getMockOrRemote(remoteApiUrl, mocks.MockGroupTarget, cfg.Mocked, r.MockedScenario)
+	}
+
+	if r.FailedFilter {
+		remoteApiUrl := fmt.Sprintf("%s/group/%s?status=Failed&limit=500", cfg.ApiUrl, cfg.GroupLabel)
+		return getMockOrRemote(remoteApiUrl, mocks.MockFailedGroup, cfg.Mocked, r.MockedScenario)
+	}
+
+	remoteApiUrl := fmt.Sprintf("%s/group/%s", cfg.ApiUrl, cfg.GroupLabel)
+	return getMockOrRemote(remoteApiUrl, mocks.MockGroup, cfg.Mocked, r.MockedScenario)
+}
+
+func getMockOrRemote(remoteApiUrl string, mockFunc mocks.MockFunc, isMocked bool, mockedScenario string) (resp *http.Response, err error) {
+	if isMocked {
+		mockedData := mockFunc(mocks.MockScenarioFactory(mockedScenario))
+
+		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			json.NewEncoder(w).Encode(mockedData)
+		}))
+		defer ts.Close()
+
+		remoteApiUrl = ts.URL
+	}
+
+	return http.Get(remoteApiUrl)
 }

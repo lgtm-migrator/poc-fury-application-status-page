@@ -12,9 +12,12 @@ type ApiResponseHealthCheckGroupedByDay struct {
 }
 
 func failedHealthCheckGroupByDay(c *gin.Context) {
+	mockedScenario := c.Query("mockedScenario")
+
 	healthChecks, err := remoteDataGet(c, &RequestConfig{
 		FailedFilter:       true,
 		ConfigError:        "Cannot read config yaml file",
+		MockedScenario:     mockedScenario,
 		RemoteRequestError: "Cannot get grouped by day list, reason: ",
 		BodyCloseError:     "IO error on get grouped by day list, reason: ",
 		BodyParseError:     "Cannot read content on get grouped by day list, reason: ",
@@ -37,11 +40,13 @@ func failedHealthCheckGroupByDay(c *gin.Context) {
 }
 
 func failedHealthChecksFilterByDay(c *gin.Context) {
+	mockedScenario := c.Query("mockedScenario")
 	paramsDay := c.Param("day")
 
 	healthChecks, err := remoteDataGet(c, &RequestConfig{
 		FailedFilter:       true,
 		ConfigError:        "Cannot read config yaml file",
+		MockedScenario:     mockedScenario,
 		RemoteRequestError: "Cannot get filter by day list, reason: ",
 		BodyCloseError:     "IO error on get filter by day list, reason: ",
 		BodyParseError:     "Cannot read content on get filter by day list, reason: ",
