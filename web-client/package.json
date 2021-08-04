@@ -52,7 +52,7 @@
   },
   "scripts": {
     "build": "webpack --mode production --config=webpack.dev.config.js",
-    "build-mocked": "webpack --mode production --config webpack.dev.config.js --env from_yaml=true --env config_path=../config.yml --env offline=true",
+    "build-mocked": "webpack --mode production --config webpack.dev.config.js --env offline=true",
     "test": "yarn jest --watch",
     "webpack-dev": "webpack serve --config=webpack.dev.config.js",
     "dev-base": "webpack serve --config webpack.dev.config.js --env from_yaml=true --env config_path=../config.yml",

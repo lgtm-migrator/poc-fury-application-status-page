@@ -87,31 +87,7 @@ async function fetchConfigFromEnvOrBackendAsync(): Promise<Config> {
   const apiPath: string = process.env.API_PATH ?? "/";
   const serverBasePath: string = process.env.SERVER_BASE_PATH ?? '';
 
-  // INFO: Allow local development without backend server
-  if (process.env.SERVER_OFFLINE === 'true') {
-    return getConfigFromProcessEnv(serverBasePath, apiPath);
-  }
-
   return await getConfigFromBackend(serverBasePath, apiPath);
-}
-
-function getConfigFromProcessEnv(serverBasePath: string, apiPath: string): Config {
-  if (!process.env.GROUP_LABEL) {
-    throw new Error('Missing GROUP_LABEL from process.env');
-  }
-
-  if (typeof process.env.CASCADE_FAILURE === 'undefined') {
-    throw new Error('Missing CASCADE_FAILURE from process.env');
-  }
-
-  return {
-    apiUrl: `${serverBasePath}${apiPath}`,
-    groupLabel: process.env.GROUP_LABEL,
-    groupTitle: process.env.GROUP_TITLE,
-    cascadeFailure: Number(process.env.CASCADE_FAILURE),
-    targetLabel: process.env.TARGET_LABEL,
-    targetTitle: process.env.TARGET_TITLE
-  }
 }
 
 async function getConfigFromBackend(serverBasePath: string, apiPath: string): Promise<Config> {
@@ -129,7 +105,7 @@ async function getConfigFromBackend(serverBasePath: string, apiPath: string): Pr
 }
 
 function injectMockServer() {
-  if (process.env.APP_ENV === "development") {
+  if (process.env.SERVER_OFFLINE === "true") {
     logger.info('creating mock server')
     return makeServer(
       { environment: "development" },

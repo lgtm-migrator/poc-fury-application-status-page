@@ -25,7 +25,7 @@ export function getRoutes(urlPrefix: string, apiPath?: string) {
          apiVersion: "",
          groupLabel: "BookInfo",
          groupTitle: "Book Info Application",
-         cascadeFailure: 0,
+         cascadeFailure: 1,
          targetLabel: "",
          targetTitle: "",
          appEnv: "development",

@@ -79,5 +79,5 @@ function getIsMocked(stateHandler: StateManager<IStateHandler>): boolean {
     return stateHandler.getMocked();
   }
 
-  return process.env.APP_ENV === "development";
+  return process.env.SERVER_OFFLINE === "true";
 }
