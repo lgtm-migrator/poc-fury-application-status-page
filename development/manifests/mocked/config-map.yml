@@ -12,6 +12,7 @@ data:
     apiUrl: http://fip-job-status-api.demo-app.localdomain
     groupLabel: 'BookInfo'
     cascadeFailure: 1
+    mocked: true
 kind: ConfigMap
 metadata:
   name: fury-application-status-mocked-config-file

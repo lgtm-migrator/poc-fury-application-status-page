@@ -66,21 +66,29 @@ func remoteDataGet(c *gin.Context, r *RequestConfig) (resources.HealthChecks, er
 func getFactory(cfg config.YamlConfig, r *RequestConfig) (resp *http.Response, err error) {
 	if r.TargetLabel != "" {
 		remoteApiUrl := fmt.Sprintf("%s/group/%s/target/%s", cfg.ApiUrl, cfg.GroupLabel, r.TargetLabel)
-		return getMockOrRemote(remoteApiUrl, mocks.MockGroupTarget, cfg.Mocked, r.MockedScenario)
+		return getMockOrRemote(remoteApiUrl, cfg.Mocked, mocks.CreationData{
+			MockedScenario:     r.MockedScenario,
+			MockedTargetLabel:  r.TargetLabel,
+		})
 	}
 
 	if r.FailedFilter {
 		remoteApiUrl := fmt.Sprintf("%s/group/%s?status=Failed&limit=500", cfg.ApiUrl, cfg.GroupLabel)
-		return getMockOrRemote(remoteApiUrl, mocks.MockFailedGroup, cfg.Mocked, r.MockedScenario)
+		return getMockOrRemote(remoteApiUrl, cfg.Mocked, mocks.CreationData{
+			MockedScenario:     r.MockedScenario,
+			MockedFailedStatus: true,
+		})
 	}
 
 	remoteApiUrl := fmt.Sprintf("%s/group/%s", cfg.ApiUrl, cfg.GroupLabel)
-	return getMockOrRemote(remoteApiUrl, mocks.MockGroup, cfg.Mocked, r.MockedScenario)
+	return getMockOrRemote(remoteApiUrl, cfg.Mocked, mocks.CreationData{
+		MockedScenario:     r.MockedScenario,
+	})
 }
 
-func getMockOrRemote(remoteApiUrl string, mockFunc mocks.MockFunc, isMocked bool, mockedScenario string) (resp *http.Response, err error) {
+func getMockOrRemote(remoteApiUrl string, isMocked bool, mocksCreationData mocks.CreationData) (resp *http.Response, err error) {
 	if isMocked {
-		mockedData := mockFunc(mocks.MockScenarioFactory(mockedScenario))
+		mockedData := mocks.MockScenarioDataFactory(mocksCreationData)
 
 		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode(mockedData)

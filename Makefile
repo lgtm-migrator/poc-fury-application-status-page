@@ -25,7 +25,7 @@ ui: require-yarn
 
 ## test-e2e-local: Runs e2e test on the local machine
 .PHONY: test-e2e-local
-test-e2e-local: docker-build-mocked
+test-e2e-local: docker-build
 	@./development/e2e-up.sh
 
 ## test-e2e-local-down: Tears down the e2e environment once the tests are done

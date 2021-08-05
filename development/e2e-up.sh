@@ -7,7 +7,7 @@ set -e
 
 kind create cluster --config=./development/kind-config.yml --kubeconfig=./.kubeconfig
 
-kind load docker-image registry.sighup.io/poc/fury-application-status:mocked
+kind load docker-image registry.sighup.io/poc/fury-application-status:latest
 
 source ./development/.env-cluster
 

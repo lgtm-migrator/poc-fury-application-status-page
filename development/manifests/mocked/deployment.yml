@@ -20,7 +20,7 @@ spec:
         app: fury-application-status-mocked
     spec:
       containers:
-        - image: registry.sighup.io/poc/fury-application-status:mocked
+        - image: registry.sighup.io/poc/fury-application-status:latest
           name: fury-application-status-mocked
           imagePullPolicy: Never
           ports:
