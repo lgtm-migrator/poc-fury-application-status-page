@@ -19,6 +19,8 @@
   "Errors Report": "Errors Report",
   "Errors Report Subtitle Sigle": "Last day report",
   "Errors Report Subtitle Multiple": "Last {{reportDays}} days report",
+  "Errors Report No Outages Title": "No failures here!",
+  "Errors Report No Outages SubTitle": "No outages reported",
 
   "Open": "open",
   "Close": "close",

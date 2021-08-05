@@ -19,6 +19,8 @@
   "Errors Report": "Report Errori",
   "Errors Report Subtitle Sigle": "Report di ieri",
   "Errors Report Subtitle Multiple": "Report degli ultimi {{reportDays}} giorni",
+  "Errors Report No Outages Title": "Nessun problema rilevato!",
+  "Errors Report No Outages SubTitle": "Non ci sono report",
 
   "Open": "apri",
   "Close": "chiudi",
