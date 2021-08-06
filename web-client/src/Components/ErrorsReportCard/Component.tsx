@@ -147,17 +147,20 @@ function getRelativeTime(healthCheckTime: moment.Moment) {
 
 function getTimeString(time: moment.Moment) {
   const currentServerTime = moment().utc();
-
   switch (currentServerTime.diff(time.utc(), "days")) {
     case 0:
-      if (currentServerTime.utc().date() != time.utc().date()) {
+      if (currentServerTime.date() != time.utc().date()) {
         return "Yesterday"
       }
 
       return "Today";
     case 1:
-      return "Yesterday";
+      if (currentServerTime.subtract(1, "days").date() === time.utc().date()) {
+         return "Yesterday";
+      }
+
+      return time.format("Do MMMM");
     default:
-      return time.format("Do MMMM")
+      return time.format("Do MMMM");
   }
 }

@@ -141,13 +141,6 @@ func createScenario3Data() []resources.HealthCheck {
 
 	mockedData := flattenMockedData(&unflattenedData, numOfChecks)
 
-	sort.SliceStable(mockedData, func(i, j int) bool {
-		parsedFirstTime, _ := time.Parse(time.RFC3339, mockedData[i].CompletedAt)
-		parsedSecondTime, _ := time.Parse(time.RFC3339, mockedData[j].CompletedAt)
-
-		return parsedFirstTime.After(parsedSecondTime)
-	})
-
 	return mockedData
 }
 
@@ -160,7 +153,17 @@ func flattenMockedData(unflattenedData *[][]resources.HealthCheck, numOfChecks i
 		cursor += copy(mockedData[cursor:], s)
 	}
 
+	sortByCompletedAt(&mockedData)
+
 	return mockedData
+}
+
+func sortByCompletedAt(dataToSort *[]resources.HealthCheck) {
+	sort.SliceStable((*dataToSort)[:], func(i, j int) bool {
+		parsedFirstTime, _ := time.Parse(time.RFC3339, (*dataToSort)[i].CompletedAt)
+		parsedSecondTime, _ := time.Parse(time.RFC3339, (*dataToSort)[j].CompletedAt)
+		return parsedFirstTime.After(parsedSecondTime)
+	})
 }
 
 func mockChecks(target Target, num int, startTime time.Time, status Status, checkName CheckType, frequency int) ([]resources.HealthCheck, error) {
