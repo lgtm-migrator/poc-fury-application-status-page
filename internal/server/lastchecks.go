@@ -14,7 +14,7 @@ type ApiResponseHealthCheck struct {
 func listLastChecks(c *gin.Context) {
 	mockedScenario := c.Query("mockedScenario")
 
-	healthChecks, err := RemoteDataGet(c, &RequestConfig{
+	healthChecks, err := resources.RemoteDataGet(c, &resources.RequestConfig{
 		ConfigError:        "Cannot read config yaml file",
 		MockedScenario:     mockedScenario,
 		RemoteRequestError: "Cannot get list, reason: ",
@@ -42,7 +42,7 @@ func listLastChecksAndIssuesByTarget(c *gin.Context) {
 	targetLabel := c.Param("targetLabel")
 	mockedScenario := c.Query("mockedScenario")
 
-	healthChecks, err := RemoteDataGet(c, &RequestConfig{
+	healthChecks, err := resources.RemoteDataGet(c, &resources.RequestConfig{
 		TargetLabel:        targetLabel,
 		ConfigError:        "Cannot read config yaml file",
 		MockedScenario:     mockedScenario,

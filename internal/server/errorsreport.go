@@ -14,7 +14,7 @@ type ApiResponseHealthCheckGroupedByDay struct {
 func failedHealthCheckGroupByDay(c *gin.Context) {
 	mockedScenario := c.Query("mockedScenario")
 
-	healthChecks, err := RemoteDataGet(c, &RequestConfig{
+	healthChecks, err := resources.RemoteDataGet(c, &resources.RequestConfig{
 		FailedFilter:       true,
 		ConfigError:        "Cannot read config yaml file",
 		MockedScenario:     mockedScenario,
@@ -43,7 +43,7 @@ func failedHealthChecksFilterByDay(c *gin.Context) {
 	mockedScenario := c.Query("mockedScenario")
 	paramsDay := c.Param("day")
 
-	healthChecks, err := RemoteDataGet(c, &RequestConfig{
+	healthChecks, err := resources.RemoteDataGet(c, &resources.RequestConfig{
 		FailedFilter:       true,
 		ConfigError:        "Cannot read config yaml file",
 		MockedScenario:     mockedScenario,

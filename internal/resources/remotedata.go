@@ -1,4 +1,4 @@
-package server
+package resources
 
 import (
 	"encoding/json"
@@ -7,7 +7,6 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sighupio/poc-fury-application-status-page/internal/config"
 	"github.com/sighupio/poc-fury-application-status-page/internal/mocks"
-	"github.com/sighupio/poc-fury-application-status-page/internal/resources"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -25,8 +24,8 @@ type RequestConfig struct {
 	JsonParseError     string
 }
 
-func RemoteDataGet(c *gin.Context, r *RequestConfig) (resources.HealthChecks, error) {
-	var healthChecks resources.HealthChecks
+func RemoteDataGet(c *gin.Context, r *RequestConfig) (HealthChecks, error) {
+	var healthChecks HealthChecks
 	var bodyCloseErr error
 
 	cfg, ok := c.MustGet("config").(config.YamlConfig)
@@ -67,22 +66,23 @@ func getFactory(cfg config.YamlConfig, r *RequestConfig) (resp *http.Response, e
 	if r.TargetLabel != "" {
 		remoteApiUrl := fmt.Sprintf("%s/group/%s/target/%s", cfg.ApiUrl, cfg.GroupLabel, r.TargetLabel)
 		return getMockOrRemote(remoteApiUrl, cfg.Mocked, mocks.CreationData{
-			MockedScenario:     r.MockedScenario,
-			MockedTargetLabel:  r.TargetLabel,
+			MockedScenario:    r.MockedScenario,
+			MockedTargetLabel: r.TargetLabel,
 		})
 	}
+
+	url := fmt.Sprintf("%s/group/%s", cfg.ApiUrl, cfg.GroupLabel)
+	mockedFailedStatus := false
 
 	if r.FailedFilter {
-		remoteApiUrl := fmt.Sprintf("%s/group/%s?status=Failed&limit=500", cfg.ApiUrl, cfg.GroupLabel)
-		return getMockOrRemote(remoteApiUrl, cfg.Mocked, mocks.CreationData{
-			MockedScenario:     r.MockedScenario,
-			MockedFailedStatus: true,
-		})
+		url = url + "?status=Failed&limit=500"
+		mockedFailedStatus = true
 	}
 
-	remoteApiUrl := fmt.Sprintf("%s/group/%s", cfg.ApiUrl, cfg.GroupLabel)
-	return getMockOrRemote(remoteApiUrl, cfg.Mocked, mocks.CreationData{
+	return getMockOrRemote(url, cfg.Mocked, mocks.CreationData{
 		MockedScenario:     r.MockedScenario,
+		MockedTargetLabel:  r.TargetLabel,
+		MockedFailedStatus: mockedFailedStatus,
 	})
 }
 

@@ -9,10 +9,20 @@ import (
 	"github.com/sighupio/poc-fury-application-status-page/internal/config"
 	"io/fs"
 	"net/http"
+	"os"
 )
 
 type EmbedFileSystem struct {
 	http.FileSystem
+}
+
+// Exists overrides http.FileSystem method
+func (e EmbedFileSystem) Exists(prefix string, path string) bool {
+	_, err := e.Open(path)
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 func New(appConfig *config.YamlConfig, embedded embed.FS) *gin.Engine {
@@ -27,11 +37,17 @@ func New(appConfig *config.YamlConfig, embedded embed.FS) *gin.Engine {
 
 func addMiddleware(engine *gin.Engine, appConfig *config.YamlConfig) {
 	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowAllOrigins = true
+
+	if os.Getenv("SERVER_ENV") != "production" {
+		corsConfig.AllowAllOrigins = true
+	}
 
 	engine.Use(cors.New(corsConfig))
 
-	engine.Use(AppConfigMiddleware(appConfig))
+	engine.Use(func(c *gin.Context) {
+		c.Set("config", *appConfig)
+		c.Next()
+	})
 }
 
 func addRoutes(engine *gin.Engine, appConfig *config.YamlConfig, embedded embed.FS) {
@@ -58,14 +74,6 @@ func addRoutes(engine *gin.Engine, appConfig *config.YamlConfig, embedded embed.
 	api.GET("/lastChecksAndIssues/:targetLabel", listLastChecksAndIssuesByTarget)
 	api.GET("lastFailedChecks/day/:day", failedHealthChecksFilterByDay)
 	api.GET("lastFailedChecks", failedHealthCheckGroupByDay)
-}
-
-func (e EmbedFileSystem) Exists(prefix string, path string) bool {
-	_, err := e.Open(path)
-	if err != nil {
-		return false
-	}
-	return true
 }
 
 func embedFolder(fsEmbed embed.FS, targetPath string) static.ServeFileSystem {
