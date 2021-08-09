@@ -2,7 +2,7 @@ package mocks
 
 import (
 	"fmt"
-	"github.com/sighupio/poc-fury-application-status-page/internal/resources"
+	"github.com/sighupio/poc-fury-application-status-page/internal/common"
 	"sort"
 	"time"
 )
@@ -52,7 +52,7 @@ var Scenario3 = MockScenario{
 	Data:        createScenario3Data(),
 }
 
-func MockScenarioDataFactory(mockCreationData CreationData) []resources.HealthCheck {
+func MockScenarioDataFactory(mockCreationData CreationData) []common.HealthCheck {
 	scenarios := []MockScenario{
 		Scenario1,
 		Scenario2,
@@ -69,7 +69,7 @@ func MockScenarioDataFactory(mockCreationData CreationData) []resources.HealthCh
 	return Scenario1.GetMockedData(mockCreationData.MockedTargetLabel, mockCreationData.MockedFailedStatus)
 }
 
-func createScenario1Data() []resources.HealthCheck {
+func createScenario1Data() []common.HealthCheck {
 	timeNow := time.Now().UTC()
 	numOfChecks := 200
 
@@ -80,7 +80,7 @@ func createScenario1Data() []resources.HealthCheck {
 	productHttp, _ := mockChecks(Product, numOfChecks, timeNow, Complete, HTTP, 5)
 	productEp, _ := mockChecks(Product, numOfChecks, timeNow, Complete, EP, 15)
 
-	unflattenedData := [][]resources.HealthCheck{
+	unflattenedData := [][]common.HealthCheck{
 		ratingsHttp,
 		ratingsEp,
 		detailsHttp,
@@ -94,7 +94,7 @@ func createScenario1Data() []resources.HealthCheck {
 	return mockedData
 }
 
-func createScenario2Data() []resources.HealthCheck {
+func createScenario2Data() []common.HealthCheck {
 	timeNow := time.Now().UTC()
 	numOfChecks := 200
 
@@ -105,7 +105,7 @@ func createScenario2Data() []resources.HealthCheck {
 	productHttp, _ := mockChecks(Product, numOfChecks, timeNow, Failed, HTTP, 5)
 	productEp, _ := mockChecks(Product, numOfChecks, timeNow, Failed, EP, 15)
 
-	unflattenedData := [][]resources.HealthCheck{
+	unflattenedData := [][]common.HealthCheck{
 		ratingsHttp,
 		ratingsEp,
 		detailsHttp,
@@ -119,18 +119,18 @@ func createScenario2Data() []resources.HealthCheck {
 	return mockedData
 }
 
-func createScenario3Data() []resources.HealthCheck {
+func createScenario3Data() []common.HealthCheck {
 	timeNow := time.Now().UTC()
 	numOfChecks := 200
 
-	ratingsHttp, _ := mockChecks(Ratings, numOfChecks, timeNow, Complete, HTTP, 5)
-	ratingsEp, _ := mockChecks(Ratings, numOfChecks, timeNow, Failed, EP, 15)
+	ratingsHttp, _ := mockChecks(Ratings, numOfChecks, timeNow, Failed, HTTP, 5)
+	ratingsEp, _ := mockChecks(Ratings, numOfChecks, timeNow, Complete, EP, 15)
 	detailsHttp, _ := mockChecks(Details, numOfChecks, timeNow, Complete, HTTP, 5)
 	detailsEp, _ := mockChecks(Details, numOfChecks, timeNow, Complete, EP, 15)
 	productHttp, _ := mockChecks(Product, numOfChecks, timeNow, Complete, HTTP, 5)
 	productEp, _ := mockChecks(Product, numOfChecks, timeNow, Complete, EP, 15)
 
-	unflattenedData := [][]resources.HealthCheck{
+	unflattenedData := [][]common.HealthCheck{
 		ratingsHttp,
 		ratingsEp,
 		detailsHttp,
@@ -144,8 +144,8 @@ func createScenario3Data() []resources.HealthCheck {
 	return mockedData
 }
 
-func flattenMockedData(unflattenedData *[][]resources.HealthCheck, numOfChecks int) []resources.HealthCheck {
-	mockedData := make([]resources.HealthCheck, len(*unflattenedData)*numOfChecks)
+func flattenMockedData(unflattenedData *[][]common.HealthCheck, numOfChecks int) []common.HealthCheck {
+	mockedData := make([]common.HealthCheck, len(*unflattenedData)*numOfChecks)
 
 	var cursor int
 
@@ -158,7 +158,7 @@ func flattenMockedData(unflattenedData *[][]resources.HealthCheck, numOfChecks i
 	return mockedData
 }
 
-func sortByCompletedAt(dataToSort *[]resources.HealthCheck) {
+func sortByCompletedAt(dataToSort *[]common.HealthCheck) {
 	sort.SliceStable((*dataToSort)[:], func(i, j int) bool {
 		parsedFirstTime, _ := time.Parse(time.RFC3339, (*dataToSort)[i].CompletedAt)
 		parsedSecondTime, _ := time.Parse(time.RFC3339, (*dataToSort)[j].CompletedAt)
@@ -166,8 +166,8 @@ func sortByCompletedAt(dataToSort *[]resources.HealthCheck) {
 	})
 }
 
-func mockChecks(target Target, num int, startTime time.Time, status Status, checkName CheckType, frequency int) ([]resources.HealthCheck, error) {
-	resultData := make([]resources.HealthCheck, num)
+func mockChecks(target Target, num int, startTime time.Time, status Status, checkName CheckType, frequency int) ([]common.HealthCheck, error) {
+	resultData := make([]common.HealthCheck, num)
 	// in seconds
 	duration := 5
 	errorMessage := ""
@@ -192,7 +192,7 @@ func mockChecks(target Target, num int, startTime time.Time, status Status, chec
 			newCompletedAt = lastCompletedAt.Add(time.Minute * time.Duration(-frequency)).Format(time.RFC3339)
 		}
 
-		resultData[index] = resources.HealthCheck{
+		resultData[index] = common.HealthCheck{
 			Group:       "BookInfo",
 			Target:      string(target),
 			StartTime:   newStartTime,

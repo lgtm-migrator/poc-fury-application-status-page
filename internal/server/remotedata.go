@@ -25,7 +25,7 @@ type RequestConfig struct {
 	JsonParseError     string
 }
 
-func remoteDataGet(c *gin.Context, r *RequestConfig) (resources.HealthChecks, error) {
+func RemoteDataGet(c *gin.Context, r *RequestConfig) (resources.HealthChecks, error) {
 	var healthChecks resources.HealthChecks
 	var bodyCloseErr error
 

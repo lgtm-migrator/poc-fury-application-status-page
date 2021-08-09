@@ -1,16 +1,16 @@
 package mocks
 
 import (
-	"github.com/sighupio/poc-fury-application-status-page/internal/resources"
+	"github.com/sighupio/poc-fury-application-status-page/internal/common"
 )
 
 type MockScenario struct {
 	Description string
 	Id          string
-	Data        []resources.HealthCheck
+	Data        []common.HealthCheck
 }
 
-func (m *MockScenario) GetMockedData(targetLabel string, failedStatus bool) []resources.HealthCheck {
+func (m *MockScenario) GetMockedData(targetLabel string, failedStatus bool) []common.HealthCheck {
 	if targetLabel != "" {
 		return m.filterTarget(targetLabel)
 	}
@@ -22,8 +22,8 @@ func (m *MockScenario) GetMockedData(targetLabel string, failedStatus bool) []re
 	return m.Data
 }
 
-func (m *MockScenario) filterTarget(targetLabel string) []resources.HealthCheck {
-	var resultData []resources.HealthCheck
+func (m *MockScenario) filterTarget(targetLabel string) []common.HealthCheck {
+	var resultData []common.HealthCheck
 
 	for _, elem := range m.Data {
 		if elem.Target == targetLabel {
@@ -34,8 +34,8 @@ func (m *MockScenario) filterTarget(targetLabel string) []resources.HealthCheck 
 	return resultData
 }
 
-func (m *MockScenario) filterFailed() []resources.HealthCheck {
-	var resultData []resources.HealthCheck
+func (m *MockScenario) filterFailed() []common.HealthCheck {
+	var resultData []common.HealthCheck
 
 	for _, elem := range m.Data {
 		if elem.Status == "Failed" {

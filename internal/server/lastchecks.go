@@ -8,13 +8,13 @@ import (
 
 type ApiResponseHealthCheck struct {
 	Data         resources.HealthChecks `json:"data"`
-	ErrorMessage string                 `json:"errorMessage"`
+	ErrorMessage string              `json:"errorMessage"`
 }
 
 func listLastChecks(c *gin.Context) {
 	mockedScenario := c.Query("mockedScenario")
 
-	healthChecks, err := remoteDataGet(c, &RequestConfig{
+	healthChecks, err := RemoteDataGet(c, &RequestConfig{
 		ConfigError:        "Cannot read config yaml file",
 		MockedScenario:     mockedScenario,
 		RemoteRequestError: "Cannot get list, reason: ",
@@ -42,7 +42,7 @@ func listLastChecksAndIssuesByTarget(c *gin.Context) {
 	targetLabel := c.Param("targetLabel")
 	mockedScenario := c.Query("mockedScenario")
 
-	healthChecks, err := remoteDataGet(c, &RequestConfig{
+	healthChecks, err := RemoteDataGet(c, &RequestConfig{
 		TargetLabel:        targetLabel,
 		ConfigError:        "Cannot read config yaml file",
 		MockedScenario:     mockedScenario,

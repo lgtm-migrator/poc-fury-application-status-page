@@ -1,39 +1,20 @@
 package resources
 
 import (
+	"github.com/sighupio/poc-fury-application-status-page/internal/common"
 	"time"
 )
 
-type HealthCheck struct {
-	Group       string `json:"group"`
-	Target      string `json:"target"`
-	StartTime   string `json:"startTime"`
-	CompletedAt string `json:"completedAt"`
-	Duration    string `json:"duration"`
-	Status      string `json:"status"`
-	Namespace   string `json:"namespace"`
-	PodName     string `json:"podName"`
-	CheckName   string `json:"checkName"`
-	Owner       string `json:"owner"`
-	Error       string `json:"error"`
-	Frequency   int    `json:"frequency"`
-}
+type HealthChecks []common.HealthCheck
 
-type HealthCheckGroupedByDay struct {
-	DayDate string `json:"dayDate"`
-	Count   int    `json:"count"`
-}
+type HealthChecksGroupedByDay []common.HealthCheckGroupedByDay
 
-type SameDayPredicate func(time.Time, time.Time) bool
+type sameDayPredicate func(time.Time, time.Time) bool
 
-type HealthCheckFilterPredicate func(HealthCheck, HealthCheck) bool
-
-type HealthChecks []HealthCheck
-
-type HealthChecksGroupedByDay []HealthCheckGroupedByDay
+type healthCheckFilterPredicate func(common.HealthCheck, common.HealthCheck) bool
 
 func (h *HealthChecks) FilterByCheckNameTarget() (HealthChecks, error) {
-	predicate := func(a HealthCheck, b HealthCheck) bool {
+	predicate := func(a common.HealthCheck, b common.HealthCheck) bool {
 		return a.CheckName == b.CheckName && a.Target == b.Target
 	}
 
@@ -41,7 +22,7 @@ func (h *HealthChecks) FilterByCheckNameTarget() (HealthChecks, error) {
 }
 
 func (h *HealthChecks) FilterByCheckNameTargetStatus() (HealthChecks, error) {
-	predicate := func(a HealthCheck, b HealthCheck) bool {
+	predicate := func(a common.HealthCheck, b common.HealthCheck) bool {
 		return a.CheckName == b.CheckName && a.Target == b.Target && a.Status == b.Status
 	}
 
@@ -82,7 +63,7 @@ func (h *HealthChecks) GroupByDay() (HealthChecksGroupedByDay, error) {
 		}
 
 		if indexFound == -1 {
-			resultHealthChecks = append(resultHealthChecks, HealthCheckGroupedByDay{
+			resultHealthChecks = append(resultHealthChecks, common.HealthCheckGroupedByDay{
 				DayDate: healthCheck.CompletedAt,
 				Count:   1,
 			})
@@ -95,7 +76,7 @@ func (h *HealthChecks) GroupByDay() (HealthChecksGroupedByDay, error) {
 	return resultHealthChecks, nil
 }
 
-func (h *HealthChecks) filter(predicate HealthCheckFilterPredicate) (HealthChecks, error) {
+func (h *HealthChecks) filter(predicate healthCheckFilterPredicate) (HealthChecks, error) {
 	resultHealthChecks := HealthChecks{}
 
 	for _, healthCheck := range *h {
@@ -126,7 +107,7 @@ func (h *HealthChecks) filter(predicate HealthCheckFilterPredicate) (HealthCheck
 	return resultHealthChecks, nil
 }
 
-func (h *HealthChecks) findIndexByPredicate(currentHealthCheck HealthCheck, predicate HealthCheckFilterPredicate) int {
+func (h *HealthChecks) findIndexByPredicate(currentHealthCheck common.HealthCheck, predicate healthCheckFilterPredicate) int {
 	for i := range *h {
 		if predicate((*h)[i], currentHealthCheck) {
 			return i
@@ -137,8 +118,8 @@ func (h *HealthChecks) findIndexByPredicate(currentHealthCheck HealthCheck, pred
 }
 
 func (h *HealthChecksGroupedByDay) findIndexByPredicate(
-	currentHealthCheck HealthCheck,
-	predicate SameDayPredicate,
+	currentHealthCheck common.HealthCheck,
+	predicate sameDayPredicate,
 ) (int, error) {
 	for i := range *h {
 		parsedHealthCheckGroupedTime, err := time.Parse(time.RFC3339, (*h)[i].DayDate)
