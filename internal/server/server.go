@@ -6,23 +6,30 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/go-resty/resty/v2"
 	"github.com/sighupio/poc-fury-application-status-page/internal/config"
+	"github.com/sighupio/poc-fury-application-status-page/internal/resources"
 	"io/fs"
 	"net/http"
 	"os"
+)
+
+const (
+	serviceProvider = "serviceprovider"
 )
 
 type EmbedFileSystem struct {
 	http.FileSystem
 }
 
+type ServiceProvider struct {
+	RemoteDataManager *resources.RemoteDataManager
+}
+
 // Exists overrides http.FileSystem method
 func (e EmbedFileSystem) Exists(prefix string, path string) bool {
 	_, err := e.Open(path)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 func New(appConfig *config.YamlConfig, embedded embed.FS) *gin.Engine {
@@ -35,7 +42,7 @@ func New(appConfig *config.YamlConfig, embedded embed.FS) *gin.Engine {
 	return router
 }
 
-func addMiddleware(engine *gin.Engine, appConfig *config.YamlConfig) {
+func addMiddleware(engine *gin.Engine, yamlConfig *config.YamlConfig) {
 	corsConfig := cors.DefaultConfig()
 
 	if os.Getenv("SERVER_ENV") != "production" {
@@ -45,7 +52,7 @@ func addMiddleware(engine *gin.Engine, appConfig *config.YamlConfig) {
 	engine.Use(cors.New(corsConfig))
 
 	engine.Use(func(c *gin.Context) {
-		c.Set("config", *appConfig)
+		c.Set(serviceProvider, ServiceProvider{RemoteDataManager: resources.NewRemoteDataManager(resty.New(), yamlConfig)})
 		c.Next()
 	})
 }
@@ -62,16 +69,18 @@ func addRoutes(engine *gin.Engine, appConfig *config.YamlConfig, embedded embed.
 	engine.GET("/", func(c *gin.Context) {
 		c.FileFromFS("index.htm", embedFolder(embedded, "static"))
 	})
+
 	engine.Use(static.Serve("/", embedFolder(embedded, "static")))
+
 	engine.NoRoute(func(c *gin.Context) {
 		fmt.Printf("%s doesn't exists, redirect on /\n", c.Request.URL.Path)
 		c.FileFromFS("index.htm", embedFolder(embedded, "static"))
 	})
 
-	api := engine.Group("/api")
+	api := engine.Group("/api/v1")
 
-	api.GET("/lastChecks", listLastChecks)
-	api.GET("/lastChecksAndIssues/:targetLabel", listLastChecksAndIssuesByTarget)
+	api.GET("lastChecks", listLastChecks)
+	api.GET("lastChecksAndIssues/:targetLabel", listLastChecksAndIssuesByTarget)
 	api.GET("lastFailedChecks/day/:day", failedHealthChecksFilterByDay)
 	api.GET("lastFailedChecks", failedHealthCheckGroupByDay)
 }

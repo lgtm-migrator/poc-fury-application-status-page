@@ -1,102 +1,52 @@
 package resources
 
 import (
-	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/pkg/errors"
+	"github.com/go-resty/resty/v2"
 	"github.com/sighupio/poc-fury-application-status-page/internal/config"
-	"github.com/sighupio/poc-fury-application-status-page/internal/mocks"
-	"io"
-	"io/ioutil"
-	"net/http"
-	"net/http/httptest"
+	"strconv"
 )
 
-type RequestConfig struct {
-	TargetLabel        string
-	MockedScenario     string
-	FailedFilter       bool
-	ConfigError        string
-	RemoteRequestError string
-	BodyCloseError     string
-	BodyParseError     string
-	JsonParseError     string
+type Filters struct {
+	Target string
+	Failed bool
+	Limit  int
 }
 
-func RemoteDataGet(c *gin.Context, r *RequestConfig) (HealthChecks, error) {
-	var healthChecks HealthChecks
-	var bodyCloseErr error
-
-	cfg, ok := c.MustGet("config").(config.YamlConfig)
-
-	if !ok {
-		return healthChecks, errors.New(r.ConfigError)
-	}
-
-	resp, err := getFactory(cfg, r)
-
-	if err != nil {
-		return healthChecks, errors.New(r.RemoteRequestError + err.Error())
-	}
-
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			bodyCloseErr = errors.New(r.BodyCloseError + err.Error())
-		}
-	}(resp.Body)
-
-	body, err := ioutil.ReadAll(resp.Body)
-
-	if err != nil {
-		return healthChecks, errors.New(r.BodyParseError + err.Error())
-	}
-
-	err = json.Unmarshal(body, &healthChecks)
-
-	if err != nil {
-		return healthChecks, errors.New(r.JsonParseError + err.Error())
-	}
-
-	return healthChecks, bodyCloseErr
+type RemoteDataManager struct {
+	httpClient *resty.Client
+	cfg        *config.YamlConfig
 }
 
-func getFactory(cfg config.YamlConfig, r *RequestConfig) (resp *http.Response, err error) {
-	if r.TargetLabel != "" {
-		remoteApiUrl := fmt.Sprintf("%s/group/%s/target/%s", cfg.ApiUrl, cfg.GroupLabel, r.TargetLabel)
-		return getMockOrRemote(remoteApiUrl, cfg.Mocked, mocks.CreationData{
-			MockedScenario:    r.MockedScenario,
-			MockedTargetLabel: r.TargetLabel,
-		})
+func NewRemoteDataManager(client *resty.Client, yamlConfig *config.YamlConfig) *RemoteDataManager {
+
+	return &RemoteDataManager{
+		httpClient: client,
+		cfg:        yamlConfig,
 	}
-
-	url := fmt.Sprintf("%s/group/%s", cfg.ApiUrl, cfg.GroupLabel)
-	mockedFailedStatus := false
-
-	if r.FailedFilter {
-		url = url + "?status=Failed&limit=500"
-		mockedFailedStatus = true
-	}
-
-	return getMockOrRemote(url, cfg.Mocked, mocks.CreationData{
-		MockedScenario:     r.MockedScenario,
-		MockedTargetLabel:  r.TargetLabel,
-		MockedFailedStatus: mockedFailedStatus,
-	})
 }
 
-func getMockOrRemote(remoteApiUrl string, isMocked bool, mocksCreationData mocks.CreationData) (resp *http.Response, err error) {
-	if isMocked {
-		mockedData := mocks.MockScenarioDataFactory(mocksCreationData)
+func (rd *RemoteDataManager) RemoteDataGet(f *Filters) (healthChecks HealthChecks, err error) {
 
-		ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			json.NewEncoder(w).Encode(mockedData)
-		}))
-		defer ts.Close()
+	url := fmt.Sprintf("%s/group/%s", rd.cfg.ApiUrl, rd.cfg.GroupLabel)
 
-		remoteApiUrl = ts.URL
+	if f.Target != "" {
+		url = url + fmt.Sprintf("/target/%s", f.Target)
 	}
 
-	return http.Get(remoteApiUrl)
+	query := rd.httpClient.
+		R().
+		SetResult(&healthChecks)
+
+	if f.Failed {
+		query = query.SetQueryParam("status", "Failed")
+	}
+
+	if f.Limit != 0 {
+		query = query.SetQueryParam("limit", strconv.Itoa(f.Limit))
+	}
+
+	_, err = query.Get(url)
+
+	return healthChecks, err
 }

@@ -12,16 +12,9 @@ type ApiResponseHealthCheck struct {
 }
 
 func listLastChecks(c *gin.Context) {
-	mockedScenario := c.Query("mockedScenario")
+	svcProvider := c.MustGet(serviceProvider).(ServiceProvider)
 
-	healthChecks, err := resources.RemoteDataGet(c, &resources.RequestConfig{
-		ConfigError:        "Cannot read config yaml file",
-		MockedScenario:     mockedScenario,
-		RemoteRequestError: "Cannot get list, reason: ",
-		BodyCloseError:     "IO error on get list, reason: ",
-		BodyParseError:     "Cannot read content on get list, reason: ",
-		JsonParseError:     "Cannot convert data to JSON, reason: ",
-	})
+	healthChecks, err := svcProvider.RemoteDataManager.RemoteDataGet(&resources.Filters{})
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, &ApiResponseHealthCheck{ErrorMessage: err.Error()})
@@ -40,16 +33,11 @@ func listLastChecks(c *gin.Context) {
 
 func listLastChecksAndIssuesByTarget(c *gin.Context) {
 	targetLabel := c.Param("targetLabel")
-	mockedScenario := c.Query("mockedScenario")
+	svcProvider := c.MustGet(serviceProvider).(ServiceProvider)
 
-	healthChecks, err := resources.RemoteDataGet(c, &resources.RequestConfig{
-		TargetLabel:        targetLabel,
-		ConfigError:        "Cannot read config yaml file",
-		MockedScenario:     mockedScenario,
-		RemoteRequestError: "Cannot get list by target, reason: ",
-		BodyCloseError:     "IO error on get list by target, reason: ",
-		BodyParseError:     "Cannot read content on get list by target, reason: ",
-		JsonParseError:     "Cannot convert data to JSON, reason: ",
+	healthChecks, err := svcProvider.RemoteDataManager.RemoteDataGet(&resources.Filters{
+		Target: targetLabel,
+
 	})
 
 	if err != nil {
@@ -65,4 +53,5 @@ func listLastChecksAndIssuesByTarget(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, &ApiResponseHealthCheck{Data: resultHealthChecks})
+	return
 }
