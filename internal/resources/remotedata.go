@@ -7,26 +7,30 @@ import (
 	"strconv"
 )
 
-type Filters struct {
+type HealthChecksManager interface {
+	Get(f *HealthChecksFilters) (healthChecks HealthChecks, err error)
+}
+
+type HealthChecksFilters struct {
 	Target string
 	Failed bool
 	Limit  int
 }
 
-type RemoteDataManager struct {
+type remoteHealthChecksManager struct {
 	httpClient *resty.Client
 	cfg        *config.YamlConfig
 }
 
-func NewRemoteDataManager(client *resty.Client, yamlConfig *config.YamlConfig) *RemoteDataManager {
+func NewRemoteDataManager(client *resty.Client, yamlConfig *config.YamlConfig) HealthChecksManager {
 
-	return &RemoteDataManager{
+	return &remoteHealthChecksManager{
 		httpClient: client,
 		cfg:        yamlConfig,
 	}
 }
 
-func (rd *RemoteDataManager) RemoteDataGet(f *Filters) (healthChecks HealthChecks, err error) {
+func (rd *remoteHealthChecksManager) Get(f *HealthChecksFilters) (healthChecks HealthChecks, err error) {
 
 	url := fmt.Sprintf("%s/group/%s", rd.cfg.ApiUrl, rd.cfg.GroupLabel)
 

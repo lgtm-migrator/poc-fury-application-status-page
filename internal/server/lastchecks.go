@@ -14,7 +14,7 @@ type ApiResponseHealthCheck struct {
 func listLastChecks(c *gin.Context) {
 	svcProvider := c.MustGet(serviceProvider).(ServiceProvider)
 
-	healthChecks, err := svcProvider.RemoteDataManager.RemoteDataGet(&resources.Filters{})
+	healthChecks, err := svcProvider.HealthChecksManager.Get(&resources.HealthChecksFilters{})
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, &ApiResponseHealthCheck{ErrorMessage: err.Error()})
@@ -35,9 +35,8 @@ func listLastChecksAndIssuesByTarget(c *gin.Context) {
 	targetLabel := c.Param("targetLabel")
 	svcProvider := c.MustGet(serviceProvider).(ServiceProvider)
 
-	healthChecks, err := svcProvider.RemoteDataManager.RemoteDataGet(&resources.Filters{
+	healthChecks, err := svcProvider.HealthChecksManager.Get(&resources.HealthChecksFilters{
 		Target: targetLabel,
-
 	})
 
 	if err != nil {

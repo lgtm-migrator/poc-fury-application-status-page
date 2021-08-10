@@ -23,7 +23,7 @@ type EmbedFileSystem struct {
 }
 
 type ServiceProvider struct {
-	RemoteDataManager *resources.RemoteDataManager
+	HealthChecksManager resources.HealthChecksManager
 }
 
 // Exists overrides http.FileSystem method
@@ -52,7 +52,15 @@ func addMiddleware(engine *gin.Engine, yamlConfig *config.YamlConfig) {
 	engine.Use(cors.New(corsConfig))
 
 	engine.Use(func(c *gin.Context) {
-		c.Set(serviceProvider, ServiceProvider{RemoteDataManager: resources.NewRemoteDataManager(resty.New(), yamlConfig)})
+
+		client := resty.New()
+		manager := resources.NewRemoteDataManager(client, yamlConfig)
+
+		if yamlConfig.Mocked {
+			manager = resources.NewFakeDataManager(client, yamlConfig)
+		}
+
+		c.Set(serviceProvider, ServiceProvider{HealthChecksManager: manager})
 		c.Next()
 	})
 }

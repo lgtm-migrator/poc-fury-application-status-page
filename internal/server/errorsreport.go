@@ -14,7 +14,7 @@ type ApiResponseHealthCheckGroupedByDay struct {
 func failedHealthCheckGroupByDay(c *gin.Context) {
 	svcProvider := c.MustGet(serviceProvider).(ServiceProvider)
 
-	healthChecks, err := svcProvider.RemoteDataManager.RemoteDataGet(&resources.Filters{
+	healthChecks, err := svcProvider.HealthChecksManager.Get(&resources.HealthChecksFilters{
 		Failed: true,
 
 	})
@@ -38,7 +38,7 @@ func failedHealthChecksFilterByDay(c *gin.Context) {
 	paramsDay := c.Param("day")
 	svcProvider := c.MustGet(serviceProvider).(ServiceProvider)
 
-	healthChecks, err := svcProvider.RemoteDataManager.RemoteDataGet(&resources.Filters{
+	healthChecks, err := svcProvider.HealthChecksManager.Get(&resources.HealthChecksFilters{
 		Failed: true,
 	})
 
