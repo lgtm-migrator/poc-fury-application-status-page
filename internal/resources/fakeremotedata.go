@@ -1,12 +1,10 @@
 package resources
 
 import (
-	"encoding/json"
 	"github.com/go-resty/resty/v2"
+	"github.com/jarcoal/httpmock"
 	"github.com/sighupio/poc-fury-application-status-page/internal/config"
 	"github.com/sighupio/poc-fury-application-status-page/internal/mocks"
-	"net/http"
-	"net/http/httptest"
 	"os"
 )
 
@@ -17,23 +15,23 @@ type fakeHealthChecksManager struct {
 }
 
 func (rd *fakeHealthChecksManager) Get(f *HealthChecksFilters) (healthChecks HealthChecks, err error) {
+	newCreationData := rd.CreationData
+
+	newCreationData.MockedTargetLabel = f.Target
+	newCreationData.MockedFailedStatus = f.Failed
 
 	mockedData := mocks.MockScenarioDataFactory(*rd.CreationData)
 
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(mockedData)
-	}))
-
-	defer ts.Close()
-
-	cfg := rd.Config
-
-	cfg.ApiUrl = ts.URL
-
 	rm := remoteHealthChecksManager{
 		httpClient: rd.httpClient,
-		cfg:        cfg,
+		cfg:        rd.Config,
 	}
+
+	url, _ := rm.createCompleteUrlWithFilters(f)
+
+	httpmock.ActivateNonDefault(rm.httpClient.GetClient())
+	responder := httpmock.NewJsonResponderOrPanic(200, mockedData)
+	httpmock.RegisterResponder("GET", url, responder)
 
 	return rm.Get(f)
 }

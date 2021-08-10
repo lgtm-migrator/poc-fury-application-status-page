@@ -16,7 +16,7 @@ func failedHealthCheckGroupByDay(c *gin.Context) {
 
 	healthChecks, err := svcProvider.HealthChecksManager.Get(&resources.HealthChecksFilters{
 		Failed: true,
-
+		Limit: 500,
 	})
 
 	if err != nil {
@@ -40,6 +40,7 @@ func failedHealthChecksFilterByDay(c *gin.Context) {
 
 	healthChecks, err := svcProvider.HealthChecksManager.Get(&resources.HealthChecksFilters{
 		Failed: true,
+		Limit: 500,
 	})
 
 	if err != nil {

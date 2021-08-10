@@ -32,6 +32,14 @@ func NewRemoteDataManager(client *resty.Client, yamlConfig *config.YamlConfig) H
 
 func (rd *remoteHealthChecksManager) Get(f *HealthChecksFilters) (healthChecks HealthChecks, err error) {
 
+	url, query := rd.createCompleteUrlWithFilters(f)
+
+	_, err = query.SetResult(&healthChecks).Get(url)
+
+	return healthChecks, err
+}
+
+func (rd *remoteHealthChecksManager) createCompleteUrlWithFilters(f *HealthChecksFilters) (string, *resty.Request) {
 	url := fmt.Sprintf("%s/group/%s", rd.cfg.ApiUrl, rd.cfg.GroupLabel)
 
 	if f.Target != "" {
@@ -39,8 +47,7 @@ func (rd *remoteHealthChecksManager) Get(f *HealthChecksFilters) (healthChecks H
 	}
 
 	query := rd.httpClient.
-		R().
-		SetResult(&healthChecks)
+		R()
 
 	if f.Failed {
 		query = query.SetQueryParam("status", "Failed")
@@ -49,8 +56,5 @@ func (rd *remoteHealthChecksManager) Get(f *HealthChecksFilters) (healthChecks H
 	if f.Limit != 0 {
 		query = query.SetQueryParam("limit", strconv.Itoa(f.Limit))
 	}
-
-	_, err = query.Get(url)
-
-	return healthChecks, err
+	return url, query
 }
