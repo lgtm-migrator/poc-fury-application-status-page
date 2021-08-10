@@ -137,6 +137,5 @@ func TestHealthChecks_GroupByDay(t *testing.T) {
 	groupedByDay1, err := scenario1Data.GroupByDay()
 
 	assert.Nil(t, err)
-	assert.Greater(t, len(groupedByDay1), 0)
-
+	assert.Equal(t, len(groupedByDay1), 0)
 }
