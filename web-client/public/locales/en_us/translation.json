@@ -27,7 +27,11 @@
   "Errors Report No Outages Title": "No failures here!",
   "Errors Report No Outages SubTitle": "No outages reported",
   "Errors Report End Of Report": "End of the report",
-
+  
+  "Issues Number": "{{issuesNumber}} ISSUES",
+  "When": "WHEN",
+  "Check Type": "CHECK TYPE",
+  "Service": "SERVICE",
   "Open": "open",
   "Close": "close",
   "Loading": "Loading...",

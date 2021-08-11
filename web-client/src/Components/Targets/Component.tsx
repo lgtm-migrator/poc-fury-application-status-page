@@ -152,10 +152,10 @@ function TargetCardStatusIcon(status: HealthCheckStatus) {
 
 function TargetCardStatusText(target: Target) {
   if (target.failedChecks === 0) {
-    return LocalizedText.singleton.passedHealthChecks(target.totalChecks.toString());
+    return LocalizedText.singleton.passedHealthChecks(target.totalChecks);
   }
 
-  return LocalizedText.singleton.failedHealthChecks(target.failedChecks.toString(), target.totalChecks.toString());
+  return LocalizedText.singleton.failedHealthChecks(target.failedChecks, target.totalChecks);
 }
 
 function TargetCard(props: TargetCardProps) {

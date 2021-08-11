@@ -29,11 +29,11 @@ export class LocalizedText extends BaseLocalizedText {
     return this.translate('Target Status Healthy', {group: group});
   }
 
-  public passedHealthChecks(totalchecks: string) {
-    return this.translate('Target Health Checks Passed', {totalchecks: totalchecks});
+  public passedHealthChecks(totalchecks: number) {
+    return this.translate('Target Health Checks Passed', {totalchecks: totalchecks.toString()});
   }
 
-  public failedHealthChecks(failedchecks: string, totalchecks: string) {
-    return this.translate('Target Health Checks Failed', {failedchecks: failedchecks, totalchecks: totalchecks});
+  public failedHealthChecks(failedchecks: number, totalchecks: number) {
+    return this.translate('Target Health Checks Failed', {failedchecks: failedchecks.toString(), totalchecks: totalchecks.toString()});
   }
 }

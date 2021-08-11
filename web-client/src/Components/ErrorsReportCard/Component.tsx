@@ -54,7 +54,7 @@ function ErrorsReportCardComponent(props: ErrorsReportCardComponentProps) {
             <EuiFlexItem grow={1}>
               <EuiText size="xs" className="error-card__issues-qt" textAlign="right">
                 <strong>
-                  {`${props.errorHealthCheckCountByDay.count} ISSUES`}
+                  {LocalizedText.singleton.issuesNumber(props.errorHealthCheckCountByDay.count)}
                 </strong>
               </EuiText>
             </EuiFlexItem>
@@ -96,9 +96,9 @@ function ErrorsReportCardComponent(props: ErrorsReportCardComponentProps) {
                       responsive={false}
                       // textOnly={true}
                       columns={[
-                        {field: 'target', name: 'SERVICE'},
-                        {field: 'checkName', name: 'CHECK TYPE'},
-                        {field: 'date', name: 'WHEN'}
+                        {field: 'target', name: LocalizedText.singleton.service},
+                        {field: 'checkName', name: LocalizedText.singleton.checkType},
+                        {field: 'date', name: LocalizedText.singleton.when}
                       ]}
                       items={
                         props.errorsReportChecksStore.errorsReportChecksList
