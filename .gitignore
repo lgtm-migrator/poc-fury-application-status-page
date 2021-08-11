@@ -1,5 +1,7 @@
 .vagrant
 .idea
+.vscode
+__debug_bin
 vendor
 bin
 dist
