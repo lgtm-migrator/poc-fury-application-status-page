@@ -27,7 +27,11 @@
   "Errors Report No Outages Title": "Nessun problema rilevato!",
   "Errors Report No Outages SubTitle": "Non ci sono report",
   "Errors Report End Of Report": "Fine del report",
-
+  
+  "Issues Number": "{{issuesNumber}} PROBLEMI",
+  "When": "QUANDO",
+  "Check Type": "TIPOLOGIA",
+  "Service": "SERVIZIO",
   "Open": "apri",
   "Close": "chiudi",
   "Loading": "Caricamento...",

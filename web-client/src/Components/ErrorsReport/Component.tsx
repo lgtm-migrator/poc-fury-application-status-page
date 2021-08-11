@@ -13,13 +13,11 @@ import {
   EuiEmptyPrompt,
   EuiLoadingSpinner,
   EuiPage,
-  EuiFlexGroup,
   EuiSpacer,
   EuiPageBody,
   EuiText, EuiIcon
 } from "fury-design-system";
 import {ResponsiveHeader} from "../ResponsiveHeader";
-import moment from "moment";
 import {observer} from "mobx-react";
 import {ErrorsReportCard} from "../ErrorsReportCard";
 
@@ -88,7 +86,8 @@ function ErrorsReportComponent(props: ErrorsReportComponentProps) {
                         <i>{LocalizedText.singleton.endOfReport}</i>
                       </EuiText>
                       <EuiSpacer size="m"/>
-                    </> :
+                    </>
+                    :
                     <div style={{margin: 'auto auto'}}>
                       <EuiEmptyPrompt
                         title={

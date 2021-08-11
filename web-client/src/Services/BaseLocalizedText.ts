@@ -43,15 +43,27 @@ export class BaseLocalizedText {
   }
 
   public get goBack() {
-    return this.translate('Back')
+    return this.translate('Back');
   }
 
   public get open() {
-    return this.translate('Open')
+    return this.translate('Open');
   }
 
   public get close() {
-    return this.translate('Close')
+    return this.translate('Close');
+  }
+
+  public get service() {
+    return this.translate('Service');
+  }
+
+  public get checkType() {
+    return this.translate('Check Type');
+  }
+
+  public get when() {
+    return this.translate('When');
   }
 
   public get loading() {
@@ -63,11 +75,15 @@ export class BaseLocalizedText {
   }
 
   public get errorsReportSubtitleSingle() {
-    return this.translate('Errors Report Subtitle Single')
+    return this.translate('Errors Report Subtitle Single');
   }
 
   public errorsReportSubtitleMultiple(reportDays: number) {
-    return this.translate('Errors Report Subtitle Multiple', {reportDays: reportDays.toString()})
+    return this.translate('Errors Report Subtitle Multiple', {reportDays: reportDays.toString()});
+  }
+
+  public issuesNumber(issuesNumber: number) {
+    return this.translate('Issues Number', {issuesNumber: issuesNumber.toString()});
   }
   
 }
