@@ -1,8 +1,10 @@
 {
+  "Target Title": "Stato di salute di {{target}}",
   "Target Status Healthy": "Tutti i sistemi di {{group}} sono pienamente operativi",
   "Target Status Error": "C'è un problema con",
-  "Target Status Go To Health Checks": "vai",
+  "Target Status Go To Health Checks": "vedi",
 
+  "Target Health Checks": "CONTROLLI",
   "Target Health Checks Status Healthy": "Il sistema {{group}} {{target}} è completamente operativo",
   "Target Health Checks Status Error": "C'è un problema relativo a:",
   "Target Health Checks Status Error Occurred": "Si è verificato il",
@@ -14,13 +16,17 @@
   "Target Health Checks Status Error Reported": "RIPORTATO",
   "Target Health Checks Status Time Hours": "{{hours}} ore fa",
   "Target Health Checks Status Time Minutes": "{{minutes}} minuti fa",
-  "Target Health Checks Status Time Hours And Minutes": "{{hours}}h e {{minutes}}m fa",
+  "Target Health Checks Status Time Hours And Minutes": "{{hours}} h e {{minutes}} m fa",
+
+  "Target Health Checks Passed": "PASSATI TUTTI E {{totalchecks}}",
+  "Target Health Checks Failed": "FALLITI {{failedchecks}} SU {{totalchecks}}",
 
   "Errors Report": "Report Errori",
   "Errors Report Subtitle Sigle": "Report di ieri",
   "Errors Report Subtitle Multiple": "Report degli ultimi {{reportDays}} giorni",
   "Errors Report No Outages Title": "Nessun problema rilevato!",
   "Errors Report No Outages SubTitle": "Non ci sono report",
+  "Errors Report End Of Report": "Fine del report",
 
   "Open": "apri",
   "Close": "chiudi",

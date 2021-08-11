@@ -71,13 +71,13 @@ function TargetStatusComponent(props: TargetsComponentProps) {
                 <EuiFlexGroup direction="row" responsive={false}>
                   <EuiFlexItem>
                     <EuiText color="subdued" size="s">
-                      {`${groupUIText} overview`}
+                      {LocalizedText.singleton.title(groupUIText)}
                     </EuiText>
                   </EuiFlexItem>
                   <EuiFlexItem>
                     <EuiText textAlign="right" size="s">
                       <EuiCustomLink to="/errors-report">
-                        Errors Report <EuiIcon type="sortRight" />
+                        {LocalizedText.singleton.errorsReport} <EuiIcon type="sortRight" />
                       </EuiCustomLink>
                     </EuiText> 
                   </EuiFlexItem>
@@ -152,10 +152,10 @@ function TargetCardStatusIcon(status: HealthCheckStatus) {
 
 function TargetCardStatusText(target: Target) {
   if (target.failedChecks === 0) {
-    return `ALL ${target.totalChecks} PASSED`;
+    return LocalizedText.singleton.passedHealthChecks(target.totalChecks.toString());
   }
 
-  return `${target.failedChecks}/${target.totalChecks} FAILED`;
+  return LocalizedText.singleton.failedHealthChecks(target.failedChecks.toString(), target.totalChecks.toString());
 }
 
 function TargetCard(props: TargetCardProps) {
@@ -179,7 +179,7 @@ function TargetCard(props: TargetCardProps) {
            <EuiFlexItem grow={false}>
              <EuiText size="xs">
                <p>
-                 HEALTHCHECKS
+                 {LocalizedText.singleton.healthChecks}
                </p>
              </EuiText>
            </EuiFlexItem>

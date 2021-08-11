@@ -9,6 +9,10 @@ import { BaseLocalizedText } from '../../Services/BaseLocalizedText';
 export class LocalizedText extends BaseLocalizedText {
   public static singleton = new LocalizedText();
 
+  public get endOfReport() {
+    return this.translate('Errors Report End Of Report');
+  }
+
   public get noOutagesTitle() {
     return this.translate('Errors Report No Outages Title');
   }

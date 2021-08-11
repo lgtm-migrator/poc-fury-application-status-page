@@ -85,7 +85,7 @@ function ErrorsReportComponent(props: ErrorsReportComponentProps) {
                       }
                       <EuiSpacer size="m"/>
                       <EuiText size="s" color="subdued" textAlign="center">
-                        <i>End of the report</i>
+                        <i>{LocalizedText.singleton.endOfReport}</i>
                       </EuiText>
                       <EuiSpacer size="m"/>
                     </> :

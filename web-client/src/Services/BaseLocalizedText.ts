@@ -58,6 +58,10 @@ export class BaseLocalizedText {
     return this.translate('Loading')
   }
 
+  public get errorsReport() {
+    return this.translate('Errors Report');
+  }
+
   public get errorsReportSubtitleSingle() {
     return this.translate('Errors Report Subtitle Single')
   }

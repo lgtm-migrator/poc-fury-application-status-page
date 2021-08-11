@@ -21,7 +21,7 @@ export function createStateHandler(): StateManager<IStateHandler> {
       cascadefailure: 0,
       grouplabel: ''
     },
-    defaultLanguage: "EN",
+    defaultLanguage: "IT",
     moduleName: moduleKey,
   });
 

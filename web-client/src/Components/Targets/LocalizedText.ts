@@ -9,6 +9,14 @@ import { BaseLocalizedText } from '../../Services/BaseLocalizedText';
 export class LocalizedText extends BaseLocalizedText {
   public static singleton = new LocalizedText();
 
+  public title(target: string) {
+    return this.translate('Target Title', {target: target});
+  }
+
+  public get healthChecks() {
+    return this.translate('Target Health Checks')
+  }
+
   public get errorStatusMessage() {
     return this.translate('Target Status Error');
   }
@@ -19,5 +27,13 @@ export class LocalizedText extends BaseLocalizedText {
 
   public healthyStatusMessage(group: string) {
     return this.translate('Target Status Healthy', {group: group});
+  }
+
+  public passedHealthChecks(totalchecks: string) {
+    return this.translate('Target Health Checks Passed', {totalchecks: totalchecks});
+  }
+
+  public failedHealthChecks(failedchecks: string, totalchecks: string) {
+    return this.translate('Target Health Checks Failed', {failedchecks: failedchecks, totalchecks: totalchecks});
   }
 }
