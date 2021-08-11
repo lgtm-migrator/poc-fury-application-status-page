@@ -20,7 +20,7 @@ func (rd *fakeHealthChecksManager) Get(f *HealthChecksFilters) (healthChecks Hea
 	newCreationData.MockedTargetLabel = f.Target
 	newCreationData.MockedFailedStatus = f.Failed
 
-	mockedData := mocks.MockScenarioDataFactory(*rd.CreationData)
+	mockedData := mocks.MockScenarioDataFactory(*newCreationData)
 
 	rm := remoteHealthChecksManager{
 		httpClient: rd.httpClient,
