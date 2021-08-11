@@ -11,6 +11,8 @@ metadata:
   namespace: fury-application-status
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: fury-application-status-mocked
@@ -25,6 +27,12 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
           volumeMounts:
             - mountPath: /app/config.yml
               name: details-config-file

@@ -51,7 +51,6 @@ docker-build-mocked:
 # port-forward: Connect port 8000 to pod fury-application-status
 .PHONY: port-forward
 port-forward:
-	@kubectl wait -n fury-application-status --for=condition=ready pod --all
 	@kubectl port-forward svc/fury-application-status-mocked 8000:8080 --namespace fury-application-status
 
 ## docker-build: Build docker images

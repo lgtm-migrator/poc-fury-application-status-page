@@ -15,22 +15,32 @@ make seed
 
 sleep 5
 
+kubectl wait -n fury-application-status --for=condition=ready pod --all
+
 make port-forward &
 
-cd e2e-test && yarn install && yarn test --headless --spec cypress/integration/fury-application-status-scenario-1_spec.js
+yarn --cwd ./e2e-test install && yarn --cwd ./e2e-test test --headless --spec cypress/integration/fury-application-status-scenario-1_spec.js
 
 kubectl set env -n fury-application-status deployment/fury-application-status-mocked FAKE_SCENARIO_ID=Scenario2
 
 pgrep kubectl | xargs kill -9
 
+sleep 5
+
+kubectl wait -n fury-application-status --for=condition=ready pod --all
+
 make port-forward &
 
-yarn test --headless --spec cypress/integration/fury-application-status-scenario-2_spec.js
+yarn --cwd ./e2e-test test --headless --spec cypress/integration/fury-application-status-scenario-2_spec.js
 
 kubectl set env -n fury-application-status deployment/fury-application-status-mocked FAKE_SCENARIO_ID=Scenario3
 
 pgrep kubectl | xargs kill -9
 
+sleep 5
+
+kubectl wait -n fury-application-status --for=condition=ready pod --all
+
 make port-forward &
 
-yarn test --headless --spec cypress/integration/fury-application-status-scenario-2_spec.js
+yarn --cwd ./e2e-test test --headless --spec cypress/integration/fury-application-status-scenario-3_spec.js

@@ -85,6 +85,10 @@ func addRoutes(engine *gin.Engine, appConfig *config.YamlConfig, embedded embed.
 		c.FileFromFS("index.htm", embedFolder(embedded, "static"))
 	})
 
+	engine.GET("/readiness", func(c *gin.Context) {
+		c.String(http.StatusOK, "OK\n")
+	})
+
 	api := engine.Group("/api/v1")
 
 	api.GET("lastChecks", listLastChecks)
