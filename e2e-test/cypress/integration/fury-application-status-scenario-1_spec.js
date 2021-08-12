@@ -7,12 +7,8 @@
 /// <reference types="cypress" />
 /// <reference types="@types/testing-library__cypress" />
 
-import {interceptAndMockToScenario} from "../utils";
-
 describe("E2E TEST - SCENARIO 1", () => {
     const scenario = "Scenario1";
-
-    before(() => interceptAndMockToScenario(scenario))
 
     it("TARGETS PAGE", function() {
         cy.visit(Cypress.env("BASE_URL"));

@@ -23,6 +23,12 @@ spec:
           image: registry.sighup.io/poc/fury-application-status
           ports:
             - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
           volumeMounts:
             - name: master-config-file
               mountPath: /app/config.yml
