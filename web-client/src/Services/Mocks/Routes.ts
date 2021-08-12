@@ -36,7 +36,7 @@ export function getRoutes(urlPrefix: string, apiPath?: string) {
    // We defined a namespace here, if present it'll get prefixed to every route
    // EX: 'list' becomes '/api/v0/list'
    if (apiPath) {
-     this.namespace = "/api/";
+     this.namespace = "/api/v1/";
    }
 
    this.get('lastChecks', (schema: MockedSchema) => {

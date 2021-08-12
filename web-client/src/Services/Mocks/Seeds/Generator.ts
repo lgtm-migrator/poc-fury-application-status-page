@@ -27,7 +27,7 @@ function generateSeedFromScenario(scenarioData: MockedHealthCheck[]) {
   }
 }
 
-export function seedsFactory(scenario: MocksScenario) {
+export function seedsGenerator(scenario: MocksScenario) {
   switch (scenario) {
     case MocksScenario.scenario1:
       return generateSeedFromScenario(scenarioOneData);

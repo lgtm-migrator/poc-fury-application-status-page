@@ -8,7 +8,7 @@ import {makeServer} from "../../Services/Mocks/MakeServer";
 import {MockedServerBaseFactories, MockedServerBaseModels, MocksScenario} from "../../Services/Mocks/types";
 import {Server} from "miragejs/server";
 import {Registry} from "miragejs/-types";
-import {seedsFactory} from "../../Services/Mocks/Seeds/Factory";
+import {seedsGenerator} from "../../Services/Mocks/Seeds/Generator";
 import {Target, TargetHealthCheck} from "../../Components/types";
 import {getAllHealthChecksByGroup, getAllHealthChecksByGroupAndTarget} from "../../Services/Mocks/IO";
 import {HealthCheckHandler} from "../../Services/HealthCheckHandler";
@@ -27,7 +27,7 @@ describe("HealthCheckHandler - scenario 1", () => {
       "/"
     )
 
-    seedsFactory(MocksScenario.scenario1)(server);
+    seedsGenerator(MocksScenario.scenario1)(server);
   })
 
   afterEach(() => {
@@ -41,6 +41,12 @@ describe("HealthCheckHandler - scenario 1", () => {
 
     const expectedValue: Target[] = [
       {
+        failedChecks: 1,
+        status: "Failed",
+        target: "Ratings",
+        totalChecks: 2
+      },
+      {
         failedChecks: 0,
         status: "Complete",
         target: "Details",
@@ -52,15 +58,11 @@ describe("HealthCheckHandler - scenario 1", () => {
         target: "Product",
         totalChecks: 2
       },
-      {
-        failedChecks: 1,
-        status: "Failed",
-        target: "Ratings",
-        totalChecks: 2
-      }
     ]
 
-    expect(healthCheckHandler.groupByTarget()).toStrictEqual(expectedValue);
+    const receivedValue = healthCheckHandler.groupByTarget();
+
+    expect(receivedValue).toEqual(expectedValue);
   })
 
   it("groupByCheckName - Ratings", () => {
@@ -70,22 +72,24 @@ describe("HealthCheckHandler - scenario 1", () => {
 
     const expectedValue: TargetHealthCheck[] = [
       {
-        checkName: "service-endpoints-check",
-        status: "Complete",
-        target: "Ratings",
-        lastCheck: moment("2021-07-13T18:08:07Z"),
-        lastIssue: undefined
-      },
-      {
         checkName: "http-status-check",
         status: "Failed",
         target: "Ratings",
         lastCheck: moment("2021-07-13T18:06:03Z"),
         lastIssue: moment("2021-07-13T18:06:03Z")
+      },
+      {
+        checkName: "service-endpoints-check",
+        status: "Complete",
+        target: "Ratings",
+        lastCheck: moment("2021-07-13T18:08:07Z"),
+        lastIssue: undefined
       }
     ];
 
-    expect(healthCheckHandler.groupByCheckName()).toStrictEqual(expectedValue);
+    const receivedValue = healthCheckHandler.groupByCheckName();
+
+    expect(receivedValue).toEqual(expectedValue);
   })
 })
 
@@ -100,7 +104,7 @@ describe("HealthCheckHandler - scenario 2", () => {
       "/"
     )
 
-    seedsFactory(MocksScenario.scenario2)(server);
+    seedsGenerator(MocksScenario.scenario2)(server);
   })
 
   afterEach(() => {
@@ -133,7 +137,9 @@ describe("HealthCheckHandler - scenario 2", () => {
       }
     ]
 
-    expect(healthCheckHandler.groupByTarget()).toStrictEqual(expectedValue);
+    const receivedValue = healthCheckHandler.groupByTarget();
+
+    expect(receivedValue).toEqual(expectedValue);
   })
 
   it("groupByCheckName - Details", () => {
@@ -143,21 +149,23 @@ describe("HealthCheckHandler - scenario 2", () => {
 
     const expectedValue: TargetHealthCheck[] = [
       {
-        checkName: "service-endpoints-check",
-        status: "Complete",
-        target: "Details",
-        lastCheck: moment("2021-07-13T18:08:07Z"),
-        lastIssue: undefined
-      },
-      {
         checkName: "http-status-check",
         status: "Complete",
         target: "Details",
         lastCheck: moment("2021-07-13T18:05:08Z"),
         lastIssue: undefined
+      },
+      {
+        checkName: "service-endpoints-check",
+        status: "Complete",
+        target: "Details",
+        lastCheck: moment("2021-07-13T18:08:07Z"),
+        lastIssue: undefined
       }
     ];
 
-    expect(healthCheckHandler.groupByCheckName()).toStrictEqual(expectedValue);
+    const receivedValue = healthCheckHandler.groupByCheckName();
+
+    expect(receivedValue).toEqual(expectedValue);
   })
 })
