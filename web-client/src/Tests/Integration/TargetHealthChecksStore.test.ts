@@ -3,19 +3,14 @@ import {Registry} from "miragejs/-types";
 import {MockedServerBaseFactories, MockedServerBaseModels, MocksScenario} from "../../Services/Mocks/types";
 import {makeServer} from "../../Services/Mocks/MakeServer";
 import {seedsGenerator} from "../../Services/Mocks/Seeds/Generator";
-import {injectGlobalWithFetchJson} from "../Utils";
 import {TargetHealthChecksStore} from "../../Stores/TargetHealthChecks";
 import {TargetHealthCheck} from "../../Components/types";
-import {getAllHealthChecksByGroupAndTarget} from "../../Services/Mocks/IO";
 import moment from "moment";
+import {setMockedHealthChecksByTargetsAndGroup} from "../Utils";
 
 const url = "https://dummy.local";
 
-function setMockedHealthChecksByTargetsAndGroup(server: Server<Registry<MockedServerBaseModels, MockedServerBaseFactories>>, targetLabel: string) {
-  const requestDataFromMocks = getAllHealthChecksByGroupAndTarget(server.schema, targetLabel);
 
-  return injectGlobalWithFetchJson(server, requestDataFromMocks);
-}
 
 describe("Target Health Checks Store - scenario 1", () => {
   let server: Server<Registry<MockedServerBaseModels, MockedServerBaseFactories>>;

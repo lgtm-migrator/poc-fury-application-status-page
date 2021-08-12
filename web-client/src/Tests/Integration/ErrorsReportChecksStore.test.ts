@@ -1,27 +1,14 @@
 import {Server} from "miragejs/server";
 import {Registry} from "miragejs/-types";
 import {MockedServerBaseFactories, MockedServerBaseModels, MocksScenario} from "../../Services/Mocks/types";
-import {getAllFailedHealthChecksByDay} from "../../Services/Mocks/IO";
-import {injectGlobalWithFetchJson} from "../Utils";
+import {setErrorsReportChecks} from "../Utils";
 import {makeServer} from "../../Services/Mocks/MakeServer";
 import {seedsGenerator} from "../../Services/Mocks/Seeds/Generator";
 import {ErrorsReportChecksStore} from "../../Stores/ErrorsReportChecks";
-import moment, {Moment} from "moment";
+import moment from "moment";
 import {ErrorsReportCheck} from "../../Components/ErrorsReportCard/types";
 
 const url = "https://dummy.local";
-
-function setErrorsReportChecks(server: Server<Registry<MockedServerBaseModels, MockedServerBaseFactories>>, day: string) {
-  const requestDataFromMocks = getAllFailedHealthChecksByDay(server.schema, day).map((mockedData) => {
-    return {
-      completedAt: mockedData.completedAt,
-      checkName: mockedData.checkName,
-      target: mockedData.target
-    }
-  });
-
-  return injectGlobalWithFetchJson(server, requestDataFromMocks);
-}
 
 describe("Errors Report Store - scenario 1", () => {
   let server: Server<Registry<MockedServerBaseModels, MockedServerBaseFactories>>;

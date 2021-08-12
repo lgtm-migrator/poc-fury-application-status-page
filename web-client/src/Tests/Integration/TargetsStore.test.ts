@@ -1,20 +1,13 @@
 import {Server} from "miragejs/server";
 import {Registry} from "miragejs/-types";
 import {MockedServerBaseFactories, MockedServerBaseModels, MocksScenario} from "../../Services/Mocks/types";
-import {getAllHealthChecksByGroup} from "../../Services/Mocks/IO";
-import {injectGlobalWithFetchJson} from "../Utils";
 import {makeServer} from "../../Services/Mocks/MakeServer";
 import {seedsGenerator} from "../../Services/Mocks/Seeds/Generator";
 import {TargetsStore} from "../../Stores/Targets";
 import {Target} from "../../Components/types";
+import {setMockedHealthChecksByGroup} from "../Utils";
 
 const url = "https://dummy.local";
-
-function setMockedHealthChecksByGroup(server: Server<Registry<MockedServerBaseModels, MockedServerBaseFactories>>) {
-  const requestDataFromMocks = getAllHealthChecksByGroup(server.schema);
-
-  return injectGlobalWithFetchJson(server, requestDataFromMocks);
-}
 
 describe("Target Store - scenario 1", () => {
   let server: Server<Registry<MockedServerBaseModels, MockedServerBaseFactories>>;
