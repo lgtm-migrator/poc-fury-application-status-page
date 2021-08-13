@@ -6,15 +6,15 @@ import React from 'react';
 import * as ReactRouterDom from 'react-router-dom';
 import {act, render, screen, waitForElementToBeRemoved} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect'
-import TargetStatusComponent from "../../Components/Targets/Component";
 import {ApplicationContext} from "../../Components/ApplicationStatus/Container";
-import {TargetsStore} from "../../Stores/Targets";
-import {setMockedHealthChecksByGroup} from "../Utils";
+import {makeServer} from "../../Services/Mocks/MakeServer";
+import {seedsGenerator} from "../../Services/Mocks/Seeds/Generator";
 import {Server} from "miragejs/server";
 import {Registry} from "miragejs/-types";
 import {MockedServerBaseFactories, MockedServerBaseModels, MocksScenario} from "../../Services/Mocks/types";
-import {makeServer} from "../../Services/Mocks/MakeServer";
-import {seedsGenerator} from "../../Services/Mocks/Seeds/Generator";
+import {TargetHealthChecksStore} from "../../Stores/TargetHealthChecks";
+import {setMockedHealthChecksByTargetsAndGroup} from "../Utils";
+import TargetHealthChecksComponent from "../../Components/TargetHealthChecks/Component";
 
 const url = "https://dummy.local";
 const groupLabel = "BookInfo";
@@ -28,8 +28,17 @@ jest.mock('react-router-dom', () => ({
   })
 }));
 
-describe("TargetsComponent - Scenario 1", () => {
+describe("TargetsHealthChecksComponent - Scenario 1", () => {
   let server: Server<Registry<MockedServerBaseModels, MockedServerBaseFactories>>;
+
+  const applicationContext = {
+    language: "EN",
+    releaseNumber: "",
+    basePath: url,
+    apiUrl: url,
+    cascadeFailure: 1,
+    groupLabel: groupLabel
+  }
 
   beforeEach(() => {
     server = makeServer(
@@ -46,69 +55,46 @@ describe("TargetsComponent - Scenario 1", () => {
     server.shutdown();
   })
 
-  it("CascadeFailure = 1", async () => {
-    const cascadeFailure = 1;
-    const applicationContext = {
-      language: "EN",
-      releaseNumber: "",
-      basePath: url,
-      apiUrl: url,
-      cascadeFailure: cascadeFailure,
-      groupLabel: groupLabel
-    }
+  it("Ratings", async () => {
+    const targetLabel = "Ratings";
 
-    const dummyTargetsStore = new TargetsStore(
-      url,
-      groupLabel,
-      cascadeFailure
-    );
+    const dummyTargetHealthChecksStore = new TargetHealthChecksStore(url, groupLabel, targetLabel);
 
-    setMockedHealthChecksByGroup(server);
+    setMockedHealthChecksByTargetsAndGroup(server, targetLabel);
 
     act(() => {
       render(
         <ApplicationContext.Provider value={applicationContext}>
-          <TargetStatusComponent targetsStore={dummyTargetsStore}
-          />
+          <TargetHealthChecksComponent releaseNumber={"test"} targetHealthChecksStore={dummyTargetHealthChecksStore}
+                                       target={targetLabel}/>
         </ApplicationContext.Provider>
       )
     })
 
     await waitForElementToBeRemoved(() => screen.getByText(/Loading/i))
 
-    expect(screen.getByText("There's an issue with Ratings")).toBeTruthy();
+    expect(screen.getByText("1 check inside BookInfo Ratings have failed for:")).toBeTruthy();
   })
 
-  it("CascadeFailure = 0", async () => {
-    const cascadeFailure = 0;
-    const applicationContext = {
-      language: "EN",
-      releaseNumber: "",
-      basePath: url,
-      apiUrl: url,
-      cascadeFailure: cascadeFailure,
-      groupLabel: groupLabel
-    }
+  it("Details", async () => {
+    const targetLabel = "Details";
 
-    const dummyTargetHealthChecksStore = new TargetsStore(
-      url,
-      groupLabel,
-      cascadeFailure
-    );
 
-    setMockedHealthChecksByGroup(server);
+    const dummyTargetHealthChecksStore = new TargetHealthChecksStore(url, groupLabel, targetLabel);
+
+    setMockedHealthChecksByTargetsAndGroup(server, targetLabel);
 
     act(() => {
       render(
         <ApplicationContext.Provider value={applicationContext}>
-          <TargetStatusComponent targetsStore={dummyTargetHealthChecksStore}
-          />
+          <TargetHealthChecksComponent releaseNumber={"test"} targetHealthChecksStore={dummyTargetHealthChecksStore}
+                                       target={targetLabel}/>
         </ApplicationContext.Provider>
       )
     })
 
     await waitForElementToBeRemoved(() => screen.getByText(/Loading/i))
 
-    expect(screen.getByText("All BookInfo systems are fully operational")).toBeTruthy();
+    expect(screen.getByText("All the BookInfo Details checks are passed")).toBeTruthy();
   })
 })
