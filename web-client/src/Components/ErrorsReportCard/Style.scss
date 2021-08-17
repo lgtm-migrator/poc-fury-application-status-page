@@ -16,11 +16,14 @@ $accordion-button-width: 90px;
 
 .error-card {
   border-bottom: 1px solid $euiColorLightShade;
+  // position: sticky;
+  // top: 56px;
 
   &__header {
     background-color: white;
     width: 100%;
     padding: 10px 0;
+    // position: sticky;
   }
 
   &__date {
@@ -36,6 +39,7 @@ $accordion-button-width: 90px;
   &__accordion-container.euiFlexItem {
     margin: 0;
     margin-bottom: 0 !important;
+
   }
 
   &__accordion {
@@ -45,6 +49,10 @@ $accordion-button-width: 90px;
       position: absolute;
       right: 0;
       top: -34px
+    }
+
+    & .euiAccordion__childWrapper {
+      overflow-y: scroll;
     }
   }
 
@@ -86,16 +94,20 @@ $accordion-button-width: 90px;
       .euiTableRow td {
         font-weight: 600;
         color: $euiColorDarkShade;
+        font-size: small;
       }
 
       .euiTableRow td:first-child .euiTableCellContent {
         color: $euiColorDarkestShade;
+        font-size: small;
       }
 
       .euiTableRow td:last-child .euiTableCellContent {
         font-weight: 300;
         font-style: italic;
         justify-content: flex-end;
+        text-align: right;
+        font-size: small;
       }
     }
   }
