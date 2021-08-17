@@ -1,0 +1,18 @@
+# Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: fury-application-status-product
+  labels:
+    app: fury-application-status-product
+spec:
+  ports:
+    - port: 8080
+      name: http
+      protocol: TCP
+  selector:
+    app: fury-application-status-product

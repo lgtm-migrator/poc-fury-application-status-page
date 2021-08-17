@@ -1,9 +1,39 @@
 {
-  "Fury Cluster Status Healthy": "All CompanyName systems are fully operational",
-  "Fury Cluster Status Error": "There's an issue with",
-  "Fury Cluster Status Go To Services": "see",
-  "Fury Cluster Services Status Healthy": "The CompanyName Cluster Custom Name 1 system is fully operational",
-  "Fury Cluster Services Status Error": "There's an issue related to:",
-  "Fury Cluster Services Status Error Occurred": "Occurred at",
-  "Fury Cluster Service Status Go Back": "back"
+  "Target Title": "{{target}} health status",
+  "Target Status Healthy": "All {{group}} systems are fully operational",
+  "Target Status Error": "There's an issue with",
+  "Target Status Go To Health Checks": "see",
+
+  "Target Health Checks": "HEALTHCHECKS",
+  "Target Health Checks Status Healthy": "All the {{group}} {{target}} checks are passed",
+  "Target Health Checks Status Error": "{{checkNum}} check inside {{group}} {{target}} have failed for:",
+  "Target Health Checks Status Error Occurred": "Occurred",
+  "Target Health Checks Status Last Check": "LAST CHECK",
+  "Target Health Checks Status Last Check Now": "NOW",
+  "Target Health Checks Status No Issue": "NO ISSUE",
+  "Target Health Checks Status Issue": "ISSUE",
+  "Target Health Checks Status Error Occurring": "OCCURRING",
+  "Target Health Checks Status Error Reported": "REPORTED",
+  "Target Health Checks Status Time Hours": "{{hours}} hours ago",
+  "Target Health Checks Status Time Minutes": "{{minutes}} mins ago",
+  "Target Health Checks Status Time Hours And Minutes": "{{hours}} h and {{minutes}} m ago",
+
+  "Target Health Checks Passed": "ALL {{totalchecks}} PASSED",
+  "Target Health Checks Failed": "{{failedchecks}} out of {{totalchecks}} FAILED",
+
+  "Errors Report": "Errors Report",
+  "Errors Report Subtitle Sigle": "Last day report",
+  "Errors Report Subtitle Multiple": "Last {{reportDays}} days report",
+  "Errors Report No Outages Title": "No failures here!",
+  "Errors Report No Outages SubTitle": "No outages reported",
+  "Errors Report End Of Report": "End of the report",
+  
+  "Issues Number": "{{issuesNumber}} ISSUES",
+  "When": "WHEN",
+  "Check Type": "CHECK TYPE",
+  "Service": "SERVICE",
+  "Open": "open",
+  "Close": "close",
+  "Loading": "Loading...",
+  "Back": "back"
 }

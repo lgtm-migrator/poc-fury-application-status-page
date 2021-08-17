@@ -1,5 +1,7 @@
 .vagrant
 .idea
+.vscode
+__debug_bin
 vendor
 bin
 dist
@@ -7,4 +9,7 @@ config.yml
 node_modules
 build
 .env
+.kubeconfig
+videos
+screenshots
 static

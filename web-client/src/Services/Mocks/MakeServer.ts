@@ -5,7 +5,7 @@
  */
 
 import {createServer} from "miragejs"
-import {seedsFactory} from "./Seeds/Factory";
+import {seedsGenerator} from "./Seeds/Generator";
 import {getBaseFactories, getBaseModels} from "./Configuration";
 import {getRoutes} from "./Routes";
 import {MocksScenario} from "./types";
@@ -15,7 +15,7 @@ export function makeServer({ environment = 'test' }, urlPrefix: string, scenario
     environment,
     models: getBaseModels(),
     factories: getBaseFactories(),
-    seeds: seedsFactory(scenario),
+    seeds: seedsGenerator(scenario),
     routes: getRoutes(urlPrefix, apiPath)
   })
 }

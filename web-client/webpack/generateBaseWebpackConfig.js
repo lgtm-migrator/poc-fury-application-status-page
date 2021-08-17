@@ -69,10 +69,10 @@ function getModule() {
       },
       {
         /* The following line to ask babel
-              to compile any file with extension .js */
+        to compile any file with extension .js */
         test: /\.(js|jsx)?$/,
         /* exclude node_modules directory from babel.
-              Babel will not compile any files in this directory */
+        Babel will not compile any files in this directory */
         exclude: /node_modules/,
         // To Use babel Loader
         loader: "babel-loader",
@@ -86,6 +86,18 @@ function getModule() {
       {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          // Creates `style` nodes from JS strings
+          "style-loader",
+          // Translates CSS into CommonJS
+          "css-loader",
+          // "postcss-loader", TODO: https://elastic.github.io/eui/#/guidelines/getting-started
+          // Compiles Sass to CSS
+          "sass-loader",
+        ],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif|ico)$/,

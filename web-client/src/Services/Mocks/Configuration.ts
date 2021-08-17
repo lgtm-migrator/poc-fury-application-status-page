@@ -4,29 +4,23 @@
  * license that can be found in the LICENSE file.
  */
 
-import {belongsTo, Factory, Model} from "miragejs";
-import {MockedCluster, MockedClusterService, MockedServerBaseFactories, MockedServerBaseModels} from "./types";
+import {Factory, Model} from "miragejs";
+import {
+  MockedHealthCheck,
+  MockedServerBaseFactories,
+  MockedServerBaseModels
+} from "./types";
 
 export function getBaseModels(): MockedServerBaseModels {
   return {
-    cluster: Model.extend<Partial<MockedCluster>>({}),
-    clusterService: Model.extend<Partial<MockedClusterService>>({
-      cluster: belongsTo()
-    })
+    healthCheck: Model.extend<Partial<MockedHealthCheck>>({}),
   }
 }
 
 export function getBaseFactories(): MockedServerBaseFactories {
   return {
-    cluster: Factory.extend<Partial<MockedCluster>>({
-      name: "Unit Name",
-      status: "healthy",
-      id: "Unit ID",
+    healthCheck: Factory.extend<Partial<MockedHealthCheck>>({
+      status: "Complete",
     }),
-    clusterService: Factory.extend<Partial<MockedClusterService>>({
-      status: "healthy",
-      name: "cluster service",
-      id: "Cluster Service ID"
-    })
   }
 }

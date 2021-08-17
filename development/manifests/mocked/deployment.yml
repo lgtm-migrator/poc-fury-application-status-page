@@ -1,0 +1,43 @@
+# Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: fury-application-status-mocked
+  name: fury-application-status-mocked
+  namespace: fury-application-status
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: fury-application-status-mocked
+  template:
+    metadata:
+      labels:
+        app: fury-application-status-mocked
+    spec:
+      containers:
+        - image: registry.sighup.io/poc/fury-application-status:latest
+          name: fury-application-status-mocked
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          volumeMounts:
+            - mountPath: /app/config.yml
+              name: details-config-file
+              subPath: config.yml
+      volumes:
+        - configMap:
+            name: fury-application-status-mocked-config-file
+          name: details-config-file

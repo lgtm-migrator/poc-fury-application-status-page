@@ -4,38 +4,27 @@
  * license that can be found in the LICENSE file.
  */
 
-import {BelongsTo, FactoryDefinition, ModelDefinition, Registry} from "miragejs/-types";
+import {FactoryDefinition, ModelDefinition, Registry} from "miragejs/-types";
 import Schema from "miragejs/orm/schema";
+import {ErrorHealthCheckCountByDay, IErrorHealthCheckCountByDay, IHealthCheck} from "../../Components/types";
 
-export type ClusterStatus = "healthy" | "error";
+export interface MockedHealthCheck extends IHealthCheck {}
 
-export interface MockedCluster {
-  status: ClusterStatus;
-  name: string;
-  id: string;
-}
-
-export interface MockedClusterService {
-  status: ClusterStatus;
-  name: string;
-  cluster: BelongsTo<"cluster">;
-  id: string;
-  failedAt: string;
-}
+export interface MockedErrorHealthCheckCountByDay extends IErrorHealthCheckCountByDay {}
 
 export type MockedServerBaseModels = {
-  cluster: ModelDefinition<MockedCluster>;
-  clusterService: ModelDefinition<MockedClusterService>;
+  healthCheck: ModelDefinition<MockedHealthCheck>;
 }
 
 export type MockedServerBaseFactories = {
-  cluster: FactoryDefinition;
-  clusterService: FactoryDefinition;
+  healthCheck: FactoryDefinition;
 }
 
 export enum MocksScenario {
   "scenario1",
-  "scenario2"
+  "scenario2",
+  "scenario3",
+  "scenario4"
 }
 
 export type MockedSchema = Schema<Registry<MockedServerBaseModels, MockedServerBaseFactories>>

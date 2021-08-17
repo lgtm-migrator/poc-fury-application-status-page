@@ -1,0 +1,39 @@
+/**
+ * Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
+.kasper {
+  .kasper-header {
+    .euiHeader {
+      margin-left: auto;
+      margin-right: auto;
+
+      &.kasper-header--desktop {
+        z-index: 1001;
+        padding-left: 13%;
+        padding-right: 13%;
+        @media screen and (min-width: 1365px) {
+          padding-left: 25%;
+        }
+      }
+      &.kasper-header--mobile {
+        height: 54px;
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+      
+      &.sub-navigation {
+        max-width: 600px;
+        // overrides EuiHeader styles
+        border-top: none;
+        box-shadow: none;
+        // TODO: use the proper EUI token
+        background: #fafbfd;
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+    }
+  }
+}

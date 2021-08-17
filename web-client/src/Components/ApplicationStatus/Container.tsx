@@ -4,18 +4,66 @@
  * license that can be found in the LICENSE file.
  */
 
-import React, {useState} from "react";
+import React, {createContext, useState} from "react";
 import {releaseNumber} from "../../constants";
 import {createStateHandler} from "../../Services/createStateHandler";
 import ApplicationStatusComponent from "./Component";
-import {logger} from "../../Services/Logger";
 import {makeServer} from "../../Services/Mocks/MakeServer";
 import {StateManager} from "fury-component/dist/State/types";
 import {IStateHandler} from "../types";
 import {MocksScenario} from "../../Services/Mocks/types";
+import {IApplicationContext, ApplicationStatusContainerProps} from "./types";
 
-interface ApplicationStatusContainerProps {
-  apiUrl?: string;
+export const ApplicationContext = createContext<IApplicationContext>({
+  language: "",
+  releaseNumber: "",
+  basePath: "",
+  apiUrl: "",
+  groupLabel: "",
+  cascadeFailure: 1
+});
+
+export default function ApplicationStatusContainer(props: ApplicationStatusContainerProps) {
+  const stateHandler = createStateHandler();
+
+  if(props.apiUrl) {
+    stateHandler.setState({
+      apiurl: props.apiUrl,
+      grouplabel: props.groupLabel,
+      grouptitle: props.groupTitle,
+      cascadefailure: props.cascadeFailure,
+      targetlabel: props.targetLabel,
+      targettitle: props.targetTitle
+    })
+  }
+
+  const isMocked = getIsMocked(stateHandler);
+  const applicationContext = buildApplicationContext(stateHandler);
+
+
+  if (isMocked) {
+    makeServer({ environment: "development" }, stateHandler.getState().apiurl, MocksScenario.scenario4)
+  }
+
+  return (
+    <ApplicationContext.Provider value={applicationContext}>
+      <ApplicationStatusComponent />
+    </ApplicationContext.Provider>
+  );
+}
+
+function buildApplicationContext(stateHandler: StateManager<IStateHandler>) {
+  return {
+    language: stateHandler.getLanguage(),
+    releaseNumber: releaseNumber,
+    basePath: getBasePath(stateHandler),
+    apiUrl: stateHandler.getState().apiurl,
+    cascadeFailure: stateHandler.getState().cascadefailure,
+    groupLabel: stateHandler.getState().grouplabel,
+    groupTitle: stateHandler.getState()?.grouptitle,
+    targetLabel: stateHandler.getState()?.targetlabel,
+    targetTitle: stateHandler.getState()?.targettitle
+  }
 }
 
 function getBasePath(stateHandler: StateManager<IStateHandler>) {
@@ -31,40 +79,5 @@ function getIsMocked(stateHandler: StateManager<IStateHandler>): boolean {
     return stateHandler.getMocked();
   }
 
-  return process.env.APP_ENV === "development";
+  return process.env.SERVER_OFFLINE === "true";
 }
-
-const ApplicationStatusContainer = (props: ApplicationStatusContainerProps) => {
-  const stateHandler = createStateHandler();
-
-  if(props.apiUrl) {
-    stateHandler.setState({
-      apiurl: props.apiUrl
-    })
-  }
-
-  logger.info(JSON.stringify(stateHandler.getState()));
-
-  const [currentLanguage] = useState<string>(stateHandler.getLanguage());
-  const [basePath] = useState<string>(getBasePath(stateHandler));
-  const [apiUrl] = useState<string>(stateHandler.getState().apiurl);
-  const isMocked = getIsMocked(stateHandler);
-
-  if (isMocked) {
-    logger.info(stateHandler.getState().apiurl);
-    makeServer({ environment: "development" }, stateHandler.getState().apiurl, MocksScenario.scenario1)
-  }
-
-  return (
-    <>
-      <ApplicationStatusComponent
-        language={currentLanguage}
-        releaseNumber={releaseNumber}
-        basePath={basePath}
-        apiUrl={apiUrl}
-      />
-    </>
-  );
-};
-
-export default ApplicationStatusContainer;

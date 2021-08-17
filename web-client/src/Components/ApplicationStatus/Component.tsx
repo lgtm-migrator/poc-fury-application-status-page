@@ -4,59 +4,22 @@
  * license that can be found in the LICENSE file.
  */
 
-import React, {useEffect} from "react";
-import { ClusterStatus } from "../ClusterStatus";
-import { BrowserRouter as Router, Route, Switch, RouteComponentProps } from "react-router-dom";
+import React, {useContext, useEffect} from "react";
 import 'fury-design-system/dist/eui_theme_fury_community.css';
-import './Style.css';
-import {ClusterServiceStatus} from "../ClusterServiceStatus";
+// import './Style.scss';
 import {LocalizedText} from "./LocalizedText";
 import {initialize} from "../../i18n";
+import {ApplicationContext} from "./Container";
+import ApplicationStatusRouterFactory from "./Factory";
 
-interface RouteParams {
-  clusterId: string;
-}
-
-interface ApplicationStatusComponentProps {
-  language: string;
-  releaseNumber: string;
-  basePath: string;
-  apiUrl: string;
-}
-
-const ApplicationStatusComponent = (props: ApplicationStatusComponentProps) => {
+export default function ApplicationStatusComponent() {
+  const appContextData = useContext(ApplicationContext);
+  
   useEffect(() => {
     initialize.then(() => {
-      LocalizedText.singleton.changeLanguage(props.language);
+      LocalizedText.singleton.changeLanguage(appContextData.language);
     })
   }, []);
 
-  return (
-    <Router>
-      <Switch>
-        <Route path={`${props.basePath}/:clusterId/status`} component={(propsRoute: RouteComponentProps<RouteParams>) =>
-          <ClusterServiceStatus
-            apiUrl={props.apiUrl}
-            releaseNumber={props.releaseNumber}
-            language={props.language}
-            clusterId={propsRoute.match.params.clusterId}
-            basePath={props.basePath}
-          />
-        } />
-        <Route
-          path={`${props.basePath}/`}
-          render={() => (
-            <ClusterStatus
-              apiUrl={props.apiUrl}
-              releaseNumber={props.releaseNumber}
-              language={props.language}
-              basePath={props.basePath}
-            />
-          )}
-        />
-      </Switch>
-    </Router>
-  );
-};
-
-export default ApplicationStatusComponent;
+  return <ApplicationStatusRouterFactory />
+}

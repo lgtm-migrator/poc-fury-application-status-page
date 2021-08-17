@@ -1,0 +1,25 @@
+# Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+namespace: fury-application-status
+
+resources:
+  - ./bases
+
+configMapGenerator:
+  - name: master-config-file
+    files:
+      - config.yml=config/master-config-file.yml
+  - name: product-config-file
+    files:
+      - config.yml=config/product-config-file.yml
+  - name: reviews-config-file
+    files:
+      - config.yml=config/reviews-config-file.yml
+  - name: details-config-file
+    files:
+      - config.yml=config/details-config-file.yml
+  - name: ratings-config-file
+    files:
+      - config.yml=config/ratings-config-file.yml

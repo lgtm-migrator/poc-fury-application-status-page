@@ -1,0 +1,60 @@
+/**
+ * Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
+.kasper {
+  // Page content width
+  .healthchecks-list {
+    .euiPageContent {
+      width: 100%;
+      max-width: 600px;
+    }
+    .title-light {
+      font-weight: 300;
+      margin-top: 0;
+    }
+  }
+
+  .euiFlexGroup {
+
+    & > .euiFlexItem.target-card__status-text {
+      margin-left: 0;
+    }
+
+    & > .euiFlexItem.target-card__status-text p {
+      font-weight: 600;
+    }
+
+    &--gutterMedium {
+      & > .euiFlexItem.target-health-checks-message {
+        margin-bottom: 30px;
+      }
+  
+      & > .euiFlexItem.target-health-checks-message p {
+        white-space: pre;
+      }
+    }
+  }
+
+  .target-health-check-card {
+    border-bottom: 1px solid #bcbdbf;
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 9px;
+
+    &.euiPanel .euiText p {
+      margin-bottom: 0;
+    }
+
+    .check-title {
+      margin-bottom: 4px;
+    }
+  }
+
+  .target-status-icon {
+    width: 22px;
+    height: 22px;
+  }
+}

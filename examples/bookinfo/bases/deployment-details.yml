@@ -1,0 +1,39 @@
+# Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fury-application-status-details
+  labels:
+    app: fury-application-status-details
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fury-application-status-details
+  template:
+    metadata:
+      labels:
+        app: fury-application-status-details
+    spec:
+      containers:
+        - name: fury-application-status-details
+          image: registry.sighup.io/poc/fury-application-status
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          volumeMounts:
+            - name: details-config-file
+              mountPath: /app/config.yml
+              subPath: config.yml
+      volumes:
+        - name: details-config-file
+          configMap:
+            name: details-config-file

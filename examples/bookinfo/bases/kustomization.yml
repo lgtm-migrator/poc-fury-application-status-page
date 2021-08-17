@@ -1,0 +1,20 @@
+# Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+namespace: fury-application-status
+
+resources:
+  - deployment-master.yml
+  - deployment-product.yml
+  - deployment-reviews.yml
+  - deployment-details.yml
+  - deployment-ratings.yml
+  - svc-master.yml
+  - svc-details.yml
+  - svc-product.yml
+  - svc-ratings.yml
+  - svc-reviews.yml
+  - ingress.yml
+  - ns.yml
+

@@ -1,0 +1,65 @@
+# Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    forecastle.stakater.com/expose: "true"
+    forecastle.stakater.com/appName: "Fury-Application-Status"
+  name: fury-application-status
+spec:
+  rules:
+    - host: fury-application-status-master.demo-app.localdomain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fury-application-status-master
+                port:
+                  name: http
+    - host: fury-application-status-details.demo-app.localdomain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fury-application-status-details
+                port:
+                  name: http
+    - host: fury-application-status-product.demo-app.localdomain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fury-application-status-product
+                port:
+                  name: http
+    - host: fury-application-status-ratings.demo-app.localdomain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fury-application-status-ratings
+                port:
+                  name: http
+    - host: fury-application-status-reviews.demo-app.localdomain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fury-application-status-reviews
+                port:
+                  name: http

@@ -1,0 +1,36 @@
+/**
+ * Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
+.kasper {
+	.target-list {
+		.euiPageContent {
+			width: 100%;
+			max-width: 600px;
+		}
+	}
+
+	.target-status-text {
+		margin-bottom: 30px;
+	}
+
+	.target-card {
+
+		&.euiPanel {
+			margin-bottom: 9px;
+			height: 64px;
+			padding: 13px 16px;
+
+			&--borderRadiusMedium {
+				border-radius: 12px;
+			}
+		}
+
+		&__link {
+			margin-left: auto;
+			font-size: 16px;
+		}
+	}
+}
