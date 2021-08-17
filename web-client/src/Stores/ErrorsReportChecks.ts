@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) 2021 SIGHUP s.r.l All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
+ */
+
 import {action, makeObservable, observable, runInAction} from "mobx";
 import moment from "moment";
 import {ErrorsReportCheck} from "../Components/ErrorsReportCard/types";

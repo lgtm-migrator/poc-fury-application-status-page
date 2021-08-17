@@ -13,9 +13,15 @@ source ./development/.env-cluster
 
 make seed
 
+git clone https://github.com/ztombol/bats-support ./scripts/e2e/libs/bats-support
+
+git clone https://github.com/ztombol/bats-assert ./scripts/e2e/libs/bats-assert
+
+bats -t ./scripts/e2e/tests.sh
+
 sleep 5
 
-kubectl wait -n fury-application-status --for=condition=ready pod --all
+kubectl wait --timeout=180s -n fury-application-status --for=condition=ready pod --all
 
 make port-forward &
 
@@ -27,7 +33,7 @@ pgrep kubectl | xargs kill -9
 
 sleep 5
 
-kubectl wait -n fury-application-status --for=condition=ready pod --all
+kubectl wait --timeout=180s -n fury-application-status --for=condition=ready pod --all
 
 make port-forward &
 
@@ -39,7 +45,7 @@ pgrep kubectl | xargs kill -9
 
 sleep 5
 
-kubectl wait -n fury-application-status --for=condition=ready pod --all
+kubectl wait --timeout=180s -n fury-application-status --for=condition=ready pod --all
 
 make port-forward &
 

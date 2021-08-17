@@ -6,3 +6,5 @@
 set -e
 
 kind delete cluster
+
+rm -rf ./scripts/e2e/libs
