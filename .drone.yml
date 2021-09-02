@@ -99,6 +99,7 @@ steps:
       - wget -qO /usr/local/bin/kind "https://kind.sigs.k8s.io/dl/$${KIND_VERSION}/kind-$(uname)-amd64"
       - wget -qO /usr/local/bin/kubectl "https://storage.googleapis.com/kubernetes-release/release/$${CLUSTER_VERSION}/bin/linux/amd64/kubectl"
       - chmod +x /usr/local/bin/kind /usr/local/bin/kubectl
+      - echo $OSTYPE
       - wget -q -O - https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh | bash -s $${KUSTOMIZE_VERSION} /usr/local/bin
       - wget -qO /tmp/temp.zip https://github.com/bats-core/bats-core/archive/refs/tags/v$${BATS_VERSION}.zip
       - unzip -d /tmp /tmp/temp.zip
