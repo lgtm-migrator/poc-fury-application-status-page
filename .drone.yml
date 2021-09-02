@@ -110,6 +110,7 @@ steps:
   - name: front
     image: node:14.16
     pull: always
+    depends_on: [e2e-test]
     environment:
       APP_ENV: "production"
       SERVER_OFFLINE: false
