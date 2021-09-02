@@ -87,7 +87,7 @@ steps:
     volumes:
       - name: dockersock
       - path: /var/run/docker.sock
-    network_mode: host
+    # network_mode: host
     environment:
       KIND_VERSION: v0.11.1
       CLUSTER_VERSION: v1.21.1
