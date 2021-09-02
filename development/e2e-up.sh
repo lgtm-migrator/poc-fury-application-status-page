@@ -29,9 +29,13 @@ echo "$PWD"
 
 ls "$PWD"/e2e-test
 
-docker run -i -v "$PWD"/e2e-test:/e2e -w /e2e -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=ls cypress/included:6.2.1 ../
+docker run -i -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=bash -d --name="cypress" cypress/included:6.2.1
 
-docker run -i -v "$PWD"/e2e-test:/e2e -w /e2e -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=cypress cypress/included:6.2.1 run --headless --spec cypress/integration/fury-application-status-scenario-1_spec.js
+docker cp $PWD/e2e-test cypress:e2e
+
+docker exec -i -w /e2e cypress 'ls'
+
+docker exec -i -w /e2e cypress 'cypress' 'run' '--headless' '--spec' 'cypress/integration/fury-application-status-scenario-1_spec.js'
 
 echo "Scenario 2"
 
