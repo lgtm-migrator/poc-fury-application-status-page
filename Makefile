@@ -76,6 +76,7 @@ build: require-docker docker-build
 ## clean: Removes generated files
 .PHONY: clean
 clean: require-docker
-	@docker rmi -f poc-fury-application-status-page:build
-	@rm -rf .vagrant
+	@docker rmi -f registry.sighup.io/poc/fury-application-status:latest
+	@docker rmi -f registry.sighup.io/poc/fury-application-status:webapp
+	@docker rmi -f registry.sighup.io/poc/fury-application-status:backend
 	@rm -rf bin

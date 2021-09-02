@@ -1,1 +1,36 @@
-{}
+{
+  "id": "cluster.example.company.name",
+  "name": "nice cluster",
+  "PKICertExpirationDate": "2021-08-22T13:34:41Z",
+  "ETCDCertExpirationDate": "2021-09-20T14:00:00Z",
+  "kubernetesVersion": "1.21.1",
+  "OS": "Ubuntu 21.04",
+  "containerRuntime": "Containerd 1.52",
+  "CPU": 80,
+  "RAM": 32,
+  "workerNodes": 22,
+  "onCall": true,
+  "usefulLinks": [
+    {
+      "name": "Kibana",
+      "url": "https://www.elastic.co/kibana/"
+    }
+  ],
+  "contacts": [
+    {
+      "fullName": "Michael Smith",
+      "email": "michael@company.com",
+      "phone": "+393441234567",
+      "onCall": true
+    }
+  ],
+  "fury": {
+    "version": "1.7",
+    "modules": [
+      {
+        "name": "Networking",
+        "version": "1.4.3"
+      }
+    ]
+  }
+}
