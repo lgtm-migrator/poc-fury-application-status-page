@@ -5,11 +5,15 @@
 
 set -e
 
+make clean-ci
+
+make make test-e2e-local-down
+
 kind create cluster --config=./development/kind-config.yml --kubeconfig=./.kubeconfig
 
 kind load docker-image registry.sighup.io/poc/fury-application-status:latest
 
-source ./development/.env-cluster
+source ./development/.env-cluster-ci
 
 make seed
 
@@ -17,15 +21,19 @@ git clone https://github.com/ztombol/bats-support ./scripts/e2e/libs/bats-suppor
 
 git clone https://github.com/ztombol/bats-assert ./scripts/e2e/libs/bats-assert
 
-bats -t ./scripts/e2e/tests.sh
-
 kubectl wait --timeout=180s -n fury-application-status --for=condition=ready pod --all
+
+bats -t ./scripts/e2e/tests.sh
 
 echo "Scenario 1"
 
 make port-forward &
 
-docker run -i -v $PWD/e2e-test:/e2e -w /e2e -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=cypress cypress/included:6.2.1 run --headless --spec cypress/integration/fury-application-status-scenario-1_spec.js
+docker run -i -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=bash -d --name="cypress" cypress/included:6.2.1
+
+docker cp $PWD/e2e-test cypress:e2e
+
+docker exec -i -w /e2e cypress 'cypress' 'run' '--headless' '--spec' 'cypress/integration/fury-application-status-scenario-1_spec.js'
 
 echo "Scenario 2"
 
@@ -45,7 +53,7 @@ echo "Forwarding ports to pod"
 
 make port-forward &
 
-docker run -i -v $PWD/e2e-test:/e2e -w /e2e -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=cypress cypress/included:6.2.1 run --headless --spec cypress/integration/fury-application-status-scenario-2_spec.js
+docker exec -i -w /e2e cypress 'cypress' 'run' '--headless' '--spec' 'cypress/integration/fury-application-status-scenario-2_spec.js'
 
 echo "Scenario 3"
 
@@ -65,4 +73,4 @@ echo "Forwarding ports to pod"
 
 make port-forward &
 
-docker run -i -v $PWD/e2e-test:/e2e -w /e2e -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=cypress cypress/included:6.2.1 run --headless --spec cypress/integration/fury-application-status-scenario-3_spec.js
+docker exec -i -w /e2e cypress 'cypress' 'run' '--headless' '--spec' 'cypress/integration/fury-application-status-scenario-3_spec.js'
