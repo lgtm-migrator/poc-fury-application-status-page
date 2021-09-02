@@ -23,7 +23,7 @@ kubectl wait --timeout=180s -n fury-application-status --for=condition=ready pod
 
 make port-forward &
 
-docker run -it -v $PWD/e2e-test:/e2e -w /e2e -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=cypress cypress/included:6.2.1 run --headless --spec cypress/integration/fury-application-status-scenario-1_spec.js
+docker run -i -v $PWD/e2e-test:/e2e -w /e2e -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=cypress cypress/included:6.2.1 run --headless --spec cypress/integration/fury-application-status-scenario-1_spec.js
 
 echo "Scenario 2"
 
@@ -43,7 +43,7 @@ echo "Forwarding ports to pod"
 
 make port-forward &
 
-docker run -it -v $PWD/e2e-test:/e2e -w /e2e -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=cypress cypress/included:6.2.1 run --headless --spec cypress/integration/fury-application-status-scenario-2_spec.js
+docker run -i -v $PWD/e2e-test:/e2e -w /e2e -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=cypress cypress/included:6.2.1 run --headless --spec cypress/integration/fury-application-status-scenario-2_spec.js
 
 echo "Scenario 3"
 
@@ -63,4 +63,4 @@ echo "Forwarding ports to pod"
 
 make port-forward &
 
-docker run -it -v $PWD/e2e-test:/e2e -w /e2e -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=cypress cypress/included:6.2.1 run --headless --spec cypress/integration/fury-application-status-scenario-3_spec.js
+docker run -i -v $PWD/e2e-test:/e2e -w /e2e -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=cypress cypress/included:6.2.1 run --headless --spec cypress/integration/fury-application-status-scenario-3_spec.js
