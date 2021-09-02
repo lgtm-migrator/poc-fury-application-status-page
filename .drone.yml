@@ -82,7 +82,7 @@ depends_on:
 
 steps:
   - name: e2e-test
-    image: docker-dind
+    image: docker:dind
     pull: always
     volumes:
       - name: dockersock
