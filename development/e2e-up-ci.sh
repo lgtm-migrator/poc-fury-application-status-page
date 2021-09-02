@@ -7,7 +7,7 @@ set -e
 
 make clean-ci
 
-make make test-e2e-local-down
+make test-e2e-local-down
 
 kind create cluster --config=./development/kind-config.yml --kubeconfig=./.kubeconfig
 
