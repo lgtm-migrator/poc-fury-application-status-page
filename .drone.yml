@@ -88,6 +88,8 @@ steps:
       - name: dockersock
         path: /var/run/docker.sock
     network_mode: host
+    extra_hosts:
+      - "e2e-test:127.0.0.1"
     environment:
       KIND_VERSION: v0.11.1
       CLUSTER_VERSION: v1.21.1
