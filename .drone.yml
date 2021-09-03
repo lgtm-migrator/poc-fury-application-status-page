@@ -84,10 +84,6 @@ steps:
   - name: e2e-test
     image: docker:dind
     pull: always
-    volumes:
-      - name: dockersock
-        path: /var/run/docker.sock
-    network_mode: host
     environment:
       KIND_VERSION: v0.11.1
       CLUSTER_VERSION: v1.21.1
@@ -153,8 +149,3 @@ steps:
       ref:
         include:
           - refs/tags/**
-
-volumes:
-  - name: dockersock
-    host:
-      path: /var/run/docker.sock
