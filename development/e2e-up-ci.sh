@@ -40,7 +40,7 @@ echo "Scenario 1"
 
 make port-forward &
 
-docker run -i -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=bash -d --network host --name="${CYPRESS_ID}" cypress/included:8.3.0
+docker run -i -e CYPRESS_BASE_URL -e CYPRESS_VIDEO -e DISPLAY: --entrypoint=bash -d --network host --name="${CYPRESS_ID}" cypress/included:8.3.0
 
 trap cleanup-cypress EXIT
 
