@@ -6,17 +6,21 @@
 set -e
 
 CLUSTER_ID=e2e-$(LC_ALL=C tr -dc 'a-z0-9' </dev/urandom | head -c 8 ; echo)
+CYPRESS_ID=cypress-$(LC_ALL=C tr -dc 'a-z0-9' </dev/urandom | head -c 8 ; echo)
 
-function cleanup {
+function cleanup-kind {
   echo "Destroying the cluster ${CLUSTER_ID}"
   kind delete cluster --name "${CLUSTER_ID}"
 }
 
-make clean-ci
+function cleanup-cypress {
+  echo "Removing cypress image ${CYPRESS_ID}"
+  docker rm -f "${CYPRESS_ID}" &> /dev/null
+}
 
 kind create cluster --name "${CLUSTER_ID}" --config=./development/kind-config.yml --kubeconfig=./.kubeconfig
 
-trap cleanup EXIT
+trap cleanup-kind EXIT
 
 kind load docker-image registry.sighup.io/poc/fury-application-status:latest
 
@@ -36,13 +40,15 @@ echo "Scenario 1"
 
 make port-forward &
 
-docker run -i -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=bash -d --network host --name="cypress" cypress/included:8.3.0
+docker run -i -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=bash -d --network host --name="${CYPRESS_ID}" cypress/included:8.3.0
 
-docker cp $PWD/e2e-test cypress:e2e
+trap cleanup-cypress EXIT
 
-docker exec -i -w /e2e cypress 'yarn' 'add' '-D' '@testing-library/cypress'
+docker cp $PWD/e2e-test "${CYPRESS_ID}":e2e
 
-docker exec -i -w /e2e cypress 'cypress' 'run' '--headless' '--spec' 'cypress/integration/fury-application-status-scenario-1_spec.js'
+docker exec -i -w /e2e "${CYPRESS_ID}" 'yarn' 'add' '-D' '@testing-library/cypress'
+
+docker exec -i -w /e2e "${CYPRESS_ID}" 'cypress' 'run' '--headless' '--spec' 'cypress/integration/fury-application-status-scenario-1_spec.js'
 
 echo "Scenario 2"
 
@@ -62,7 +68,7 @@ echo "Forwarding ports to pod"
 
 make port-forward &
 
-docker exec -i -w /e2e cypress 'cypress' 'run' '--headless' '--spec' 'cypress/integration/fury-application-status-scenario-2_spec.js'
+docker exec -i -w /e2e "${CYPRESS_ID}" 'cypress' 'run' '--headless' '--spec' 'cypress/integration/fury-application-status-scenario-2_spec.js'
 
 echo "Scenario 3"
 
@@ -82,4 +88,8 @@ echo "Forwarding ports to pod"
 
 make port-forward &
 
-docker exec -i -w /e2e cypress 'cypress' 'run' '--headless' '--spec' 'cypress/integration/fury-application-status-scenario-3_spec.js'
+docker exec -i -w /e2e "${CYPRESS_ID}" 'cypress' 'run' '--headless' '--spec' 'cypress/integration/fury-application-status-scenario-3_spec.js'
+
+cleanup-kind
+
+cleanup-cypress
