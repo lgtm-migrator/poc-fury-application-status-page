@@ -104,7 +104,6 @@ steps:
       - unzip -d /tmp /tmp/temp.zip
       - /tmp/bats-core-$${BATS_VERSION}/install.sh /usr/local
       - make test-e2e-ci
-      - make test-e2e-local-down
       - make clean
 
   - name: front
