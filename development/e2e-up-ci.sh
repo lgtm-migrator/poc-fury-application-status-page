@@ -45,15 +45,13 @@ echo "Scenario 1"
 
 kubectl port-forward svc/fury-application-status-mocked "${LISTENING_PORT}":8080 --namespace fury-application-status &
 
-docker run -i -e CYPRESS_BASE_URL -e CYPRESS_VIDEO -e DISPLAY= --entrypoint=bash -d --network host --name="${CYPRESS_ID}" cypress/included:8.3.0
+docker run -i -e CYPRESS_BASE_URL -e CYPRESS_VIDEO -e DISPLAY=:${XVFB_PORT} --entrypoint=bash -d --network host --name="${CYPRESS_ID}" cypress/included:8.3.0
 
 docker cp $PWD/e2e-test "${CYPRESS_ID}":e2e
 
 docker exec -i -w /e2e "${CYPRESS_ID}" 'yarn' 'add' '-D' '@testing-library/cypress'
 
-docker exec -i -w /e2e "${CYPRESS_ID}" 'Xvfb' ":${XVFB_PORT} &"
-
-docker exec -i -w /e2e "${CYPRESS_ID}" 'export' "DISPLAY=:${XVFB_PORT}"
+docker exec -i -d -w /e2e "${CYPRESS_ID}" 'Xvfb' ":${XVFB_PORT}"
 
 docker exec -i -w /e2e "${CYPRESS_ID}" 'cypress' 'run' '--headless' '--spec' 'cypress/integration/fury-application-status-scenario-1_spec.js'
 
