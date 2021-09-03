@@ -22,7 +22,7 @@ kind create cluster --name "${CLUSTER_ID}" --config=./development/kind-config.ym
 
 trap cleanup-kind EXIT
 
-kind load docker-image registry.sighup.io/poc/fury-application-status:latest
+kind load --name "${CLUSTER_ID}" docker-image registry.sighup.io/poc/fury-application-status:latest
 
 source ./development/.env-cluster-ci
 
