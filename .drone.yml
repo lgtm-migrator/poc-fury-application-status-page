@@ -107,7 +107,7 @@ steps:
       - make clean
 
   - name: front
-    image: node:14.16
+    image: node:16.8
     pull: always
     depends_on: [e2e-test]
     environment:
