@@ -132,6 +132,8 @@ steps:
       - curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sed -e 's|${PROJECT_NAME}_checksums.txt|checksums.txt|' | sh
       - git reset --hard
       - git fetch --tags
+      - ls
+      - ls ./bin
       - ./bin/goreleaser check
       - ./bin/goreleaser build --debug --snapshot --rm-dist
 
