@@ -25,9 +25,7 @@ RUN yarn --cwd ./web-client build
 FROM golang:1.16-buster AS compile
 
 RUN apt update
-# temp fix for issue on goreleaser
-RUN curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sed -e 's|${PROJECT_NAME}_checksums.txt|checksums.txt|' | sh
-# RUN curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
+RUN curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
 
 WORKDIR /app
 COPY ./go.mod go.mod

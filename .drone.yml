@@ -129,7 +129,7 @@ steps:
     depends_on: [front]
     commands:
       - cp -a -R web-client/dist/ static/
-      - curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sed -e 's|$${PROJECT_NAME}_checksums.txt|checksums.txt|' | sh
+      - curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
       - git reset --hard
       - git fetch --tags
       - ./bin/goreleaser check
