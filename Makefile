@@ -23,6 +23,11 @@ ui: require-yarn
 	@yarn --cwd ./web-client build
 	@cp -R ./web-client/build ./static
 
+## test-e2e-ci: Runs e2e test on pipeline
+.PHONY: test-e2e-ci
+test-e2e-ci: docker-build
+	@./development/e2e-up-ci.sh
+
 ## test-e2e-local: Runs e2e test on the local machine
 .PHONY: test-e2e-local
 test-e2e-local: docker-build
@@ -73,9 +78,15 @@ build: require-docker docker-build
 	@docker cp poc-fury-application-status-page-result:/app/poc-fury-application-status-page bin/linux/poc-fury-application-status-page
 	@docker rm poc-fury-application-status-page-result
 
+## clean-ci: Remove pending resources from other pipelines
+.PHONY: clean-ci
+clean-ci: require-docker
+	@docker rm -f cypress &> /dev/null
+
 ## clean: Removes generated files
 .PHONY: clean
 clean: require-docker
-	@docker rmi -f poc-fury-application-status-page:build
-	@rm -rf .vagrant
+	@docker rmi -f registry.sighup.io/poc/fury-application-status:latest
+	@docker rmi -f registry.sighup.io/poc/fury-application-status:webapp
+	@docker rmi -f registry.sighup.io/poc/fury-application-status:backend
 	@rm -rf bin
