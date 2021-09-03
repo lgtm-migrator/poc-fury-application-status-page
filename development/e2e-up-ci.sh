@@ -5,8 +5,10 @@
 
 set -e
 
-RANDOM_PORT=$(LC_ALL=C tr -cd 0-9 </dev/urandom | head -c 3 ; echo)
-LISTENING_PORT=$((RANDOM_PORT + 8000))
+RANDOM_FORWARD_PORT=$(LC_ALL=C tr -cd 0-9 </dev/urandom | head -c 3 ; echo)
+RANDOM_XVFB_PORT=$(LC_ALL=C tr -cd 0-9 </dev/urandom | head -c 2 ; echo)
+LISTENING_PORT=$((RANDOM_FORWARD_PORT + 8000))
+XVFB_PORT=$((RANDOM_XVFB_PORT + 80))
 CLUSTER_ID=e2e-$(LC_ALL=C tr -dc 'a-z0-9' </dev/urandom | head -c 8 ; echo)
 CYPRESS_ID=cypress-$(LC_ALL=C tr -dc 'a-z0-9' </dev/urandom | head -c 8 ; echo)
 
@@ -48,6 +50,10 @@ docker run -i -e CYPRESS_BASE_URL -e CYPRESS_VIDEO -e DISPLAY= --entrypoint=bash
 docker cp $PWD/e2e-test "${CYPRESS_ID}":e2e
 
 docker exec -i -w /e2e "${CYPRESS_ID}" 'yarn' 'add' '-D' '@testing-library/cypress'
+
+docker exec -i -w /e2e "${CYPRESS_ID}" 'Xvfb' ':${XVFB_PORT}' '&'
+
+docker exec -i -w /e2e "${CYPRESS_ID}" 'export' 'DISPLAY=:${XVFB_PORT}'
 
 docker exec -i -w /e2e "${CYPRESS_ID}" 'cypress' 'run' '--headless' '--spec' 'cypress/integration/fury-application-status-scenario-1_spec.js'
 
