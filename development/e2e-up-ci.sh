@@ -29,7 +29,7 @@ echo "Scenario 1"
 
 make port-forward &
 
-docker run -i -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=bash -d --network host --name="cypress" cypress/included:6.2.1
+docker run -i -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=bash -d --network host --name="cypress" cypress/included:8.0.0
 
 docker cp $PWD/e2e-test cypress:e2e
 
