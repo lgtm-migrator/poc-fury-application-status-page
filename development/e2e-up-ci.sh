@@ -5,11 +5,18 @@
 
 set -e
 
+CLUSTER_ID=e2e-$(LC_ALL=C tr -dc 'a-z0-9' </dev/urandom | head -c 8 ; echo)
+
+function cleanup {
+  echo "Destroying the cluster ${CLUSTER_ID}"
+  kind delete cluster --name "${CLUSTER_ID}"
+}
+
 make clean-ci
 
-make test-e2e-local-down
+kind create cluster --name "${CLUSTER_ID}" --config=./development/kind-config.yml --kubeconfig=./.kubeconfig
 
-kind create cluster --config=./development/kind-config.yml --kubeconfig=./.kubeconfig
+trap cleanup EXIT
 
 kind load docker-image registry.sighup.io/poc/fury-application-status:latest
 
