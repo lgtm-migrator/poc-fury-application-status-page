@@ -33,6 +33,8 @@ docker run -i -e CYPRESS_BASE_URL -e CYPRESS_VIDEO --entrypoint=bash -d --networ
 
 docker cp $PWD/e2e-test cypress:e2e
 
+docker exec -i -w /e2e cypress 'yarn' 'add' '-D' '@testing-library/cypress'
+
 docker exec -i -w /e2e cypress 'cypress' 'run' '--headless' '--spec' 'cypress/integration/fury-application-status-scenario-1_spec.js'
 
 echo "Scenario 2"
