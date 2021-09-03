@@ -51,9 +51,9 @@ docker cp $PWD/e2e-test "${CYPRESS_ID}":e2e
 
 docker exec -i -w /e2e "${CYPRESS_ID}" 'yarn' 'add' '-D' '@testing-library/cypress'
 
-docker exec -i -w /e2e "${CYPRESS_ID}" 'Xvfb' ':' "${XVFB_PORT}" ' &'
+docker exec -i -w /e2e "${CYPRESS_ID}" 'Xvfb' ":${XVFB_PORT}"  " &"
 
-docker exec -i -w /e2e "${CYPRESS_ID}" 'export' 'DISPLAY=:${XVFB_PORT}'
+docker exec -i -w /e2e "${CYPRESS_ID}" 'export' "DISPLAY=:${XVFB_PORT}"
 
 docker exec -i -w /e2e "${CYPRESS_ID}" 'cypress' 'run' '--headless' '--spec' 'cypress/integration/fury-application-status-scenario-1_spec.js'
 
