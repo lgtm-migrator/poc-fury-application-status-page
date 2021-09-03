@@ -11,16 +11,15 @@ CYPRESS_ID=cypress-$(LC_ALL=C tr -dc 'a-z0-9' </dev/urandom | head -c 8 ; echo)
 function cleanup-kind {
   echo "Destroying the cluster ${CLUSTER_ID}"
   kind delete cluster --name "${CLUSTER_ID}"
-}
-
-function cleanup-cypress {
-  echo "Removing cypress image ${CYPRESS_ID}"
+    echo "Removing cypress image ${CYPRESS_ID}"
   docker rm -f "${CYPRESS_ID}" &> /dev/null
 }
 
-kind create cluster --name "${CLUSTER_ID}" --config=./development/kind-config.yml --kubeconfig=./.kubeconfig
-
 trap cleanup-kind EXIT
+
+trap cleanup-kind ERR
+
+kind create cluster --name "${CLUSTER_ID}" --config=./development/kind-config.yml --kubeconfig=./.kubeconfig
 
 kind load --name "${CLUSTER_ID}" docker-image registry.sighup.io/poc/fury-application-status:latest
 
@@ -41,8 +40,6 @@ echo "Scenario 1"
 make port-forward &
 
 docker run -i -e CYPRESS_BASE_URL -e CYPRESS_VIDEO -e DISPLAY: --entrypoint=bash -d --network host --name="${CYPRESS_ID}" cypress/included:8.3.0
-
-trap cleanup-cypress EXIT
 
 docker cp $PWD/e2e-test "${CYPRESS_ID}":e2e
 
@@ -89,7 +86,3 @@ echo "Forwarding ports to pod"
 make port-forward &
 
 docker exec -i -w /e2e "${CYPRESS_ID}" 'cypress' 'run' '--headless' '--spec' 'cypress/integration/fury-application-status-scenario-3_spec.js'
-
-cleanup-kind
-
-cleanup-cypress

@@ -103,7 +103,6 @@ steps:
       - wget -qO /tmp/temp.zip https://github.com/bats-core/bats-core/archive/refs/tags/v$${BATS_VERSION}.zip
       - unzip -d /tmp /tmp/temp.zip
       - /tmp/bats-core-$${BATS_VERSION}/install.sh /usr/local
-      - kind delete clusters --all
       - make test-e2e-ci
       - make test-e2e-local-down
       - make clean
