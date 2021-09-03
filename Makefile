@@ -89,4 +89,3 @@ clean: require-docker
 	@docker rmi -f registry.sighup.io/poc/fury-application-status:latest
 	@docker rmi -f registry.sighup.io/poc/fury-application-status:webapp
 	@docker rmi -f registry.sighup.io/poc/fury-application-status:backend
-	@rm -rf bin
