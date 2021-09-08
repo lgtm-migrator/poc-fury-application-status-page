@@ -23,7 +23,7 @@ RUN cd web-client && \
 
 RUN yarn --cwd ./web-client build-mocked
 
-FROM golang:1.16-buster AS compile
+FROM golang:1.17-buster AS compile
 
 RUN apt update
 RUN curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | sh
