@@ -1,5 +1,4 @@
 {
-  "schedule": "before 9am every wednesday",
   "extends": [
     "config:base"
   ],
