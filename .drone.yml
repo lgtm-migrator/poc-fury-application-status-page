@@ -105,6 +105,11 @@ steps:
       - /tmp/bats-core-$${BATS_VERSION}/install.sh /usr/local
       - make test-e2e-ci
       - make clean
+    trigger:
+      event:
+        include:
+          - tag
+          - pull_request
 
   - name: front
     image: node:16.9
