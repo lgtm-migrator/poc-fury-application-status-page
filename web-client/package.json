@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "fury-component": "0.1.7",
-    "fury-design-system": "0.0.6",
+    "fury-design-system": "0.1.0",
     "i18next": "21.0.1",
     "loglevel": "1.7.1",
     "loglevel-remote": "0.1.0",
