@@ -2,5 +2,11 @@
   "schedule": "before 9am every wednesday",
   "extends": [
     "config:base"
+  ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    }
   ]
 }
