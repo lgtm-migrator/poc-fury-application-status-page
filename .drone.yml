@@ -125,6 +125,10 @@ steps:
     commands:
       - yarn --cwd ./web-client install
       - yarn --cwd ./web-client build
+    when:
+      event:
+        - pull_request
+        - tag
 
   - name: build
     image: golang:1.17-buster
@@ -137,6 +141,10 @@ steps:
       - git fetch --tags
       - ./bin/goreleaser check
       - ./bin/goreleaser build --debug --snapshot --rm-dist
+    when:
+      event:
+        - pull_request
+        - tag
 
   - name: release
     image: golang:1.17-buster
