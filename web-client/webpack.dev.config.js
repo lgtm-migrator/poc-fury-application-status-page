@@ -19,6 +19,12 @@ module.exports = (env, args) => {
 				index: "index.htm",
 			},
 			port: 8085,
+			client: {
+				overlay: {
+					errors: true,
+					warnings: false,
+				},
+			},
 		}
 	}
 }
