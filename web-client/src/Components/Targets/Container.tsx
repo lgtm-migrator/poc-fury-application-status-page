@@ -4,23 +4,25 @@
  * license that can be found in the LICENSE file.
  */
 
-import React, {useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import TargetStatusComponent from "./Component";
-import {ApplicationContext} from "../ApplicationStatus/Container";
-import {withErrorWrapper} from "../ErrorWrapper";
-import {TargetsStore} from "../../Stores/Targets";
-
-export default withErrorWrapper(TargetsContainer);
+import ApplicationContext from "../ApplicationStatus/Context";
+import withErrorWrapper from "../ErrorWrapper";
+import TargetsStore from "../../Stores/Targets";
 
 function TargetsContainer() {
   const appContextData = useContext(ApplicationContext);
-  const [targetsStore] = useState<TargetsStore>(new TargetsStore(appContextData.apiUrl, appContextData.groupLabel, appContextData.cascadeFailure))
+  const [targetsStore] = useState<TargetsStore>(
+    new TargetsStore(
+      appContextData.apiUrl,
+      appContextData.groupLabel,
+      appContextData.cascadeFailure
+    )
+  );
 
   return (
-    <>
-      {targetsStore &&
-        <TargetStatusComponent targetsStore={targetsStore} />
-      }
-    </>
+    <>{targetsStore && <TargetStatusComponent targetsStore={targetsStore} />}</>
   );
 }
+
+export default withErrorWrapper(TargetsContainer);

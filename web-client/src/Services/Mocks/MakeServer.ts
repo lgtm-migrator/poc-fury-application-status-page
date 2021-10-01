@@ -4,18 +4,24 @@
  * license that can be found in the LICENSE file.
  */
 
-import {createServer} from "miragejs"
-import {seedsGenerator} from "./Seeds/Generator";
-import {getBaseFactories, getBaseModels} from "./Configuration";
-import {getRoutes} from "./Routes";
-import {MocksScenario} from "./types";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { createServer } from "miragejs";
+import seedsGenerator from "./Seeds/Generator";
+import { getBaseFactories, getBaseModels } from "./Configuration";
+import getRoutes from "./Routes";
+import { MocksScenario } from "./types";
 
-export function makeServer({ environment = 'test' }, urlPrefix: string, scenario: MocksScenario, apiPath?: string) {
+export default function makeServer(
+  { environment = "test" },
+  urlPrefix: string,
+  scenario: MocksScenario,
+  apiPath?: string
+) {
   return createServer({
     environment,
     models: getBaseModels(),
     factories: getBaseFactories(),
     seeds: seedsGenerator(scenario),
-    routes: getRoutes(urlPrefix, apiPath)
-  })
+    routes: getRoutes(urlPrefix, apiPath),
+  });
 }

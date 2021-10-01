@@ -4,9 +4,10 @@
  * license that can be found in the LICENSE file.
  */
 
-import {Moment} from "moment";
-import {ErrorsReportChecksStore} from "../../Stores/ErrorsReportChecks";
-import {ErrorHealthCheckCountByDay} from "../types";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Moment } from "moment";
+import ErrorsReportChecksStore from "../../Stores/ErrorsReportChecks";
+import { ErrorHealthCheckCountByDay } from "../types";
 
 export interface ErrorsReportCardContainerProps {
   accordionOpen?: boolean;

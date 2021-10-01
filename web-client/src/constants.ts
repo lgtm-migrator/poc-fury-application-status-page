@@ -4,10 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-const releaseNumber = process.env.RELEASE_TAG ?? `hash: ${ process.env.COMMIT }`
+const releaseNumber = process.env.RELEASE_TAG ?? `hash: ${process.env.COMMIT}`;
 const moduleKey: string | undefined = process.env.MODULE_KEY;
 
-export {
-  releaseNumber,
-  moduleKey
-}
+export { releaseNumber, moduleKey };

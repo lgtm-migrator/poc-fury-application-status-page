@@ -5,11 +5,11 @@
  */
 
 import { Factory } from "fury-component";
-import { IStateHandler } from "../Components/types";
 import { StateManager } from "fury-component/dist/State/types";
+import { IStateHandler } from "../Components/types";
 import { moduleKey } from "../constants";
 
-export function createStateHandler(): StateManager<IStateHandler> {
+export default function createStateHandler(): StateManager<IStateHandler> {
   if (!moduleKey) {
     throw new Error("Missing MODULE_KEY from .env");
   }
@@ -19,7 +19,7 @@ export function createStateHandler(): StateManager<IStateHandler> {
     defaultState: {
       apiurl: `${process.env.SERVER_BASE_PATH}${process.env.API_PATH}`,
       cascadefailure: 0,
-      grouplabel: ''
+      grouplabel: "",
     },
     defaultLanguage: "EN",
     moduleName: moduleKey,

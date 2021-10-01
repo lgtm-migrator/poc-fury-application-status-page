@@ -4,16 +4,32 @@
  * license that can be found in the LICENSE file.
  */
 
-import {MockedErrorHealthCheckCountByDay, MockedSchema} from "./types";
-import {ErrorHealthCheckCountByDay} from "../../Components/types";
+// eslint-disable-next-line import/no-extraneous-dependencies
 import moment from "moment";
+import { MockedErrorHealthCheckCountByDay, MockedSchema } from "./types";
 
-export function getAllHealthChecksByGroup(
-  schema: MockedSchema
+function sortForTimeDesc(
+  a: MockedErrorHealthCheckCountByDay,
+  b: MockedErrorHealthCheckCountByDay
 ) {
-  return schema
-    .all("healthCheck")
-    .models
+  const timeDiff = moment(a.dayDate).diff(moment(b.dayDate));
+
+  if (timeDiff >= 0) return -1;
+
+  return 1;
+}
+
+function findIndexOfElemSameDayData(
+  acc: MockedErrorHealthCheckCountByDay[],
+  healthCheckTime: moment.Moment
+) {
+  return acc.findIndex((groupedDataElement) => {
+    return healthCheckTime.isSame(groupedDataElement.dayDate, "day");
+  });
+}
+
+export function getAllHealthChecksByGroup(schema: MockedSchema) {
+  return schema.all("healthCheck").models;
 }
 
 export function getAllHealthChecksByGroupAndTarget(
@@ -22,33 +38,35 @@ export function getAllHealthChecksByGroupAndTarget(
 ) {
   return schema
     .all("healthCheck")
-    .models
-    .filter(healthCheck => healthCheck.target === targetLabel);
+    .models.filter((healthCheck) => healthCheck.target === targetLabel);
 }
 
-export function getAllFailedHealthCountByDay(
-  schema: MockedSchema
-) {
+export function getAllFailedHealthCountByDay(schema: MockedSchema) {
   return schema
     .all("healthCheck")
-    .models
-    .filter(healthCheck => healthCheck.status === "Failed")
-    .reduce<MockedErrorHealthCheckCountByDay[]>((accumulator, currentHealthCheck) => {
-      const currentHealthCheckTime = moment(currentHealthCheck.completedAt);
-      const indexOfSameDayInAcc = findIndexOfElemSameDayData(accumulator, currentHealthCheckTime);
+    .models.filter((healthCheck) => healthCheck.status === "Failed")
+    .reduce<MockedErrorHealthCheckCountByDay[]>(
+      (accumulator, currentHealthCheck) => {
+        const currentHealthCheckTime = moment(currentHealthCheck.completedAt);
+        const indexOfSameDayInAcc = findIndexOfElemSameDayData(
+          accumulator,
+          currentHealthCheckTime
+        );
 
-      if (indexOfSameDayInAcc === -1) {
-        accumulator.push({
-          dayDate: currentHealthCheck.completedAt,
-          count: 1
-        });
-      } else {
-        accumulator[indexOfSameDayInAcc].count++;
-      }
+        if (indexOfSameDayInAcc === -1) {
+          accumulator.push({
+            dayDate: currentHealthCheck.completedAt,
+            count: 1,
+          });
+        } else {
+          accumulator[indexOfSameDayInAcc].count += 1;
+        }
 
-      return accumulator;
-    }, [])
-    .sort(sortForTimeDesc)
+        return accumulator;
+      },
+      []
+    )
+    .sort(sortForTimeDesc);
 }
 
 export function getAllFailedHealthChecksByDay(
@@ -59,21 +77,9 @@ export function getAllFailedHealthChecksByDay(
 
   return schema
     .all("healthCheck")
-    .models
-    .filter(healthCheck => healthCheck.status === "Failed" && moment(healthCheck.completedAt).isSame(parsedDay, "day"))
-}
-
-function sortForTimeDesc(a: MockedErrorHealthCheckCountByDay, b: MockedErrorHealthCheckCountByDay) {
-  const timeDiff = moment(a.dayDate).diff(moment(b.dayDate))
-
-  if (timeDiff >= 0)
-    return -1;
-
-  return 1;
-}
-
-function findIndexOfElemSameDayData(acc: MockedErrorHealthCheckCountByDay[], healthCheckTime: moment.Moment) {
-  return acc.findIndex((groupedDataElement) => {
-    return healthCheckTime.isSame(groupedDataElement.dayDate, 'day');
-  });
+    .models.filter(
+      (healthCheck) =>
+        healthCheck.status === "Failed" &&
+        moment(healthCheck.completedAt).isSame(parsedDay, "day")
+    );
 }

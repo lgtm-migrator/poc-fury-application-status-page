@@ -6,6 +6,4 @@
 
 import TargetHealthChecksContainer from "./Container";
 
-export {
-  TargetHealthChecksContainer as TargetHealthChecks
-}
+export default TargetHealthChecksContainer;

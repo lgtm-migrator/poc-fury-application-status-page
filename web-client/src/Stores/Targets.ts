@@ -4,35 +4,42 @@
  * license that can be found in the LICENSE file.
  */
 
-import {action, makeObservable, observable, runInAction} from 'mobx';
-import {HealthCheckResponse, Target} from "../Components/types";
-import {HealthCheckHandler} from "../Services/HealthCheckHandler";
+import { action, makeObservable, observable, runInAction } from "mobx";
+import { HealthCheckResponse, Target } from "../Components/types";
+import HealthCheckHandler from "../Services/HealthCheckHandler";
 
-export class TargetsStore {
+export default class TargetsStore {
   public targetList: Target[] = [];
 
-  constructor(private apiUrl: string, private groupLabel: string, private cascadeFailure: number) {
+  constructor(
+    private apiUrl: string,
+    private groupLabel: string,
+    private cascadeFailure: number
+  ) {
     makeObservable(this, {
-      targetList              : observable,
-      targetListGetAll        : action,
+      targetList: observable,
+      targetListGetAll: action,
     });
   }
 
   public async targetListGetAll() {
     const targetListJson = await this.fetchTargetListAsync();
 
-    if(!targetListJson) throw new Error("targetList is undefined");
+    if (!targetListJson) throw new Error("targetList is undefined");
 
-    const healthCheckHandler = new HealthCheckHandler(targetListJson.data, this.cascadeFailure)
+    const healthCheckHandler = new HealthCheckHandler(
+      targetListJson.data,
+      this.cascadeFailure
+    );
 
     runInAction(() => {
       this.targetList = healthCheckHandler.groupByTarget();
-    })
+    });
   }
 
   private async fetchTargetListAsync(): Promise<HealthCheckResponse> {
     const targetList = await fetch(`${this.apiUrl}lastChecks`);
 
-    return await targetList.json();
+    return targetList.json();
   }
 }

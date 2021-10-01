@@ -4,9 +4,9 @@
  * license that can be found in the LICENSE file.
  */
 
-import React from 'react';
-import { EuiLink } from 'fury-design-system';
-import { useHistory } from 'react-router-dom';
+import React from "react";
+import { EuiLink } from "fury-design-system";
+import { useHistory } from "react-router-dom";
 
 interface EuiCustomLinkProps {
   [key: string]: any;
@@ -16,11 +16,12 @@ interface EuiCustomLinkProps {
 const isModifiedEvent = (event: React.MouseEvent<HTMLAnchorElement>) =>
   !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 
-const isLeftClickEvent = (event: React.MouseEvent<HTMLAnchorElement>) => event.button === 0;
+const isLeftClickEvent = (event: React.MouseEvent<HTMLAnchorElement>) =>
+  event.button === 0;
 
 const isTargetBlank = (event: React.MouseEvent<HTMLAnchorElement>) => {
-  const target = (event.target as HTMLAnchorElement).getAttribute('target');
-  return target && target !== '_self';
+  const target = (event.target as HTMLAnchorElement).getAttribute("target");
+  return target && target !== "_self";
 };
 
 export default function EuiCustomLink({ to, ...rest }: EuiCustomLinkProps) {
@@ -31,7 +32,11 @@ export default function EuiCustomLink({ to, ...rest }: EuiCustomLinkProps) {
       return;
     }
     // Let the browser handle links that open new tabs/windows
-    if (isModifiedEvent(event) || !isLeftClickEvent(event) || isTargetBlank(event)) {
+    if (
+      isModifiedEvent(event) ||
+      !isLeftClickEvent(event) ||
+      isTargetBlank(event)
+    ) {
       return;
     }
     // Prevent regular link behavior, which causes a browser refresh.

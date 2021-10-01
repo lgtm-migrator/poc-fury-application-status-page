@@ -6,6 +6,4 @@
 
 import TargetsContainer from "./Container";
 
-export {
-  TargetsContainer as Targets
-}
+export default TargetsContainer;

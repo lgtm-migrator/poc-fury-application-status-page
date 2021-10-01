@@ -6,6 +6,4 @@
 
 import ApplicationStatusContainer from "./Container";
 
-export {
-  ApplicationStatusContainer as ApplicationStatus
-}
+export default ApplicationStatusContainer;

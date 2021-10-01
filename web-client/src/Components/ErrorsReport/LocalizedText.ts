@@ -4,21 +4,20 @@
  * license that can be found in the LICENSE file.
  */
 
-import { BaseLocalizedText } from '../../Services/BaseLocalizedText';
+import BaseLocalizedText from "../../Services/BaseLocalizedText";
 
-export class LocalizedText extends BaseLocalizedText {
+export default class LocalizedText extends BaseLocalizedText {
   public static singleton = new LocalizedText();
 
   public get endOfReport() {
-    return this.translate('Errors Report End Of Report');
+    return this.translate("Errors Report End Of Report");
   }
 
   public get noOutagesTitle() {
-    return this.translate('Errors Report No Outages Title');
+    return this.translate("Errors Report No Outages Title");
   }
 
   public get noOutagesSubTitle() {
-    return this.translate('Errors Report No Outages SubTitle');
+    return this.translate("Errors Report No Outages SubTitle");
   }
-
 }

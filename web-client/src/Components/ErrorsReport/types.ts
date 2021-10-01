@@ -4,9 +4,9 @@
  * license that can be found in the LICENSE file.
  */
 
-import {ErrorsReportStore} from "../../Stores/ErrorsReport";
+import ErrorsReportStore from "../../Stores/ErrorsReport";
 
 export interface ErrorsReportComponentProps {
-  errorsReportStore: ErrorsReportStore
-  pageName: string
+  errorsReportStore: ErrorsReportStore;
+  pageName: string;
 }
