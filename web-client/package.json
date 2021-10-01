@@ -6,7 +6,7 @@
   "dependencies": {
     "fury-component": "0.1.7",
     "fury-design-system": "0.1.0",
-    "i18next": "21.2.0",
+    "i18next": "21.2.1",
     "loglevel": "1.7.1",
     "loglevel-remote": "0.1.0",
     "mobx": "6.3.3",
