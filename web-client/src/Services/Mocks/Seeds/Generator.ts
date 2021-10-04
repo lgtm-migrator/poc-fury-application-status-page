@@ -18,7 +18,7 @@ import scenarioThreeData from "./ScenarioThree";
 import scenarioFourData from "./ScenarioFour";
 
 function generateSeedFromScenario(scenarioData: MockedHealthCheck[]) {
-  return function (
+  return function generator(
     server: Server<Registry<MockedServerBaseModels, MockedServerBaseFactories>>
   ) {
     scenarioData.forEach((scenarioClusterData) => {

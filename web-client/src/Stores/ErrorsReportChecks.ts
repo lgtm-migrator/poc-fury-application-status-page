@@ -7,8 +7,7 @@
 import { action, makeObservable, observable, runInAction } from "mobx";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from "moment";
-import { ErrorsReportCheck } from "../Components/ErrorsReportCard/types";
-import { HealthCheckResponse } from "../Components/types";
+import { ErrorsReportCheck, HealthCheckResponse } from "../Components/types";
 
 export default class ErrorsReportChecksStore {
   public errorsReportChecksList: ErrorsReportCheck[] | undefined = undefined;

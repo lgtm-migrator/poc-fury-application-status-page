@@ -9,7 +9,7 @@ import { EuiEmptyPrompt, EuiLoadingSpinner } from "fury-design-system";
 import { Server } from "miragejs/server";
 import { initialize } from "./i18n";
 import makeServer from "./Services/Mocks/MakeServer";
-import { logger } from "./Services/Logger";
+import logger from "./Services/Logger";
 import { MocksScenario } from "./Services/Mocks/types";
 import { Config } from "./Components/types";
 

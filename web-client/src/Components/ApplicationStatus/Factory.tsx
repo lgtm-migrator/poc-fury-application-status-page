@@ -15,7 +15,7 @@ import ApplicationContext from "./Context";
 import TargetHealthChecks from "../TargetHealthChecks";
 import Targets from "../Targets";
 import { ApplicationStatusRouteParams } from "./types";
-import { logger } from "../../Services/Logger";
+import logger from "../../Services/Logger";
 import ErrorsReport from "../ErrorsReport";
 
 export default function ApplicationStatusRouterFactory() {

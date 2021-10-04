@@ -6,7 +6,7 @@
 
 import BaseLocalizedText from "../../Services/BaseLocalizedText";
 
-export class LocalizedText extends BaseLocalizedText {
+export default class LocalizedText extends BaseLocalizedText {
   public static singleton = new LocalizedText();
 
   public healthyStatusMessage(group: string, target: string) {

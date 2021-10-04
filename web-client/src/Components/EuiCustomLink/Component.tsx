@@ -49,5 +49,6 @@ export default function EuiCustomLink({ to, ...rest }: EuiCustomLinkProps) {
   const href = history.createHref({ pathname: to });
 
   const props = { ...rest, href, onClick };
+  // eslint-disable-next-line react/jsx-props-no-spreading
   return <EuiLink {...props} />;
 }

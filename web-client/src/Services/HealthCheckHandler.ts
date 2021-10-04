@@ -45,6 +45,21 @@ export default class HealthCheckHandler {
     return failedChecksCount >= this.cascadeFailure ? "Failed" : "Complete";
   }
 
+  private static sortHealthChecksByParam(param: "target" | "checkName") {
+    return (a: Target & TargetHealthCheck, b: Target & TargetHealthCheck) => {
+      if (a.status === "Failed" && b.status !== "Failed") return -1;
+
+      if (a.status === b.status) {
+        if (a[param] < b[param]) {
+          return -1;
+        }
+        return 1;
+      }
+
+      return 1;
+    };
+  }
+
   private updateAggregatedTargetData(
     aggregatedTarget: Target,
     currentTarget: TargetHealthCheck
@@ -118,6 +133,7 @@ export default class HealthCheckHandler {
           return [...targetAcc, aggregatedHealthCheck];
         }
 
+        // eslint-disable-next-line no-param-reassign
         targetAcc[targetIndex] =
           HealthCheckHandler.updateAggregatedHealthCheckData(
             targetAcc[targetIndex],
@@ -126,7 +142,7 @@ export default class HealthCheckHandler {
 
         return targetAcc;
       }, [] as TargetHealthCheck[])
-      .sort(sortHealthChecksByParam("checkName"));
+      .sort(HealthCheckHandler.sortHealthChecksByParam("checkName"));
   }
 
   public groupByTarget(): Target[] {
@@ -153,27 +169,13 @@ export default class HealthCheckHandler {
           return [...targetAcc, aggregatedTarget];
         }
 
+        // eslint-disable-next-line no-param-reassign
         targetAcc[targetIndex] = this.updateAggregatedTargetData(
           targetAcc[targetIndex],
           currentTarget
         );
         return targetAcc;
       }, [] as Target[])
-      .sort(sortHealthChecksByParam("target"));
+      .sort(HealthCheckHandler.sortHealthChecksByParam("target"));
   }
-}
-
-function sortHealthChecksByParam(param: "target" | "checkName") {
-  return (a: Target & TargetHealthCheck, b: Target & TargetHealthCheck) => {
-    if (a.status === "Failed" && b.status !== "Failed") return -1;
-
-    if (a.status === b.status) {
-      if (a[param] < b[param]) {
-        return -1;
-      }
-      return 1;
-    }
-
-    return 1;
-  };
 }

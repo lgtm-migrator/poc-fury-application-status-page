@@ -7,7 +7,6 @@
 import { FactoryDefinition, ModelDefinition, Registry } from "miragejs/-types";
 import Schema from "miragejs/orm/schema";
 import {
-  ErrorHealthCheckCountByDay,
   IErrorHealthCheckCountByDay,
   IHealthCheck,
 } from "../../Components/types";

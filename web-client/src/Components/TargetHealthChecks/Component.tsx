@@ -22,7 +22,7 @@ import "./Style.scss";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment, { Moment } from "moment";
 import { observer } from "mobx-react";
-import { LocalizedText } from "./LocalizedText";
+import LocalizedText from "./LocalizedText";
 import { HealthCheckStatus, TargetHealthCheck } from "../types";
 import ApplicationContext from "../ApplicationStatus/Context";
 import ResponsiveHeader from "../ResponsiveHeader";

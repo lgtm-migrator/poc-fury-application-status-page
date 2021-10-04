@@ -76,3 +76,9 @@ export interface Config {
   targetLabel?: string;
   targetTitle?: string;
 }
+
+export interface ErrorsReportCheck {
+  completedAt: Moment;
+  checkName: string;
+  target: string;
+}

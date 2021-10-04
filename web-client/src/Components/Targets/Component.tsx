@@ -21,8 +21,8 @@ import {
 } from "fury-design-system";
 import "./Style.scss";
 import { observer } from "mobx-react";
-import { EuiCustomLink } from "../EuiCustomLink";
-import { LocalizedText } from "./LocalizedText";
+import EuiCustomLink from "../EuiCustomLink";
+import LocalizedText from "./LocalizedText";
 import { HealthCheckStatus, Target } from "../types";
 import ApplicationContext from "../ApplicationStatus/Context";
 import { TargetCardProps, TargetsComponentProps } from "./types";
@@ -158,7 +158,7 @@ function TargetStatusComponent(props: TargetsComponentProps) {
   useEffect(() => {
     targetsStore
       .targetListGetAll()
-      .then((_) => {
+      .then(() => {
         setIsLoading(false);
       })
       .catch((err) => {

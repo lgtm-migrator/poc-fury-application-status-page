@@ -15,7 +15,7 @@ import {
 } from "./IO";
 
 export default function getRoutes(urlPrefix: string, apiPath?: string) {
-  return function () {
+  return function routes() {
     this.urlPrefix = urlPrefix;
 
     this.get("/config", () => {

@@ -17,7 +17,7 @@ import seedsGenerator from "../../Services/Mocks/Seeds/Generator";
 import ErrorsReportChecksStore from "../../Stores/ErrorsReportChecks";
 // @ts-ignore
 import moment from "moment";
-import { ErrorsReportCheck } from "../../Components/ErrorsReportCard/types";
+import { ErrorsReportCheck } from "../../Components/types";
 
 const url = "https://dummy.local";
 
