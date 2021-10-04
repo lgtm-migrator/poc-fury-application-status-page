@@ -4,14 +4,19 @@
  * license that can be found in the LICENSE file.
  */
 
-import React, {useContext} from "react";
-import {ApplicationContext} from "./Container";
-import {BrowserRouter as Router, Route, RouteComponentProps, Switch} from "react-router-dom";
-import {TargetHealthChecks} from "../TargetHealthChecks";
-import {Targets} from "../Targets";
-import {ApplicationStatusRouteParams} from "./types";
-import {logger} from "../../Services/Logger";
-import {ErrorsReport} from "../ErrorsReport";
+import React, { useContext } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  RouteComponentProps,
+  Switch,
+} from "react-router-dom";
+import ApplicationContext from "./Context";
+import TargetHealthChecks from "../TargetHealthChecks";
+import Targets from "../Targets";
+import { ApplicationStatusRouteParams } from "./types";
+import logger from "../../Services/Logger";
+import ErrorsReport from "../ErrorsReport";
 
 export default function ApplicationStatusRouterFactory() {
   const appContextData = useContext(ApplicationContext);
@@ -26,17 +31,17 @@ export default function ApplicationStatusRouterFactory() {
         <Switch>
           <Route
             path={`${appContextData.basePath}`}
-            component={() =>
+            component={() => (
               <TargetHealthChecks
                 target={targetLabel}
                 targetTitle={appContextData.targetTitle}
                 standalone
               />
-            }
+            )}
           />
         </Switch>
       </Router>
-    )
+    );
   }
 
   return (
@@ -48,9 +53,9 @@ export default function ApplicationStatusRouterFactory() {
         />
         <Route
           path={`${appContextData.basePath}/:target`}
-          component={(propsRoute: RouteComponentProps<ApplicationStatusRouteParams>) =>
-            <TargetHealthChecks target={propsRoute.match.params.target} />
-          }
+          component={(
+            propsRoute: RouteComponentProps<ApplicationStatusRouteParams>
+          ) => <TargetHealthChecks target={propsRoute.match.params.target} />}
         />
         <Route
           path={`${appContextData.basePath}/`}
@@ -58,5 +63,5 @@ export default function ApplicationStatusRouterFactory() {
         />
       </Switch>
     </Router>
-  )
+  );
 }

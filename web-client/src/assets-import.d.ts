@@ -9,8 +9,8 @@
  * import raster images without
  * throwing errors
  */
-declare module '*.png';
-declare module '*.jpg';
+declare module "*.png";
+declare module "*.jpg";
 
 // Same for vector artworks
 declare module "*.svg" {

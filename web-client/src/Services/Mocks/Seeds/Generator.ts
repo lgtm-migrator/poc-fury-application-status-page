@@ -4,30 +4,32 @@
  * license that can be found in the LICENSE file.
  */
 
+import { Server } from "miragejs/server";
+import { Registry } from "miragejs/-types";
 import {
   MockedHealthCheck,
   MockedServerBaseFactories,
   MockedServerBaseModels,
-  MocksScenario
+  MocksScenario,
 } from "../types";
-import {scenarioOneData} from "./ScenarioOne";
-import {scenarioTwoData} from "./ScenarioTwo";
-import {scenarioThreeData} from "./ScenarioThree";
-import {Server} from "miragejs/server";
-import {Registry} from "miragejs/-types";
-import {scenarioFourData} from "./ScenarioFour";
+import scenarioOneData from "./ScenarioOne";
+import scenarioTwoData from "./ScenarioTwo";
+import scenarioThreeData from "./ScenarioThree";
+import scenarioFourData from "./ScenarioFour";
 
 function generateSeedFromScenario(scenarioData: MockedHealthCheck[]) {
-  return function(server: Server<Registry<MockedServerBaseModels, MockedServerBaseFactories>>) {
-    scenarioData.forEach(scenarioClusterData => {
+  return function generator(
+    server: Server<Registry<MockedServerBaseModels, MockedServerBaseFactories>>
+  ) {
+    scenarioData.forEach((scenarioClusterData) => {
       server.create("healthCheck", {
-        ...scenarioClusterData
+        ...scenarioClusterData,
       });
-    })
-  }
+    });
+  };
 }
 
-export function seedsGenerator(scenario: MocksScenario) {
+export default function seedsGenerator(scenario: MocksScenario) {
   switch (scenario) {
     case MocksScenario.scenario1:
       return generateSeedFromScenario(scenarioOneData);
@@ -37,5 +39,7 @@ export function seedsGenerator(scenario: MocksScenario) {
       return generateSeedFromScenario(scenarioThreeData);
     case MocksScenario.scenario4:
       return generateSeedFromScenario(scenarioFourData);
+    default:
+      return generateSeedFromScenario(scenarioOneData);
   }
 }

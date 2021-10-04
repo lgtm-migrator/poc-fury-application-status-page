@@ -3,8 +3,8 @@
  * Use of this source code is governed by a BSD-style
  * license that can be found in the LICENSE file.
  */
-import {Moment} from "moment";
-import {ErrorsReportCheck} from "./ErrorsReportCard/types";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Moment } from "moment";
 
 export interface IStateHandler {
   apiurl: string;
@@ -37,12 +37,14 @@ export interface IErrorHealthCheckCountByDay {
 }
 
 export interface ServerResponse<T> {
- data: T;
- errorMessage: string;
+  data: T;
+  errorMessage: string;
 }
 
 export type HealthCheckResponse = ServerResponse<IHealthCheck[]>;
-export type ErrorHealthCheckCountByDayResponse = ServerResponse<IErrorHealthCheckCountByDay[]>;
+export type ErrorHealthCheckCountByDayResponse = ServerResponse<
+  IErrorHealthCheckCountByDay[]
+>;
 
 export interface Target {
   status: HealthCheckStatus;
@@ -52,16 +54,17 @@ export interface Target {
 }
 
 export interface TargetHealthCheck {
- completedAt?: string;
- checkName: string;
- status: HealthCheckStatus;
- target: string;
- lastCheck: Moment;
- lastIssue?: Moment;
- error?: string;
+  completedAt?: string;
+  checkName: string;
+  status: HealthCheckStatus;
+  target: string;
+  lastCheck: Moment;
+  lastIssue?: Moment;
+  error?: string;
 }
 
-export interface ErrorHealthCheckCountByDay extends Omit<IErrorHealthCheckCountByDay, "dayDate"> {
+export interface ErrorHealthCheckCountByDay
+  extends Omit<IErrorHealthCheckCountByDay, "dayDate"> {
   dayDate: Moment;
 }
 
@@ -72,4 +75,10 @@ export interface Config {
   groupTitle?: string;
   targetLabel?: string;
   targetTitle?: string;
+}
+
+export interface ErrorsReportCheck {
+  completedAt: Moment;
+  checkName: string;
+  target: string;
 }

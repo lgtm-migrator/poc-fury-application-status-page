@@ -4,9 +4,9 @@
  * license that can be found in the LICENSE file.
  */
 
-import {MockedHealthCheck} from "../types";
+import { MockedHealthCheck } from "../types";
 
-export const scenarioTwoData: MockedHealthCheck[] = [
+const scenarioTwoData: MockedHealthCheck[] = [
   {
     group: "BookInfo",
     target: "Details",
@@ -216,3 +216,5 @@ export const scenarioTwoData: MockedHealthCheck[] = [
     error: "",
   },
 ];
+
+export default scenarioTwoData;

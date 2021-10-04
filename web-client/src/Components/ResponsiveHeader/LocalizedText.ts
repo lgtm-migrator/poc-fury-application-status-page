@@ -4,8 +4,8 @@
  * license that can be found in the LICENSE file.
  */
 
- import { BaseLocalizedText } from '../../Services/BaseLocalizedText';
+import BaseLocalizedText from "../../Services/BaseLocalizedText";
 
- export class LocalizedText extends BaseLocalizedText {
+export default class LocalizedText extends BaseLocalizedText {
   public static singleton = new LocalizedText();
 }

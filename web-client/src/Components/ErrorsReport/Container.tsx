@@ -4,29 +4,29 @@
  * license that can be found in the LICENSE file.
  */
 
-
-import React, {useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import ErrorsReportComponent from "./Component";
-import {withErrorWrapper} from "../ErrorWrapper";
-import {ApplicationContext} from "../ApplicationStatus/Container";
-import {ErrorsReportStore} from "../../Stores/ErrorsReport";
-
-export default withErrorWrapper(ErrorsReportContainer);
+import withErrorWrapper from "../ErrorWrapper";
+import ApplicationContext from "../ApplicationStatus/Context";
+import ErrorsReportStore from "../../Stores/ErrorsReport";
 
 function ErrorsReportContainer() {
   const appContextData = useContext(ApplicationContext);
   const pageName = "Errors Report";
-  const [errorsReportStore] = useState<ErrorsReportStore>(new ErrorsReportStore(appContextData.apiUrl))
+  const [errorsReportStore] = useState<ErrorsReportStore>(
+    new ErrorsReportStore(appContextData.apiUrl)
+  );
 
   return (
     <>
-      {
-        errorsReportStore &&
+      {errorsReportStore && (
         <ErrorsReportComponent
           errorsReportStore={errorsReportStore}
           pageName={pageName}
         />
-      }
+      )}
     </>
-  )
+  );
 }
+
+export default withErrorWrapper(ErrorsReportContainer);

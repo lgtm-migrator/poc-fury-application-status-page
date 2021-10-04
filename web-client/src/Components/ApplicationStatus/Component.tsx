@@ -4,22 +4,21 @@
  * license that can be found in the LICENSE file.
  */
 
-import React, {useContext, useEffect} from "react";
-import 'fury-design-system/dist/eui_theme_fury_community.css';
-// import './Style.scss';
-import {LocalizedText} from "./LocalizedText";
-import {initialize} from "../../i18n";
-import {ApplicationContext} from "./Container";
+import React, { useContext, useEffect } from "react";
+import "fury-design-system/dist/eui_theme_fury_community.css";
+import LocalizedText from "./LocalizedText";
+import { initialize } from "../../i18n";
+import ApplicationContext from "./Context";
 import ApplicationStatusRouterFactory from "./Factory";
 
 export default function ApplicationStatusComponent() {
   const appContextData = useContext(ApplicationContext);
-  
+
   useEffect(() => {
     initialize.then(() => {
       LocalizedText.singleton.changeLanguage(appContextData.language);
-    })
+    });
   }, []);
 
-  return <ApplicationStatusRouterFactory />
+  return <ApplicationStatusRouterFactory />;
 }

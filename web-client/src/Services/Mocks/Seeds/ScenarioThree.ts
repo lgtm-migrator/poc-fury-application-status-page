@@ -6,7 +6,7 @@
 
 import { MockedHealthCheck } from "../types";
 
-export const scenarioThreeData: MockedHealthCheck[] = [
+const scenarioThreeData: MockedHealthCheck[] = [
   {
     group: "BookInfo",
     target: "Details",
@@ -226,6 +226,8 @@ export const scenarioThreeData: MockedHealthCheck[] = [
     podName: "http-check-product-1626199500-ijn8h",
     checkName: "http-status-check",
     owner: "healthcheck-controller",
-    error: ""
+    error: "",
   },
 ];
+
+export default scenarioThreeData;

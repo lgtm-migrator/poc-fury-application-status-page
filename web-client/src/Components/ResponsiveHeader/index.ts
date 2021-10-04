@@ -4,4 +4,6 @@
  * license that can be found in the LICENSE file.
  */
 
-export { ResponsiveHeader } from './Component';
+import ResponsiveHeader from "./Component";
+
+export default ResponsiveHeader;

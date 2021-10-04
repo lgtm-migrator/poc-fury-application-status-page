@@ -6,4 +6,4 @@
 
 import ErrorWrapperContainer from "./Container";
 
-export { ErrorWrapperContainer as withErrorWrapper };
+export default ErrorWrapperContainer;

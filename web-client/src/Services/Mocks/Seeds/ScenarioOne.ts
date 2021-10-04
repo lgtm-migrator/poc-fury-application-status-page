@@ -6,7 +6,7 @@
 
 import { MockedHealthCheck } from "../types";
 
-export const scenarioOneData: MockedHealthCheck[] = [
+const scenarioOneData: MockedHealthCheck[] = [
   {
     group: "BookInfo",
     target: "Details",
@@ -216,3 +216,5 @@ export const scenarioOneData: MockedHealthCheck[] = [
     error: "Job was active longer than specified deadline",
   },
 ];
+
+export default scenarioOneData;

@@ -4,32 +4,38 @@
  * license that can be found in the LICENSE file.
  */
 
-import React, {useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import { releaseNumber } from "../../constants";
 import TargetHealthChecksComponent from "./Component";
-import {ApplicationContext} from "../ApplicationStatus/Container";
-import {withErrorWrapper} from "../ErrorWrapper";
-import {TargetHealthChecksContainerProps} from "./types";
-import {TargetHealthChecksStore} from "../../Stores/TargetHealthChecks";
-
-export default withErrorWrapper(TargetHealthChecksContainer);
+import ApplicationContext from "../ApplicationStatus/Context";
+import withErrorWrapper from "../ErrorWrapper";
+import { TargetHealthChecksContainerProps } from "./types";
+import TargetHealthChecksStore from "../../Stores/TargetHealthChecks";
 
 function TargetHealthChecksContainer(props: TargetHealthChecksContainerProps) {
   const appContextData = useContext(ApplicationContext);
-  const [targetHealthChecksStore] = useState<TargetHealthChecksStore>(new TargetHealthChecksStore(appContextData.apiUrl, appContextData.groupLabel, props.target))
+  const { target, targetTitle, standalone } = props;
+  const [targetHealthChecksStore] = useState<TargetHealthChecksStore>(
+    new TargetHealthChecksStore(
+      appContextData.apiUrl,
+      appContextData.groupLabel,
+      target
+    )
+  );
 
   return (
     <>
-      {
-        targetHealthChecksStore &&
+      {targetHealthChecksStore && (
         <TargetHealthChecksComponent
-            releaseNumber={releaseNumber}
-            targetHealthChecksStore={targetHealthChecksStore}
-            target={props.target}
-            targetTitle={props.targetTitle}
-            standalone={props.standalone}
+          releaseNumber={releaseNumber}
+          targetHealthChecksStore={targetHealthChecksStore}
+          target={target}
+          targetTitle={targetTitle}
+          standalone={standalone}
         />
-      }
+      )}
     </>
   );
 }
+
+export default withErrorWrapper(TargetHealthChecksContainer);

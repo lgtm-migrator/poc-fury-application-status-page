@@ -6,7 +6,7 @@
 
 import { Factory } from "fury-component";
 
-export const logger = Factory.logger(
+const logger = Factory.logger(
   {
     level: process.env.APP_ENV === "production" ? "warn" : "debug",
   },
@@ -16,3 +16,5 @@ export const logger = Factory.logger(
     // todo add client guid from process.env
   }
 );
+
+export default logger;
