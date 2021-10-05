@@ -9,6 +9,8 @@ const dotenv = require("dotenv").config({ path: `${__dirname}/.env` });
 const generateBaseWebpackConfig = require("./webpack/generateBaseWebpackConfig");
 
 module.exports = (env, args) => {
+  const base = generateBaseWebpackConfig(env, "development", dotenv, args);
+
   return {
     ...base,
     devServer: {
