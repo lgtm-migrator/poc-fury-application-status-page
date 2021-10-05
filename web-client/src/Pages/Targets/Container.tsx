@@ -6,8 +6,8 @@
 
 import React, { useContext, useState } from "react";
 import TargetStatusComponent from "./Component";
-import ApplicationContext from "../ApplicationStatus/Context";
-import withErrorWrapper from "../ErrorWrapper";
+import ApplicationContext from "../../ExportedComponents/ApplicationStatus/Context";
+import withErrorWrapper from "../../Components/ErrorWrapper";
 import TargetsStore from "../../Stores/Targets";
 
 function TargetsContainer() {

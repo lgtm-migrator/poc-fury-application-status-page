@@ -16,11 +16,11 @@ import {
 } from "fury-design-system";
 import { observer } from "mobx-react";
 import { ErrorsReportComponentProps } from "./types";
-import ApplicationContext from "../ApplicationStatus/Context";
+import ApplicationContext from "../../ExportedComponents/ApplicationStatus/Context";
 import useErrorHandler from "../../Hooks/UseErrorHandler";
 import LocalizedText from "./LocalizedText";
-import ResponsiveHeader from "../ResponsiveHeader";
-import ErrorsReportCard from "../ErrorsReportCard";
+import ResponsiveHeader from "../../Components/ResponsiveHeader";
+import ErrorsReportCard from "../../Components/ErrorsReportCard";
 
 function ErrorsReportComponent(props: ErrorsReportComponentProps) {
   const appContextData = useContext(ApplicationContext);

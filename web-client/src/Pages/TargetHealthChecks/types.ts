@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-import { TargetHealthCheck } from "../types";
+import { TargetHealthCheck } from "../../Components/types";
 import TargetHealthChecksStore from "../../Stores/TargetHealthChecks";
 
 export interface TargetHealthChecksContainerProps {

@@ -6,8 +6,8 @@
 
 import React, { useContext, useState } from "react";
 import ErrorsReportComponent from "./Component";
-import withErrorWrapper from "../ErrorWrapper";
-import ApplicationContext from "../ApplicationStatus/Context";
+import withErrorWrapper from "../../Components/ErrorWrapper";
+import ApplicationContext from "../../ExportedComponents/ApplicationStatus/Context";
 import ErrorsReportStore from "../../Stores/ErrorsReport";
 
 function ErrorsReportContainer() {

@@ -18,7 +18,7 @@ import {
   waitForElementToBeRemoved,
 } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import ApplicationContext from "../../Components/ApplicationStatus/Context";
+import ApplicationContext from "../../ExportedComponents/ApplicationStatus/Context";
 import makeServer from "../../Services/Mocks/MakeServer";
 import seedsGenerator from "../../Services/Mocks/Seeds/Generator";
 import { Server } from "miragejs/server";
@@ -30,7 +30,7 @@ import {
 } from "../../Services/Mocks/types";
 import ErrorsReportStore from "../../Stores/ErrorsReport";
 import { setErrorsReport } from "../Utils";
-import ErrorsReportComponent from "../../Components/ErrorsReport/Component";
+import ErrorsReportComponent from "../../Pages/ErrorsReport/Component";
 
 const url = "https://dummy.local";
 const groupLabel = "BookInfo";

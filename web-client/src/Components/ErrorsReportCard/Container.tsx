@@ -7,7 +7,7 @@
 import React, { useContext, useState } from "react";
 import ErrorsReportCardComponent from "./Component";
 import withErrorWrapper from "../ErrorWrapper";
-import ApplicationContext from "../ApplicationStatus/Context";
+import ApplicationContext from "../../ExportedComponents/ApplicationStatus/Context";
 import ErrorsReportChecksStore from "../../Stores/ErrorsReportChecks";
 import { ErrorsReportCardContainerProps } from "./types";
 

@@ -23,9 +23,9 @@ import "./Style.scss";
 import moment, { Moment } from "moment";
 import { observer } from "mobx-react";
 import LocalizedText from "./LocalizedText";
-import { HealthCheckStatus, TargetHealthCheck } from "../types";
-import ApplicationContext from "../ApplicationStatus/Context";
-import ResponsiveHeader from "../ResponsiveHeader";
+import { HealthCheckStatus, TargetHealthCheck } from "../../Components/types";
+import ApplicationContext from "../../ExportedComponents/ApplicationStatus/Context";
+import ResponsiveHeader from "../../Components/ResponsiveHeader";
 import {
   TargetHealthChecksCardProps,
   TargetHealthChecksComponentProps,

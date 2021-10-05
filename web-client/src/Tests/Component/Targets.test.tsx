@@ -18,8 +18,8 @@ import {
   waitForElementToBeRemoved,
 } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import TargetStatusComponent from "../../Components/Targets/Component";
-import ApplicationContext from "../../Components/ApplicationStatus/Context";
+import TargetStatusComponent from "../../Pages/Targets/Component";
+import ApplicationContext from "../../ExportedComponents/ApplicationStatus/Context";
 import TargetsStore from "../../Stores/Targets";
 import { setMockedHealthChecksByGroup } from "../Utils";
 import { Server } from "miragejs/server";
