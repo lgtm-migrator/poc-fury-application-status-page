@@ -17,7 +17,7 @@ function getPlugins(dotenv, env) {
       filename: "remoteEntry.js",
       exposes: {
         "./ApplicationStatusPage":
-          "./src/Webcomponents/ApplicationStatusPage.tsx",
+          "./src/ExportedComponents/ApplicationStatus/WebComponent.tsx",
       },
       shared: {
         react: {
@@ -26,6 +26,7 @@ function getPlugins(dotenv, env) {
         },
         "react-dom": {
           singleton: true,
+          requiredVersion: ">=16.8.0",
         },
         "fury-design-system": {
           singleton: true,
@@ -78,7 +79,7 @@ function getModule() {
         loader: "babel-loader",
         options: {
           presets: [
-            "@babel/preset-env" /* to transfer any advansed ES to ES5 */,
+            "@babel/preset-env" /* to transfer any advanced ES to ES5 */,
             "@babel/preset-react",
           ], // to compile react to ES5
         },

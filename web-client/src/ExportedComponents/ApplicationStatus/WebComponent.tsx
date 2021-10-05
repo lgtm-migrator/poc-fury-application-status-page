@@ -7,12 +7,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import reactToWebComponent from "react-to-webcomponent";
-import ApplicationStatus from "../Components/ApplicationStatus/Container";
+import ApplicationStatus from "./Container";
 
-const ApplicationStatusPage = reactToWebComponent(
-  ApplicationStatus,
-  React,
-  ReactDOM
-);
+const WebComponent = reactToWebComponent(ApplicationStatus, React, ReactDOM);
 
-export default ApplicationStatusPage;
+export default WebComponent;

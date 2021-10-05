@@ -11,12 +11,12 @@ import {
   RouteComponentProps,
   Switch,
 } from "react-router-dom";
-import ApplicationContext from "./Context";
-import TargetHealthChecks from "../TargetHealthChecks";
-import Targets from "../Targets";
-import { ApplicationStatusRouteParams } from "./types";
-import logger from "../../Services/Logger";
-import ErrorsReport from "../ErrorsReport";
+import ApplicationContext from "../ExportedComponents/ApplicationStatus/Context";
+import TargetHealthChecks from "../Pages/TargetHealthChecks";
+import Targets from "../Pages/Targets";
+import { ApplicationStatusRouteParams } from "../ExportedComponents/ApplicationStatus/types";
+import logger from "../Services/Logger";
+import ErrorsReport from "../Pages/ErrorsReport";
 
 export default function ApplicationStatusRouterFactory() {
   const appContextData = useContext(ApplicationContext);

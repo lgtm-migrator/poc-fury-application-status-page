@@ -51,7 +51,7 @@ const mockServer: Server | undefined =
   process.env.SERVER_OFFLINE === "true" ? injectMockServer() : undefined;
 const ApplicationStatus = React.lazy(async () => {
   await initialize;
-  return import("./Components/ApplicationStatus").then((module) => ({
+  return import("./ExportedComponents/ApplicationStatus").then((module) => ({
     default: module.default,
   }));
 });

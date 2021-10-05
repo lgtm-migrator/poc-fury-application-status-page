@@ -10,7 +10,7 @@ import { releaseNumber } from "../../constants";
 import createStateHandler from "../../Services/createStateHandler";
 import ApplicationStatusComponent from "./Component";
 import makeServer from "../../Services/Mocks/MakeServer";
-import { IStateHandler } from "../types";
+import { IStateHandler } from "../../Components/types";
 import { MocksScenario } from "../../Services/Mocks/types";
 import { ApplicationStatusContainerProps } from "./types";
 import ApplicationContext from "./Context";

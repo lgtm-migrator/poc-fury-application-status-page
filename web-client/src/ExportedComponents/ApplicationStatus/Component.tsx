@@ -9,7 +9,7 @@ import "fury-design-system/dist/eui_theme_fury_community.css";
 import LocalizedText from "./LocalizedText";
 import { initialize } from "../../i18n";
 import ApplicationContext from "./Context";
-import ApplicationStatusRouterFactory from "./Factory";
+import ApplicationStatusRouterFactory from "../../Routes/Base";
 
 export default function ApplicationStatusComponent() {
   const appContextData = useContext(ApplicationContext);

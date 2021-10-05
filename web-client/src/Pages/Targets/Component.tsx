@@ -21,13 +21,13 @@ import {
 } from "fury-design-system";
 import "./Style.scss";
 import { observer } from "mobx-react";
-import EuiCustomLink from "../EuiCustomLink";
+import EuiCustomLink from "../../Components/EuiCustomLink";
 import LocalizedText from "./LocalizedText";
-import { HealthCheckStatus, Target } from "../types";
-import ApplicationContext from "../ApplicationStatus/Context";
+import { HealthCheckStatus, Target } from "../../Components/types";
+import ApplicationContext from "../../ExportedComponents/ApplicationStatus/Context";
 import { TargetCardProps, TargetsComponentProps } from "./types";
 import useErrorHandler from "../../Hooks/UseErrorHandler";
-import ResponsiveHeader from "../ResponsiveHeader";
+import ResponsiveHeader from "../../Components/ResponsiveHeader";
 
 function TargetCardStatusIcon(status: HealthCheckStatus) {
   if (status === "Complete") {

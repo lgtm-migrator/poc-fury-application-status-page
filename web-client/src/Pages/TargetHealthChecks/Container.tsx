@@ -7,8 +7,8 @@
 import React, { useContext, useState } from "react";
 import { releaseNumber } from "../../constants";
 import TargetHealthChecksComponent from "./Component";
-import ApplicationContext from "../ApplicationStatus/Context";
-import withErrorWrapper from "../ErrorWrapper";
+import ApplicationContext from "../../ExportedComponents/ApplicationStatus/Context";
+import withErrorWrapper from "../../Components/ErrorWrapper";
 import { TargetHealthChecksContainerProps } from "./types";
 import TargetHealthChecksStore from "../../Stores/TargetHealthChecks";
 

@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-import { Target } from "../types";
+import { Target } from "../../Components/types";
 import TargetsStore from "../../Stores/Targets";
 
 export interface TargetsComponentProps {

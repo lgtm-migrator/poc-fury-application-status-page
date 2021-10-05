@@ -4,7 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-import { Config } from "../types";
+import { Config } from "../../Components/types";
 
 export interface ApplicationStatusContainerProps
   extends Omit<Config, "apiUrl"> {
