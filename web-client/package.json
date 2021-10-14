@@ -10,7 +10,7 @@
     "loglevel": "1.7.1",
     "loglevel-remote": "0.1.0",
     "mobx": "6.3.4",
-    "mobx-react": "7.2.0",
+    "mobx-react": "7.2.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-i18next": "11.12.0",
