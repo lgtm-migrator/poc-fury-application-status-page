@@ -111,7 +111,7 @@ steps:
         - tag
 
   - name: front
-    image: node:16.11
+    image: node:16.12
     pull: always
     depends_on: [e2e-test]
     environment:
