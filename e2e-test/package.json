@@ -7,7 +7,7 @@
     "test": "cypress run"
   },
   "devDependencies": {
-    "@testing-library/cypress": "8.0.1",
+    "@testing-library/cypress": "8.0.3",
     "@types/testing-library__cypress": "5.0.9",
     "cypress": "8.7.0",
     "eslint": "7.32.0",
